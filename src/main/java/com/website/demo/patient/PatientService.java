@@ -1,4 +1,4 @@
-package com.website.demo.database;
+package com.website.demo.patient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,5 +27,9 @@ public class PatientService {
 
     public void addPatient(Long id) {
         patientRepository.save(new PatientFactory().getPatient(id));
+    }
+
+    public void deleteById(Long id) {
+        patientRepository.deleteById(id);
     }
 }

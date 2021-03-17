@@ -1,4 +1,4 @@
-package com.website.demo.database;
+package com.website.demo.patient;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +34,11 @@ public class PatientController {
     @PostMapping("/{id}")
     public void addPatient(@PathVariable Long id){
         patientService.addPatient(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id){
+        patientService.deleteById(id);
     }
 
 }

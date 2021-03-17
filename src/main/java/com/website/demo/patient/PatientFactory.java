@@ -1,4 +1,4 @@
-package com.website.demo.database;
+package com.website.demo.patient;
 
 import com.github.javafaker.Faker;
 
