@@ -22,6 +22,7 @@ public class Patient {
     private String secondname;
 
 
+
     public Patient(String name, String surname, String secondname) {
         this.name = name;
         this.surname = surname;
