@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date date;
+    private LocalDate date;
     private LocalTime startHour;
     private LocalTime endHour;
     @ManyToMany(mappedBy = "schedules")

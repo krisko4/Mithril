@@ -1,11 +1,12 @@
 package com.website.demo.visit;
 
+import com.website.demo.doctor.Doctor;
+import com.website.demo.patient.Patient;
 import lombok.Data;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -17,8 +18,8 @@ public class VisitController {
 
 
     @PostMapping("/add")
-    public void addVisit(){
-        visitService.addVisit();
+    public void addVisit(@RequestBody Patient patient, Doctor doctor, LocalDate date){
+        visitService.addVisit(patient, doctor, date);
     }
 
     @GetMapping
