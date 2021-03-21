@@ -19,7 +19,7 @@ public class PatientFactory {
         return patientList;
     }
 
-    public Patient getPatient(Long id){
+    public Patient getPatient(){
         return new Patient(faker.name().firstName(), faker.name().firstName(), faker.name().lastName());
     }
 

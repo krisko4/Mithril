@@ -1,11 +1,14 @@
 package com.website.demo.patient;
 
+import com.website.demo.visit.Visit;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @Data
@@ -15,9 +18,17 @@ public class PatientController {
 
     private final PatientService patientService;
 
+
     @GetMapping
-    public List<Patient> getPatients(){
-        return patientService.getPatients();
+    public List<PatientDto> getPatients(){
+        return patientService.getPatients().stream()
+                .map(PatientDto::from)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/visit/{id}" )
+    public Set<Visit> getVisitsForOnePatient(@PathVariable Long id){
+        return patientService.getVisit(id);
     }
 
     @GetMapping("/{id}")
@@ -31,14 +42,15 @@ public class PatientController {
         patientService.addPatientList();
     }
 
-    @PostMapping("/{id}")
-    public void addPatient(@PathVariable Long id){
-        patientService.addPatient(id);
+    @PostMapping("/add")
+    public void addPatient(){
+        patientService.addPatient();
     }
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id){
         patientService.deleteById(id);
     }
+
 
 }
