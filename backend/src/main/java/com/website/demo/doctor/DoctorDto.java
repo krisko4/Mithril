@@ -4,6 +4,8 @@ import com.website.demo.schedule.Schedule;
 import com.website.demo.schedule.ScheduleDto;
 import com.website.demo.visit.Visit;
 import com.website.demo.visit.VisitDto;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -13,6 +15,8 @@ import javax.validation.constraints.Email;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
 public class DoctorDto {
 
     private Long id;

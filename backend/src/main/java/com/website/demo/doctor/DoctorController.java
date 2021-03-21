@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Data
@@ -16,10 +17,9 @@ public class DoctorController {
     private final DoctorService doctorService;
 
     @GetMapping
-    public List<Doctor> getDoctors(){
-        return doctorService.getDoctors();
+    public List<DoctorDto> getDoctors() {
+        return doctorService.getDoctors().stream().map(DoctorDto::from).collect(Collectors.toList());
     }
-
 
 
 }

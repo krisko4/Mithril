@@ -15,10 +15,9 @@ import java.util.List;
 @Data
 public class DoctorService {
 
-private final DoctorRepository doctorRepository;
-
+    private final DoctorRepository doctorRepository;
 
     public List<Doctor> getDoctors() {
-        return doctorRepository.findAllBySchedules_Date(Date.valueOf("1995-04-28"));
+        return doctorRepository.findAll();
     }
 }
