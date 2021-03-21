@@ -1,9 +1,14 @@
 package com.website.demo.schedule;
 
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalTime;
 import java.util.Date;
 
+@Getter
+@Setter
 public class ScheduleDto {
     private Long id;
     private LocalDate date;
