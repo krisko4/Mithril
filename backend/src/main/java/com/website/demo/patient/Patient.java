@@ -33,18 +33,9 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private Set<Visit> visitSet;
 
-
-
-
-
-
     public Patient(String first_name, String last_name, String second_name) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.second_name = second_name;
     }
-
-
-
-
 }

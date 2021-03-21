@@ -2,6 +2,7 @@ package com.website.demo.doctor;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.website.demo.schedule.Schedule;
 import com.website.demo.visit.Visit;
 import lombok.*;
 
@@ -28,6 +29,13 @@ public class Doctor {
     private String phone;
     @OneToMany(mappedBy = "doctor")
     private Set<Visit> visitSet;
+    @ManyToMany
+    @JoinTable(
+            name = "doctor_schedule",
+            joinColumns = {@JoinColumn(name = "doctor_id")},
+            inverseJoinColumns = {@JoinColumn(name = "schedule_id")}
+    )
+    private Set<Schedule> schedules;
 
 
 }
