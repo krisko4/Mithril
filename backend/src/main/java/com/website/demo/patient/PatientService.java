@@ -34,11 +34,10 @@ public class PatientService {
 
     public void deleteById(Long id) {
         patientRepository.deleteById(id);
-        System.out.println("ema");
     }
 
     public Set<Visit> getVisit(Long id) {
-        Patient patient = patientRepository.findById(id).orElseThrow(()->new RuntimeException("ema"));
+        Patient patient = patientRepository.findById(id).orElseThrow(()->new RuntimeException("Could not find patient with ID: " + id));
         return patient.getVisitSet();
     }
 }

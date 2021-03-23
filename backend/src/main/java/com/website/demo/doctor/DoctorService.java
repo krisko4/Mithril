@@ -2,6 +2,8 @@ package com.website.demo.doctor;
 
 import com.website.demo.schedule.Schedule;
 import com.website.demo.schedule.ScheduleDto;
+import com.website.demo.visit.Visit;
+import com.website.demo.visit.VisitService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.tomcat.jni.Local;
@@ -24,33 +26,54 @@ import java.util.Locale;
 @Data
 public class DoctorService {
 
-private final DoctorRepository doctorRepository;
+    private final DoctorRepository doctorRepository;
+    private final VisitService visitService;
 
 
-    public List<Doctor> getAvailableDoctors(String dateString) {
-        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-d", Locale.US);
-        LocalDate localDate = LocalDate.parse(dateString, formatter1);
-        return doctorRepository.findAllBySchedules_Date(localDate);
-    }
+    /**
+     * Method finding all doctors available on provided date. Then, for each doctor, the difference between start_hour
+     * and end_hour is converted into a list of working hours.
+     *
+     * @param date date provided by the user
+     * @return a list of doctors available on provided date with a list of available hours for each doctor during that period
+     */
+    public List<DoctorVisitResponse> getAvailableDoctorsByDate(String date) {
 
-    public List<DoctorVisitResponse> getDoctors(String date) {
-
-        List<Doctor> doctorList = getAvailableDoctors(date);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d", Locale.US);
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        // lista doktorów pracujących w wybranym dniu
+        List<Doctor> doctorList = doctorRepository.findAllBySchedules_Date(localDate);
         List<DoctorVisitResponse> dvrList = new ArrayList<>();
-        for(Doctor doctor : doctorList){
-            for(Schedule schedule : doctor.getSchedules()){
+        for (Doctor doctor : doctorList) {
+            // lista wizyt w danym dniu dla danego doktora
+            List<Visit> visitList = visitService.getVisitsByDate(date, doctor.getId());
+            // lista godzin w jakich odbywają się wizyty
+            List<LocalTime> visitHourList = new ArrayList<>();
+            for (Visit visit : visitList) {
+                int hour = visit.getDate().getHour();
+                int minute = visit.getDate().getMinute();
+                LocalTime visitHour = LocalTime.of(hour, minute);
+                visitHourList.add(visitHour);
+            }
+            // sprawdzamy dni pracy doktora - jeśli data jest inna niż ta, którą wybraliśmy, szukamy dalej
+            for (Schedule schedule : doctor.getSchedules()) {
+                if (schedule.getDate().compareTo(localDate) != 0) {
+                    continue;
+                }
                 LocalTime startHour = schedule.getStartHour();
                 LocalTime endHour = schedule.getEndHour();
-                List<LocalTime> emaList = new ArrayList<>();
-                while(startHour.isBefore(endHour)){
-                    emaList.add(startHour);
+                List<LocalTime> hourList = new ArrayList<>();
+                while (startHour.isBefore(endHour)) {
+                    if (!visitHourList.contains(startHour)){
+                        hourList.add(startHour);
+                }
                     startHour = startHour.plusMinutes(20);
                 }
-                DoctorVisitResponse dvr = new DoctorVisitResponse(DoctorDto.from(doctor), ScheduleDto.from(schedule), emaList);
+                DoctorVisitResponse dvr = new DoctorVisitResponse(DoctorDto.from(doctor), ScheduleDto.from(schedule), hourList);
                 dvrList.add(dvr);
             }
-
         }
         return dvrList;
     }
+
 }

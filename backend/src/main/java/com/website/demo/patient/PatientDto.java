@@ -7,6 +7,7 @@ import com.website.demo.visit.VisitDto;
 import lombok.Data;
 
 import javax.persistence.OneToMany;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +20,7 @@ public class PatientDto {
     private String second_name;
     private String last_name;
     private String pesel;
-    private Date birth_date;
+    private LocalDate birth_date;
     private String phone;
     private AddressDto address;
     private Set<VisitDto> visit;

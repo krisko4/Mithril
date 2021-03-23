@@ -24,10 +24,10 @@ public class DoctorController {
     private final DoctorService doctorService;
 
     @GetMapping("/{date}")
-    public List<DoctorVisitResponse> getDoctors(@PathVariable String date){
-        return doctorService.getDoctors(date);
-
+    public List<DoctorVisitResponse> getDoctors(@PathVariable String date) {
+        return doctorService.getAvailableDoctorsByDate(date);
     }
+
 
 
 }
