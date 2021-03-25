@@ -23,6 +23,7 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
+    @CrossOrigin
     @GetMapping("/{date}")
     public List<DoctorVisitResponse> getAvailableDoctorsByDate(@PathVariable String date) {
         return doctorService.getAvailableDoctorsByDate(date);

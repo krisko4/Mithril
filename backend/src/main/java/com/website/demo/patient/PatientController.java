@@ -18,7 +18,7 @@ public class PatientController {
 
     private final PatientService patientService;
 
-
+    @CrossOrigin
     @GetMapping
     public List<PatientDto> getPatients(){
         return patientService.getPatients().stream()
