@@ -8,8 +8,12 @@
             EmaMed
         </v-app-bar>
         <v-main>
-            <TestPage :msg="message"/>
 
+            <TestPage
+                :msg="message"
+                :date="visitDate"
+                @messageFromChild="printMsg"
+            />
         </v-main>
     </v-app>
 </template>
@@ -26,9 +30,16 @@ export default {
         TestPage,
     },
 
-    data(){
-        return{
-            message: 'ema'
+    methods:{
+        printMsg(msg, number){
+            alert(msg + number)
+        }
+    },
+
+    data() {
+        return {
+            message: 'ema',
+            visitDate: new Date('2021-03-21')
         }
     }
 };
