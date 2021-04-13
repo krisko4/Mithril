@@ -1,17 +1,29 @@
 package com.website.demo.validation;
 
-public class EmailValidator implements Validator {
-    @Override
-    public void validate(String email) {
+import org.springframework.stereotype.Service;
+
+import java.util.function.Predicate;
+
+@Service
+public class EmailValidator implements Predicate<String> {
+
+    public static boolean isValid(String email) {
         if (!email.matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")) {
             throw new IllegalStateException("E-mail is invalid.");
         }
+        return true;
     }
 
-    @Override
-    public void checkIfEqual(String email1, String email2) {
+    public static boolean areEqual(String email1, String email2) {
         if(!email1.equals(email2)){
             throw new IllegalStateException("E-mails are different.");
         }
+        return true;
+    }
+
+    @Override
+    public boolean test(String s) {
+        //TODO: regex to validate email
+        return true;
     }
 }

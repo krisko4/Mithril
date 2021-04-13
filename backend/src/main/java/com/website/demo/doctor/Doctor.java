@@ -1,18 +1,11 @@
 package com.website.demo.doctor;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.website.demo.schedule.Schedule;
-import com.website.demo.user.CustomUser;
+import com.website.demo.user.AppUser;
 import com.website.demo.visit.Visit;
 import lombok.*;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "doctor")
@@ -20,8 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Doctor  {
-
+public class Doctor{
 
 
     public Doctor(DoctorRequest doctorRequest){
