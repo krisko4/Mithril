@@ -8,14 +8,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class VisitRequest {
 
-    private Long id;
+    private Long patient_id;
+    private Long doctor_id;
     private String date;
-    private String description;
-    private Doctor doctor;
-    private Patient patient;
 
 }

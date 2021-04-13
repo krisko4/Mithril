@@ -26,11 +26,12 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String first_name;
-    private String second_name;
-    private String last_name;
+
+    private String firstName;
+    private String secondName;
+    private String lastName;
     private String pesel;
-    private LocalDate birth_date;
+    private LocalDate birthDate;
     private String phone;
     @ManyToOne(optional = false)
     @JoinColumn(name = "address_id")
@@ -38,9 +39,9 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private Set<Visit> visitSet;
 
-    public Patient(String first_name, String last_name, String second_name) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.second_name = second_name;
+    public Patient(String firstName, String lastName, String secondName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.secondName = secondName;
     }
 }

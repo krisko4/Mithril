@@ -36,6 +36,12 @@ public class PatientController {
         return patientService.findPatientById(id);
     }
 
+    @CrossOrigin
+    @GetMapping("/bychar")
+    public List<PatientDto> getPatientsByChar(@RequestParam String character){
+        return patientService.getPatientsByChar(character);
+    }
+
 
     @PostMapping
     public void addPatientList(){

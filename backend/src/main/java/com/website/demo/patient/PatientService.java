@@ -37,7 +37,11 @@ public class PatientService {
     }
 
     public Set<Visit> getVisit(Long id) {
-        Patient patient = patientRepository.findById(id).orElseThrow(()->new RuntimeException("Could not find patient with ID: " + id));
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new RuntimeException("Could not find patient with ID: " + id));
         return patient.getVisitSet();
+    }
+
+    public List<PatientDto> getPatientsByChar(String character) {
+        return patientRepository.findByFirstNameStartsWith(character);
     }
 }

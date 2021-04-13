@@ -6,6 +6,7 @@ import com.website.demo.schedule.ScheduleDto;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,8 +26,14 @@ public class DoctorController {
 
     @CrossOrigin
     @GetMapping("/{date}")
-    public List<DoctorVisitResponse> getAvailableDoctorsByDate(@PathVariable String date) {
+    public List<DoctorDto> getAvailableDoctorsByDate(@PathVariable String date) {
         return doctorService.getAvailableDoctorsByDate(date);
+    }
+
+    @CrossOrigin
+    @PostMapping("/register")
+    public void validateFirstRegistrationStep(@RequestBody DoctorRequest doctorRequest){
+        doctorService.validateFirstRegistrationStep(doctorRequest);
     }
 
 

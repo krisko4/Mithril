@@ -12,11 +12,8 @@ import java.util.List;
 public class DoctorVisitResponse {
 
     private DoctorDto doctor;
-    private ScheduleDto schedule;
+   // private ScheduleDto schedule;
     private List<LocalTime> hourList;
-
-
-
 
 
 }
