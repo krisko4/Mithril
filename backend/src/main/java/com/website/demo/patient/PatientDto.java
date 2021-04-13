@@ -16,25 +16,27 @@ import java.util.stream.Collectors;
 @Data
 public class PatientDto {
 
-    private String first_name;
-    private String second_name;
-    private String last_name;
+    private Long id;
+    private String firstName;
+    private String secondName;
+    private String lastName;
     private String pesel;
-    private LocalDate birth_date;
+    private LocalDate birthDate;
     private String phone;
     private AddressDto address;
-    private Set<VisitDto> visit;
+   // private Set<VisitDto> visit;
 
     public static PatientDto from(Patient patient){
         PatientDto patientDto = new PatientDto();
-        patientDto.first_name = patient.getFirst_name();
-        patientDto.second_name = patient.getSecond_name();
-        patientDto.last_name = patient.getLast_name();
+        patientDto.id = patient.getId();
+        patientDto.firstName = patient.getFirstName();
+        patientDto.secondName = patient.getSecondName();
+        patientDto.lastName = patient.getLastName();
         patientDto.pesel = patient.getPesel();
-        patientDto.birth_date = patient.getBirth_date();
+        patientDto.birthDate = patient.getBirthDate();
         patientDto.phone = patient.getPhone();
         patientDto.address = AddressDto.from(patient.getAddress());
-        patientDto.visit = patient.getVisitSet().stream().map(VisitDto::new).collect(Collectors.toSet());
+       // patientDto.visit = patient.getVisitSet().stream().map(VisitDto::new).collect(Collectors.toSet());
         return patientDto;
     }
 
