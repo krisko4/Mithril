@@ -3,12 +3,10 @@ package com.website.demo.address;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity(name = "address")
+@Entity
+@Table(name = "address")
 @Getter
 @Setter
 public class Address {
@@ -22,4 +20,5 @@ public class Address {
     private Integer streetNumber;
     private Integer flat_number;
     private String postCode;
+
 }

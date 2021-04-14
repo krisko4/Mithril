@@ -58,5 +58,11 @@ public class PatientController {
         patientService.deleteById(id);
     }
 
+    @GetMapping("all")
+    public List<Patient> getPatients1(){
+        return patientService.getPatients();
+    }
+
+
 
 }

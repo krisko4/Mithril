@@ -1,6 +1,6 @@
 package com.website.demo.security.config;
 
-import com.website.demo.user.AppUserService;
+import com.website.demo.user.PersonService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final AppUserService appUserService;
+    private final PersonService personService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/registration/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("PRESCRIPTION_READ")
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder);
-        provider.setUserDetailsService(appUserService);
+        provider.setUserDetailsService(personService);
         return provider;
     }
 }
