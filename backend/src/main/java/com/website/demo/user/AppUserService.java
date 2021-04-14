@@ -39,17 +39,17 @@ public class AppUserService implements UserDetailsService {
 
         appUser.setPassword(encodedPassword);
 
-        appUserRepository.save(appUser);
+        AppUser save = appUserRepository.save(appUser);
 
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
-                appUser
+                LocalDateTime.now().plusMinutes(1),
+                save
         );
 
-        confirmationTokenService.saveCOnfirmationToken(confirmationToken);
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
 
         //TODO: send email
 

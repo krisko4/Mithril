@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/registration/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("PRESCRIPTION_READ")
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
     }
 
     @Override
