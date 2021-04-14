@@ -1,13 +1,14 @@
 package com.website.demo.registration;
 
+import com.website.demo.authorities.AppUserRole;
 import com.website.demo.registration.email.EmailSender;
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenService;
 import com.website.demo.user.AppUser;
-import com.website.demo.user.AppUserRole;
 import com.website.demo.user.AppUserService;
 import com.website.demo.validation.EmailValidator;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +38,7 @@ public class RegistrationService {
                         request.getEmail(),
                         request.getPassword(),
                         request.getPhone(),
-                        AppUserRole.ADMIN
+                        request.getRole()
                 )
         );
         String link = "localhost:8080/registration/confirm?token=" + token;

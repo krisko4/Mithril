@@ -24,11 +24,11 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
-    @CrossOrigin
-    @GetMapping("/{date}")
-    public List<DoctorDto> getAvailableDoctorsByDate(@PathVariable String date) {
-        return doctorService.getAvailableDoctorsByDate(date);
-    }
+//    @CrossOrigin
+//    @GetMapping("/{date}")
+//    public List<DoctorDto> getAvailableDoctorsByDate(@PathVariable String date) {
+//        return doctorService.getAvailableDoctorsByDate(date);
+//    }
 
     @CrossOrigin
     @PostMapping("/register")

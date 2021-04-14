@@ -1,6 +1,9 @@
 package com.website.demo.user;
 
-import lombok.EqualsAndHashCode;
+import com.website.demo.address.Address;
+import com.website.demo.authorities.AppUserRole;
+import com.website.demo.schedule.Schedule;
+import com.website.demo.visit.Visit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,16 +12,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "app_user")
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class AppUser implements UserDetails {
 
     @Id
@@ -30,12 +34,24 @@ public class AppUser implements UserDetails {
     private String phone;
     private String password;
     private String email;
-    @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
-    private boolean accountNonExpired = true;
-    private boolean accountNonLocked = true;
-    private boolean credentialsNonExpired = true;
-    private boolean enabled = false;
+//    private LocalDate birthdate;
+    @OneToMany(mappedBy = "doctor")
+    private Set<Visit> visitSet;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "address_id")
+    private Address address;
+    @ManyToMany
+    @JoinTable(name = "doctor_schedule", joinColumns = {@JoinColumn(name = "doctor_id")}, inverseJoinColumns = {@JoinColumn(name = "schedule_id")})
+    private Set<Schedule> schedules;
+
+
+
+    @Enumerated(value = EnumType.STRING)
+    private AppUserRole role;
+    private boolean accountNonExpired;
+    private boolean accountNonLocked;
+    private boolean credentialsNonExpired;
+    private boolean enabled;
 
     public AppUser(String firstName,
                    String secondName,
@@ -43,21 +59,25 @@ public class AppUser implements UserDetails {
                    String email,
                    String password,
                    String phone,
-                   AppUserRole appUserRole) {
+                   AppUserRole role) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.appUserRole = appUserRole;
+        this.accountNonExpired = true;
+        this.accountNonLocked = true;
+        this.credentialsNonExpired = true;
+        this.enabled = false;
+        this.role = role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
-        return Collections.singletonList(authority);
-
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+        return authorities;
     }
 
     @Override
@@ -90,31 +110,4 @@ public class AppUser implements UserDetails {
         return enabled;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public AppUserRole getAppUserRole() {
-        return appUserRole;
-    }
 }

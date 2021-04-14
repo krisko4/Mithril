@@ -8,8 +8,6 @@ import javax.validation.constraints.Pattern;
 @Data
 public class DoctorRequest {
 
-
-    private String username;
     private String password;
     private String confirmPassword;
     private String firstName;

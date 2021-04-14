@@ -33,20 +33,17 @@ public class DoctorService {
     private final ScheduleService scheduleService;
 
 
-    public List<DoctorDto> getAvailableDoctorsByDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d", Locale.US);
-        LocalDate localDate = LocalDate.parse(date, formatter);
-        return doctorRepository.findAllBySchedules_Date(localDate);
-    }
+//    public List<DoctorDto> getAvailableDoctorsByDate(String date) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d", Locale.US);
+//        LocalDate localDate = LocalDate.parse(date, formatter);
+//        return doctorRepository.findAllBySchedules_Date(localDate);
+//    }
 
     public void validateFirstRegistrationStep(DoctorRequest doctorRequest) {
 
-        if (doctorRepository.findByEmail(doctorRequest.getEmail()) != null) {
-            throw new RuntimeException("E-mail already exists.");
-        }
-        if (doctorRepository.findByUsername(doctorRequest.getUsername()) != null) {
-            throw new RuntimeException("Username already exists.");
-        }
+//        if (doctorRepository.findByEmail(doctorRequest.getEmail()) != null) {
+//            throw new RuntimeException("E-mail already exists.");
+//        }
 
         PasswordValidator.isValid(doctorRequest.getPassword());
         PasswordValidator.areEqual(doctorRequest.getPassword(), doctorRequest.getConfirmPassword());

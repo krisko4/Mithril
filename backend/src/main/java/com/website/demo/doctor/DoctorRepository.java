@@ -12,9 +12,8 @@ import java.util.List;
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
-    List<DoctorDto> findAllBySchedules_Date(LocalDate date);
-    DoctorDto findByEmail(String email);
-    DoctorDto findByUsername(String username);
+//    List<DoctorDto> findAllBySchedules_Date(LocalDate date);
+//    DoctorDto findByEmail(String email);
 
 
 }

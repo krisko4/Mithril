@@ -22,7 +22,6 @@ public class DoctorDto {
     private Long id;
     private String firstName;
     private String secondName;
-    private String username;
     private String lastName;
     private String email;
     private String phone;
@@ -32,12 +31,11 @@ public class DoctorDto {
     public static DoctorDto from(Doctor doctor) {
         DoctorDto dto = new DoctorDto();
         dto.id = doctor.getId();
-        dto.firstName = doctor.getFirstName();
-        dto.secondName = doctor.getSecondName();
-        dto.lastName = doctor.getLastName();
-        dto.username = doctor.getUsername();
-        dto.email = doctor.getEmail();
-        dto.phone = doctor.getPhone();
+//        dto.firstName = doctor.getFirstName();
+//        dto.secondName = doctor.getSecondName();
+//        dto.lastName = doctor.getLastName();
+//        dto.email = doctor.getEmail();
+//        dto.phone = doctor.getPhone();
   //      dto.visitSet = doctor.getVisitSet().stream().map(VisitDto::new).collect(Collectors.toSet());
   //      dto.schedules = doctor.getSchedules().stream().map(ScheduleDto::from).collect(Collectors.toSet());
 
