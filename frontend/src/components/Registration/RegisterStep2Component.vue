@@ -17,9 +17,7 @@
                 </transition>
             </v-col>
         </v-row>
-        <v-form ref="form" v-model="valid" class="login" @submit.prevent="validateForm">
-
-
+        <v-form ref="form" v-model="valid" class="login">
             <v-row justify="center">
                 <v-col cols="3">
                     <v-flex
@@ -58,7 +56,7 @@
                             :rules="[
               () => !!address || 'This field is required',
               () => !!address && address.length <= 25 || 'Address must be less than 25 characters',
-              addressCheck
+
             ]"
                             label="Address Line"
                             placeholder="Address"
@@ -68,7 +66,7 @@
                         <v-text-field
                             ref="city"
                             v-model="city"
-                            :rules="[() => !!city || 'This field is required', addressCheck]"
+                            :rules="[() => !!city || 'This field is required']"
                             label="City"
                             placeholder="El Paso"
                             required
@@ -92,27 +90,39 @@
                         ></v-autocomplete>
 
 
-
-                        <v-row justify="center">
-                            <transition name="fade">
-                                <v-btn color="primary" @click="validateForm" v-if="buttonEnabled" medium>Create an
-                                    account
-                                    <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
-                                </v-btn>
-                            </transition>
-                        </v-row>
                     </v-flex>
                 </v-col>
             </v-row>
+            <v-row justify="center">
+                <v-col cols="1" align="center">
+                <v-btn color="primary" @click="goBack">
+                    <v-icon
+                        dark
+                        left
+                    >
+                        mdi-arrow-left
+                    </v-icon>Return</v-btn>
+                </v-col>
+                <v-col cols="1" align="center" v-if="buttonEnabled">
+                <transition name="fade">
+                    <v-btn color="primary" @click="validateForm"  medium>Submit
+                        <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+                    </v-btn>
+                </transition>
+                </v-col>
+
+            </v-row>
+
+
         </v-form>
 
     </v-container>
 </template>
 
 <script>
-export default{
-    data(){
-        return{
+export default {
+    data() {
+        return {
             countries: ['Poland', 'England'],
             firstName: '',
             lastName: '',
@@ -122,15 +132,27 @@ export default{
             zip: '',
             country: '',
             buttonEnabled: false,
+            valid: false,
+            errorPopped: ''
         }
     },
-    methods:{
-        validateForm(){
-
+    methods: {
+        validateForm() {
+            this.$emit('secondStepComplete', 3)
+            this.$toast.success('Step 2 completed successfully.')
+        },
+        showButton() {
+            this.buttonEnabled = this.valid
+        },
+        goBack() {
+            this.$emit('goBack', 1)
         }
     },
-    watch:{
-
-    }
+    watch: {
+        valid() {
+            console.log(this.valid)
+            setTimeout(this.showButton, 200);
+        }
+    },
 }
 </script>

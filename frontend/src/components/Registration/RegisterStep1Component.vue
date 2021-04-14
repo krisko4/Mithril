@@ -26,21 +26,31 @@
                         xs-12
                         md-4
                     >
-
                         <v-text-field
-                            label="Login"
-                            :rules="[
-            v => !!v || 'Please enter your login.'
-            ]"
+                            type="email"
+                            :rules="emailRules"
                             outlined
+                            clearable
                             rounded
+                            label="E-mail"
+                            error-count="1"
                             required
-                            v-model="login"
+                            v-model="email"
+                        ></v-text-field>
+                        <v-text-field
+                            type="email"
+                            :rules="emailRules"
+                            outlined
+                            clearable
+                            rounded
+                            label="Confirm e-mail"
+                            error-count="1"
+                            required
+                            v-model="confirmEmail"
                         ></v-text-field>
                         <v-text-field
                             type="password"
                             :rules="passwordRules"
-
                             outlined
                             clearable
                             rounded
@@ -64,33 +74,9 @@
                             required
                             v-model="confirmPassword"
                         ></v-text-field>
-                        <v-text-field
-                            type="email"
-                            :rules="emailRules"
-                            outlined
-                            clearable
-                            rounded
-                            label="E-mail"
-
-                            error-count="1"
-                            required
-                            v-model="email"
-                        ></v-text-field>
-                        <v-text-field
-                            type="email"
-                            :rules="emailRules"
-                            outlined
-                            clearable
-                            rounded
-                            label="Confirm e-mail"
-                            error-count="1"
-                            required
-                            v-model="confirmEmail"
-                        ></v-text-field>
                         <v-row justify="center">
                             <transition name="fade">
-                                <v-btn color="primary" @click="validateForm" v-if="buttonEnabled" medium>Create an
-                                    account
+                                <v-btn color="primary" @click="validateForm" v-if="buttonEnabled" medium>Submit
                                     <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
                                 </v-btn>
                             </transition>
@@ -106,7 +92,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+//import axios from 'axios'
 export default {
     name: "RegisterStep1Component",
 
@@ -117,10 +103,10 @@ export default {
             valid: false,
             passwordRules: [
                 v => !!v || "Please enter your password.",
-                v => (v && v.length >= 8) || "Your password should contain at least 8 digits.",
+                v => (v && v.length >= 8) || ("Your password should contain at least 8 digits."),
                 v => /(?=.*[A-Z])/.test(v) || "Your password should contain at least one capital letter.",
                 v => /(?=.*\d)/.test(v) || "Your password should contain at least one number.",
-                v => /([!@$%])/.test(v) || "Your password should contain at least one special sign(!@$%).",
+                v => /([!@$%])/.test(v) || "Your password should contain at least one special sign (!@$%).",
 
 
             ],
@@ -132,7 +118,6 @@ export default {
 
             buttonEnabled: false,
             errorPopped: false,
-            login: '',
             password: '',
             confirmPassword: '',
             confirmEmail: '',
@@ -143,8 +128,10 @@ export default {
         }
     },
     watch: {
-        valid: function () {
+        valid() {
+            console.log(this.valid)
             setTimeout(this.showButton, 200);
+            this.$emit('validCheck', this.valid)
         }
     },
     methods: {
@@ -165,20 +152,20 @@ export default {
                 this.error = "E-mails are different."
                 this.errorPopped = true;
             }
-            axios.post('http://localhost:8080/doctors/register', {
-                username: this.login,
-                password: this.password,
-                confirmPassword: this.confirmPassword,
-                confirmEmail: this.confirmEmail,
-                email: this.email,
+            this.$emit('firstStepComplete', 2)
+            this.$toast.success('Step 1 completed successfully.')
+         //   axios.post('http://localhost:8080/doctors/register', {
+           //     password: this.password,
+        //        email: this.email,
 
-            }).then(()=>{
-                this.$toast.success('Step 1 completed successfully.')
-                this.$emit('firstStepComplete')
-            }).catch((error)=>{
-                this.error = error.response.data.message
-                this.errorPopped = true
-            })
+         //   }).then(()=>{
+          //      this.$toast.success('Step 1 completed successfully.')
+
+           //     this.$emit('firstStepComplete', 2)
+        //    }).catch((error)=>{
+         //      this.error = error.response.data.message
+          //      this.errorPopped = true
+        //    })
 
 
         }
