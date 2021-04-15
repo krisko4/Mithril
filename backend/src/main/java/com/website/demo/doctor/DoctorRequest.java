@@ -17,4 +17,5 @@ public class DoctorRequest {
     private String confirmEmail;
     private String phone;
 
+
 }

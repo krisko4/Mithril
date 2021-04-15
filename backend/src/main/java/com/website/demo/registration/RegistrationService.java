@@ -3,8 +3,8 @@ package com.website.demo.registration;
 import com.website.demo.registration.email.EmailSender;
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenService;
-import com.website.demo.user.Person;
-import com.website.demo.user.PersonService;
+import com.website.demo.user.AppUser;
+import com.website.demo.user.AppUserService;
 import com.website.demo.validation.EmailValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class RegistrationService {
 
     private static final String EMAIL_NOT_VALID_MSG = "email %s not valid";
     private final EmailValidator emailValidator;
-    private final PersonService personService;
+    private final AppUserService appUserService;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
@@ -28,8 +28,8 @@ public class RegistrationService {
         if (!isValidEmail) {
             throw new IllegalStateException(String.format(EMAIL_NOT_VALID_MSG, request.getEmail()));
         }
-        String token = personService.signUp(
-                new Person(
+        String token = appUserService.signUp(
+                new AppUser(
                         request.getFirstName(),
                         request.getSecondName(),
                         request.getLastName(),
@@ -60,7 +60,7 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        personService.enableAppUser(confirmationToken.getPerson().getEmail());
+        appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
 
         return "confirmed";
     }

@@ -18,6 +18,12 @@ public class RegistrationRequest {
     private final String phone;
     private final String password;
     private final String email;
+    private final String country;
+    private final String city;
+    private final String street;
+    private final Integer streetNumber;
+    private final Integer flat_number;
+    private final String postCode;
     private AppUserRole role;
 
     public void setRole(AppUserRole role) {

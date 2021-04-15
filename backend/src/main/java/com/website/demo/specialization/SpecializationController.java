@@ -2,6 +2,7 @@ package com.website.demo.specialization;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ public class SpecializationController {
         this.specializationService = specializationService;
     }
 
+    @CrossOrigin
     @GetMapping
     public List<Specialization> getAll(){
         return specializationService.getAll();
