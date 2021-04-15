@@ -20,6 +20,7 @@ public class RegistrationDoctorController {
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final AppUserRepository appUserRepository;
 
+    @CrossOrigin
     @PostMapping
     public String register(@RequestBody RegistrationRequest request){
         request.setRole(AppUserRole.DOCTOR);

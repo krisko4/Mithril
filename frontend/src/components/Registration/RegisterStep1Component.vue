@@ -93,6 +93,8 @@
 
 <script>
 //import axios from 'axios'
+import axios from "axios";
+
 export default {
     name: "RegisterStep1Component",
 
@@ -152,25 +154,37 @@ export default {
                 this.error = "E-mails are different."
                 this.errorPopped = true;
             }
-            this.$emit('firstStepComplete', 2, {
-                'email' : this.email,
-                'password' : this.password
+            axios.get("http://localhost:8080/users/email", {
+                params: {
+                    "email": this.email
+                }
+            })
+                .then((response) => {
+                        console.log(response.data)
+                        this.$emit('firstStepComplete', 2, {
+                            'email': this.email,
+                            'password': this.password
+                        })
+                        this.$toast.success('Step 1 completed successfully.')
+                    }
+                ).catch((error) => {
+                this.error = error.response.data.message
+                this.errorPopped = true
             })
 
-            this.$toast.success('Step 1 completed successfully.')
-         //   axios.post('http://localhost:8080/doctors/register', {
-           //     password: this.password,
-        //        email: this.email,
 
-         //   }).then(()=>{
-          //      this.$toast.success('Step 1 completed successfully.')
+            //   axios.post('http://localhost:8080/doctors/register', {
+            //     password: this.password,
+            //        email: this.email,
 
-           //     this.$emit('firstStepComplete', 2)
-        //    }).catch((error)=>{
-         //      this.error = error.response.data.message
-          //      this.errorPopped = true
-        //    })
+            //   }).then(()=>{
+            //      this.$toast.success('Step 1 completed successfully.')
 
+            //     this.$emit('firstStepComplete', 2)
+            //    }).catch((error)=>{
+            //      this.error = error.response.data.message
+            //      this.errorPopped = true
+            //    })
 
 
         }

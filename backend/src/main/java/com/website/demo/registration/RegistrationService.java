@@ -1,5 +1,8 @@
 package com.website.demo.registration;
 
+import com.website.demo.address.Address;
+import com.website.demo.address.AddressRepository;
+import com.website.demo.authorities.AppUserRole;
 import com.website.demo.registration.email.EmailSender;
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenService;
@@ -7,6 +10,7 @@ import com.website.demo.user.AppUser;
 import com.website.demo.user.AppUserService;
 import com.website.demo.validation.EmailValidator;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +23,7 @@ public class RegistrationService {
     private static final String EMAIL_NOT_VALID_MSG = "email %s not valid";
     private final EmailValidator emailValidator;
     private final AppUserService appUserService;
+    private final AddressRepository addressRepository;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
@@ -28,6 +33,25 @@ public class RegistrationService {
         if (!isValidEmail) {
             throw new IllegalStateException(String.format(EMAIL_NOT_VALID_MSG, request.getEmail()));
         }
+
+        Address requestAddress = new Address(
+                request.getCountry(),
+                request.getCity(),
+                request.getStreet(),
+                request.getFlatNumber(),
+                request.getPostCode()
+        );
+
+        Address address;
+        boolean addressExists = addressRepository.exists(Example.of(requestAddress));
+        if (addressExists) {
+            address = addressRepository.findOne(Example.of(requestAddress)).get();
+        } else {
+            address = requestAddress;
+            addressRepository.save(address);
+        }
+
+
         String token = appUserService.signUp(
                 new AppUser(
                         request.getFirstName(),
@@ -36,10 +60,18 @@ public class RegistrationService {
                         request.getEmail(),
                         request.getPassword(),
                         request.getPhone(),
+                        address,
                         request.getRole()
                 )
         );
-        String link = "localhost:8080/registration/confirm?token=" + token;
+        String link;
+        if (request.getRole().equals(AppUserRole.DOCTOR)) {
+            link = "http://localhost:8080/doctor/registration/confirm?token=" + token;
+        } else if (request.getRole().equals(AppUserRole.ADMIN)) {
+            link = "http://localhost:8080/admin/registration/confirm?token=" + token;
+        } else {
+            link = "http://localhost:8080/patient/registration/confirm?token=" + token;
+        }
         emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
         return token;
     }

@@ -22,8 +22,10 @@ public class EmailValidator implements Predicate<String> {
     }
 
     @Override
-    public boolean test(String s) {
-        //TODO: regex to validate email
+    public boolean test(String email) {
+        if (!email.matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")) {
+            throw new IllegalStateException("E-mail is invalid.");
+        }
         return true;
     }
 }

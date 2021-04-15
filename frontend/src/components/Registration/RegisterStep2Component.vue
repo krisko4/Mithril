@@ -236,7 +236,7 @@ export default {
                 'firstName': this.firstName,
                 'lastName': this.lastName,
                 'secondName': this.secondName,
-                'address': this.address,
+                'street': this.address,
                 'city': this.city,
                 'postCode': this.postCode,
                 'country': this.country,

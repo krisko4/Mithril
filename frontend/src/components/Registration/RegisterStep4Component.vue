@@ -82,7 +82,7 @@ export default {
         },
         registerDoctor() {
             console.log(this.userData)
-            axios.post("http://localhost:8080/registration/doctor", this.userData).then((response) => {
+            axios.post("http://localhost:8080/doctor/registration", this.userData).then((response) => {
                 console.log(response)
                 this.$emit('fourthStepComplete', this.userData.email)
             })

@@ -3,6 +3,7 @@ package com.website.demo.user;
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -60,8 +61,9 @@ public class AppUserService implements UserDetailsService {
     public int enableAppUser(String email) {
         return appUserRepository.enableAppUser(email);
     }
-    public boolean isEmailTaken (String email){
-        return appUserRepository.existsByEmail(email);
+
+    public void checkEmailAvailability(String email) {
+        if (appUserRepository.existsByEmail(email)) throw new IllegalStateException("E-mail already exists");
     }
 
     public List<AppUser> list() {

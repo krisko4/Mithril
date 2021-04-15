@@ -22,7 +22,7 @@ public class RegistrationRequest {
     private final String country;
     private final String city;
     private final String street;
-    private final Integer flat_number;
+    private final Integer flatNumber;
     private final String postCode;
     private AppUserRole role;
 
