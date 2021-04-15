@@ -22,7 +22,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "app_user")
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class AppUser implements UserDetails {
 
     @Id
@@ -37,7 +36,7 @@ public class AppUser implements UserDetails {
 //    private LocalDate birthdate;
     @OneToMany(mappedBy = "doctor")
     private Set<Visit> visitSet;
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
     @ManyToMany
@@ -77,6 +76,8 @@ public class AppUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+        Set<SimpleGrantedAuthority> roleGrantedAuthorities = role.getGrantedAuthorities();
+        authorities.addAll(roleGrantedAuthorities);
         return authorities;
     }
 

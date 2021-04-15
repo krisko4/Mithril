@@ -3,17 +3,22 @@ package com.website.demo.registration.token;
 import com.website.demo.user.AppUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "confirmation_token")
 public class ConfirmationToken {
 
     @Id
@@ -26,8 +31,10 @@ public class ConfirmationToken {
     @Column(nullable = false)
     private LocalDateTime expiresAt;
     private LocalDateTime confirmedAt;
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "app_user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    @JoinColumn(name = "appuser_id")
+    @Cascade({ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DELETE })
     private AppUser appUser;
 
     public ConfirmationToken(String token,
