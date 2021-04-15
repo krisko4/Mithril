@@ -33,7 +33,7 @@ public class AppUser implements UserDetails {
     private String phone;
     private String password;
     private String email;
-    //    private LocalDate birthdate;
+    private LocalDate birthdate;
     @OneToMany(mappedBy = "doctor")
     private Set<Visit> visitSet;
     @ManyToOne
@@ -42,9 +42,6 @@ public class AppUser implements UserDetails {
     @ManyToMany
     @JoinTable(name = "doctor_schedule", joinColumns = {@JoinColumn(name = "doctor_id")}, inverseJoinColumns = {@JoinColumn(name = "schedule_id")})
     private Set<Schedule> schedules;
-
-
-
     @Enumerated(value = EnumType.STRING)
     private AppUserRole role;
     private boolean accountNonExpired;

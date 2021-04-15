@@ -1,7 +1,8 @@
 package com.website.demo.schedule;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.website.demo.doctor.Doctor;
+
+import com.website.demo.user.AppUser;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,5 +25,5 @@ public class Schedule {
     private LocalTime endHour;
     @ManyToMany(mappedBy = "schedules")
     @JsonBackReference
-    private Set<Doctor> doctors;
+    private Set<AppUser> doctors;
 }

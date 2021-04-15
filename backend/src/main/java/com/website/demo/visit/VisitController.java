@@ -1,6 +1,5 @@
 package com.website.demo.visit;
 
-import com.website.demo.doctor.Doctor;
 import com.website.demo.patient.Patient;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;

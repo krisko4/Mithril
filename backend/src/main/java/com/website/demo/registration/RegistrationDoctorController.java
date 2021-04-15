@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "registration/doctor")
+@RequestMapping(path = "doctor/registration")
 @AllArgsConstructor
 public class RegistrationDoctorController {
 

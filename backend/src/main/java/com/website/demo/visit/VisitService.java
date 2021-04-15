@@ -1,11 +1,12 @@
 package com.website.demo.visit;
 
-import com.website.demo.doctor.Doctor;
-import com.website.demo.doctor.DoctorRepository;
+//import com.website.demo.doctor.DoctorRepository;
 import com.website.demo.patient.Patient;
 import com.website.demo.patient.PatientRepository;
 import com.website.demo.schedule.Schedule;
 import com.website.demo.schedule.ScheduleService;
+import com.website.demo.user.AppUser;
+import com.website.demo.user.AppUserRepository;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,13 @@ public class VisitService {
 
     private final VisitRepository visitRepository;
     private final ScheduleService scheduleService;
-    private final DoctorRepository doctorRepository;
+//    private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
+    private final AppUserRepository appUserRepository;
 
     public void addVisit(VisitRequest visitRequest) {
         Patient patient = patientRepository.findById(visitRequest.getPatient_id()).get();
-        Doctor doctor = doctorRepository.findById(visitRequest.getDoctor_id()).get();
+        AppUser doctor = appUserRepository.findById(visitRequest.getDoctor_id()).get();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         LocalDateTime localDateTime = LocalDateTime.parse(visitRequest.getDate(), formatter);
         Visit visit = new Visit(patient, doctor, localDateTime);

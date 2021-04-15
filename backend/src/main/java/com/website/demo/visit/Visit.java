@@ -2,8 +2,9 @@ package com.website.demo.visit;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.website.demo.doctor.Doctor;
+
 import com.website.demo.patient.Patient;
+import com.website.demo.user.AppUser;
 import lombok.*;
 import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,12 +22,11 @@ import java.util.Date;
 public class Visit {
 
 
-    public Visit(Patient patient, Doctor doctor, LocalDateTime date){
+    public Visit(Patient patient, AppUser doctor, LocalDateTime date) {
         this.patient = patient;
         this.doctor = doctor;
         this.date = date;
-          }
-
+    }
 
 
     @Id
@@ -38,12 +38,11 @@ public class Visit {
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
+    private AppUser doctor;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "patient_id")
     private Patient patient;
-
 
 
 }

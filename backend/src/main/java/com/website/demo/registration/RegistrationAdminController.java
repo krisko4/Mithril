@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "registration/admin")
+@RequestMapping(path = "admin/registration")
 @AllArgsConstructor
 public class RegistrationAdminController {
 

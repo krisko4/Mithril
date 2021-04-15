@@ -1,5 +1,6 @@
 package com.website.demo.registration;
 
+import com.website.demo.address.Address;
 import com.website.demo.authorities.AppUserRole;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -21,7 +22,6 @@ public class RegistrationRequest {
     private final String country;
     private final String city;
     private final String street;
-    private final Integer streetNumber;
     private final Integer flat_number;
     private final String postCode;
     private AppUserRole role;

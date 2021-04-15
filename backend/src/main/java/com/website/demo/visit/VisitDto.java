@@ -2,10 +2,9 @@
 
 package com.website.demo.visit;
 
-import com.website.demo.doctor.Doctor;
-import com.website.demo.doctor.DoctorDto;
 import com.website.demo.patient.Patient;
 import com.website.demo.patient.PatientDto;
+import com.website.demo.user.AppUser;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,7 +16,7 @@ public class VisitDto {
 
     private LocalDateTime date;
     private String description;
-    private Doctor doctorDto;
+    private AppUser doctorDto;
     private Patient patientDto;
 
     public VisitDto(Visit visit){
