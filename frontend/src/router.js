@@ -8,8 +8,8 @@ import VisitComponent from "@/components/VisitSaving/VisitComponent";
 //import MailConfirmComponent from "@/components/Registration/MailConfirmComponent";
 import RegisterComponent from "@/components/Registration/RegisterComponent";
 //import RegisterStep4Component from "@/components/Registration/RegisterStep4Component";
-
-
+import ConfirmationSuccessComponent from "@/components/Registration/ConfirmationSuccessComponent";
+import App from "@/App";
 Vue.use(Router);
 
 const RouterVue = new Router({
@@ -26,7 +26,21 @@ const RouterVue = new Router({
             name: 'visit',
             component: VisitComponent
         },
-    ]
+        {
+            path: '/confirm/:token',
+            name: 'confirm',
+            component: ConfirmationSuccessComponent
+        },
+        {
+            path: '',
+            name: 'home',
+            component: App
+        }
+
+    ],
+    props:{
+        default: true
+    }
 });
 
 export default RouterVue;
