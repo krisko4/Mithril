@@ -58,21 +58,25 @@ export default {
             step4Completed: false,
             step: 1,
             valid: true,
+            form: {},
         }
     },
     name: "RegisterComponent",
     components: {RegisterStep2Component, RegisterStep1Component, RegisterStep3Component, RegisterStep4Component},
     methods: {
 
-        firstStepComplete(nextStep) {
+        firstStepComplete(nextStep, form) {
             this.step1Completed = true
             this.step = nextStep
-            console.log(this.step1Completed)
+            this.form = Object.assign(this.form, form)
+            console.log(this.form)
         },
 
-        secondStepComplete(nextStep) {
+        secondStepComplete(nextStep, form) {
             this.step2Completed = true
             this.step = nextStep
+            this.form = Object.assign(this.form, form)
+            console.log(this.form)
         },
         thirdStepComplete(nextStep){
             this.step3Completed = true

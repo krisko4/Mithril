@@ -135,8 +135,9 @@ export default {
             }
         },
         nextStep() {
-            this.$emit('thirdStepComplete', 3)
-            this.$toast.success('Step 3 completed successfully.')
+            this.$emit('thirdStepComplete', 3, {
+                image: this.previewImage
+            })
         },
         goBack() {
             this.$emit('goBack', 2)

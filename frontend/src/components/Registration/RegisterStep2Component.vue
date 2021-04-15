@@ -133,12 +133,22 @@ export default {
             country: '',
             buttonEnabled: false,
             valid: false,
-            errorPopped: ''
+            errorPopped: '',
         }
     },
     methods: {
         validateForm() {
-            this.$emit('secondStepComplete', 3)
+            console.log(this.form)
+            this.$emit('secondStepComplete', 3, {
+                'firstName': this.firstName,
+                'lastName': this.lastName,
+                'secondName': this.secondName,
+                'address': this.address,
+                'city': this.city,
+                'zip': this.zip,
+                'country': this.country
+            })
+
             this.$toast.success('Step 2 completed successfully.')
         },
         showButton() {
