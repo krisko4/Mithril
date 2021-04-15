@@ -41,7 +41,8 @@
                                     v-if="buttonVisible"
                                     text
                                     @click="registerDoctor"
-                                >Submit</v-btn>
+                                >Submit
+                                </v-btn>
                             </v-row>
                         </v-col>
                     </v-card-actions>
@@ -53,10 +54,11 @@
 
 <script>
 import axios from 'axios'
+
 export default {
     name: "RegisterStep4Component",
-    props:{
-      userData: {},
+    props: {
+        userData: Object,
     },
     data() {
         return {
@@ -68,23 +70,27 @@ export default {
     },
     created() {
         axios.get("http://localhost:8080/specializations").then((response) => {
-            response.data.forEach((element)=>{
+            response.data.forEach((element) => {
                 this.items.push(element.name)
             })
         })
     },
 
-    methods:{
+    methods: {
         goBack() {
             this.$emit('goBack', 3)
         },
-        registerDoctor(){
-            axios.post("http://localhost:8080/registration/doctor")
+        registerDoctor() {
+            console.log(this.userData)
+            axios.post("http://localhost:8080/registration/doctor", this.userData).then((response) => {
+                console.log(response)
+                this.$emit('fourthStepComplete', this.userData.email)
+            })
         }
     },
 
-    computed:{
-        buttonVisible(){
+    computed: {
+        buttonVisible() {
             return !!this.value;
         }
     }
