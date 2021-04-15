@@ -8,6 +8,8 @@
                         <v-select
                             placeholder="Please choose your specialization"
                             prepend-icon="mdi-database-search"
+                            multiple
+                            chips
                             :loading="loading"
                             :items="items"
                             v-model="value"

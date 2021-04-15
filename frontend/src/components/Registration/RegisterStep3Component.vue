@@ -135,7 +135,7 @@ export default {
             }
         },
         nextStep() {
-            this.$emit('thirdStepComplete', 3)
+            this.$emit('thirdStepComplete', 4)
         },
         goBack() {
             this.$emit('goBack', 2)

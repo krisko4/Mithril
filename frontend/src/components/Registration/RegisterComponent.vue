@@ -46,7 +46,7 @@
         <RegisterStep3Component v-else-if="!step3Completed"
                                 @imageLoaded="imageLoaded"
                                 @goBack="goBack"
-                                @thirdStepComplete="thirdStepComplete" >
+                                @thirdStepComplete="thirdStepComplete">
         </RegisterStep3Component>
         <RegisterStep4Component :userData="userData" v-else @goBack="goBack"></RegisterStep4Component>
     </v-container>
@@ -87,28 +87,25 @@ export default {
             this.userData = Object.assign(this.userData, form)
             console.log(this.userData)
         },
-        thirdStepComplete(nextStep){
+        thirdStepComplete(nextStep) {
             this.step3Completed = true
             this.step = nextStep
         },
 
         goBack(step) {
             this.step = step
-            if(step === 1){
+            if (step === 1) {
                 this.step1Completed = false
-            }
-            else if(step === 2){
+            } else if (step === 2) {
                 this.step2Completed = false
-            }
-            else if(step === 3){
+            } else if (step === 3) {
                 this.step3Completed = false
-            }
-            else{
+            } else {
                 this.step4Completed = false
             }
 
         },
-        imageLoaded(image){
+        imageLoaded(image) {
             this.userData = Object.assign(this.userData, image)
             console.log(this.userData)
         }

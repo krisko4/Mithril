@@ -26,9 +26,7 @@
                     >
                         <v-text-field
                             label="First name"
-                            :rules="[
-            v => !!v || 'Please enter your first name.'
-            ]"
+                            :rules="[v => !!v || 'Please enter your first name.']"
                             outlined
                             rounded
                             required
@@ -42,77 +40,136 @@
                         ></v-text-field>
                         <v-text-field
                             label="Last name"
-                            :rules="[
-            v => !!v || 'Please enter your last name.'
-            ]"
+                            :rules="[v => !!v || 'Please enter your last name.']"
                             outlined
                             rounded
                             required
                             v-model="lastName"
                         ></v-text-field>
-                        <v-text-field
-                            ref="address"
-                            v-model="address"
-                            :rules="[
-              () => !!address || 'This field is required',
-              () => !!address && address.length <= 25 || 'Address must be less than 25 characters',
 
-            ]"
-                            label="Address Line"
-                            placeholder="Address"
-                            counter="25"
-                            required
-                        ></v-text-field>
                         <v-text-field
-                            ref="city"
-                            v-model="city"
-                            :rules="[() => !!city || 'This field is required']"
-                            label="City"
-                            placeholder="El Paso"
+                            label="Phone"
+                            :rules="[v => !!v || 'Please enter your phone number.']"
+                            outlined
+                            rounded
                             required
+                            v-model="phone"
                         ></v-text-field>
-                        <v-text-field
-                            ref="zip"
-                            v-model="postCode"
-                            :rules="[() => !!postCode || 'This field is required']"
-                            label="ZIP / Postal Code"
-                            required
-                            placeholder="79938"
-                        ></v-text-field>
-                        <v-autocomplete
-                            ref="country"
-                            v-model="country"
-                            :rules="[() => !!country || 'This field is required']"
-                            :items="countries"
-                            label="Country"
-                            placeholder="Select..."
-                            required
-                        ></v-autocomplete>
-
 
                     </v-flex>
+                </v-col>
+                <v-col cols="3">
+                    <v-text-field
+                        ref="address"
+                        v-model="address"
+                        :rules="[
+                            () => !!address || 'This field is required',
+                            () => address.length <= 25 || 'Address must be less than 25 characters',]"
+                        label="Address Line"
+                        placeholder="Address"
+                        counter="25"
+                        outlined
+                        rounded
+                        required
+                    ></v-text-field>
+                    <v-text-field
+                        ref="city"
+                        v-model="city"
+                        :rules="[() => !!city || 'This field is required']"
+                        label="City"
+                        outlined
+                        rounded
+                        placeholder="El Paso"
+                        required
+                    ></v-text-field>
+                    <v-text-field
+                        ref="zip"
+                        v-model="postCode"
+                        :rules="[() => !!postCode || 'This field is required']"
+                        label="ZIP / Postal Code"
+                        required
+                        outlined
+                        rounded
+                        placeholder="79938"
+                    ></v-text-field>
+                    <v-autocomplete
+                        ref="country"
+                        v-model="country"
+                        :rules="[() => !!country || 'This field is required']"
+                        :items="countries"
+                        label="Country"
+                        outlined
+                        rounded
+                        placeholder="Select..."
+                        required
+                    ></v-autocomplete>
+                </v-col>
+
+            </v-row>
+            <v-row justify="center">
+                <v-col cols="4" align="center">
+                    <v-dialog
+                        ref="dialog"
+                        v-model="modal"
+                        :return-value.sync="date"
+                        persistent
+                        width="290px"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                                v-model="date"
+                                label="Birthdate"
+                                prepend-icon="mdi-calendar"
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                            ></v-text-field>
+                        </template>
+                        <v-date-picker
+                            v-model="date"
+                            scrollable
+                            :allowed-dates="allowedDates"
+                        >
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                text
+                                color="primary"
+                                @click="modal = false"
+                            >
+                                Cancel
+                            </v-btn>
+                            <v-btn
+                                text
+                                color="primary"
+                                @click="$refs.dialog.save(date)"
+                            >
+                                OK
+                            </v-btn>
+                        </v-date-picker>
+                    </v-dialog>
                 </v-col>
             </v-row>
             <v-row justify="center">
                 <v-col cols="1" align="center">
-                <v-btn color="primary" @click="goBack">
-                    <v-icon
-                        dark
-                        left
-                    >
-                        mdi-arrow-left
-                    </v-icon>Return</v-btn>
-                </v-col>
-                <v-col cols="1" align="center" v-if="buttonEnabled">
-                <transition name="fade">
-                    <v-btn color="primary" @click="validateForm"  medium>Submit
-                        <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+                    <v-btn color="primary" @click="goBack">
+                        <v-icon
+                            dark
+                            left
+                        >
+                            mdi-arrow-left
+                        </v-icon>
+                        Return
                     </v-btn>
-                </transition>
                 </v-col>
 
+                <v-col cols="1" align="center" v-if="buttonEnabled">
+                    <transition name="fade">
+                        <v-btn color="primary" @click="validateForm" medium>Submit
+                            <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+                        </v-btn>
+                    </transition>
+                </v-col>
             </v-row>
-
 
         </v-form>
 
@@ -131,9 +188,13 @@ export default {
             city: '',
             postCode: '',
             country: '',
+            phone: '',
             buttonEnabled: false,
             valid: false,
             errorPopped: '',
+            date: new Date().toISOString().substr(0, 10),
+            modal: false,
+            allowedDates: val => val <= new Date().toISOString().substr(0, 10),
         }
     },
     methods: {
@@ -146,7 +207,9 @@ export default {
                 'address': this.address,
                 'city': this.city,
                 'postCode': this.postCode,
-                'country': this.country
+                'country': this.country,
+                'phone': this.phone,
+                'birthdate': this.date,
             })
 
             this.$toast.success('Step 2 completed successfully.')
