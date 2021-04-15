@@ -38,6 +38,7 @@
                                     color="primary"
                                     v-if="buttonVisible"
                                     text
+                                    @click="registerDoctor"
                                 >Submit</v-btn>
                             </v-row>
                         </v-col>
@@ -49,24 +50,35 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name: "RegisterStep4Component",
+    props:{
+      userData: {},
+    },
     data() {
         return {
-            items: ['tibijczyk'],
+            items: [],
             loading: false,
             search: '',
             value: '',
         }
     },
     created() {
-        //TODO: query specialization list from database
+        axios.get("http://localhost:8080/specializations").then((response) => {
+            response.data.forEach((element)=>{
+                this.items.push(element.name)
+            })
+        })
     },
 
     methods:{
         goBack() {
             this.$emit('goBack', 3)
         },
+        registerDoctor(){
+            axios.post("http://localhost:8080/registration/doctor")
+        }
     },
 
     computed:{

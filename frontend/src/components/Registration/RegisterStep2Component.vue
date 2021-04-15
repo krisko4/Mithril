@@ -73,8 +73,8 @@
                         ></v-text-field>
                         <v-text-field
                             ref="zip"
-                            v-model="zip"
-                            :rules="[() => !!zip || 'This field is required']"
+                            v-model="postCode"
+                            :rules="[() => !!postCode || 'This field is required']"
                             label="ZIP / Postal Code"
                             required
                             placeholder="79938"
@@ -129,7 +129,7 @@ export default {
             secondName: '',
             address: '',
             city: '',
-            zip: '',
+            postCode: '',
             country: '',
             buttonEnabled: false,
             valid: false,
@@ -145,7 +145,7 @@ export default {
                 'secondName': this.secondName,
                 'address': this.address,
                 'city': this.city,
-                'zip': this.zip,
+                'postCode': this.postCode,
                 'country': this.country
             })
 

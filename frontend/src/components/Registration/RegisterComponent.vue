@@ -35,11 +35,20 @@
                 </v-stepper>
             </v-col>
         </v-row>
-        <RegisterStep1Component v-if="!step1Completed" @firstStepComplete="firstStepComplete"></RegisterStep1Component>
-        <RegisterStep2Component @goBack="goBack" v-else-if="!step2Completed"
-                                @secondStepComplete="secondStepComplete"></RegisterStep2Component>
-        <RegisterStep3Component v-else-if="!step3Completed" @goBack="goBack" @thirdStepComplete="thirdStepComplete" ></RegisterStep3Component>
-        <RegisterStep4Component v-else @goBack="goBack"></RegisterStep4Component>
+        <RegisterStep1Component
+            v-if="!step1Completed"
+            @firstStepComplete="firstStepComplete">
+        </RegisterStep1Component>
+        <RegisterStep2Component @goBack="goBack"
+                                v-else-if="!step2Completed"
+                                @secondStepComplete="secondStepComplete"
+        ></RegisterStep2Component>
+        <RegisterStep3Component v-else-if="!step3Completed"
+                                @imageLoaded="imageLoaded"
+                                @goBack="goBack"
+                                @thirdStepComplete="thirdStepComplete" >
+        </RegisterStep3Component>
+        <RegisterStep4Component :userData="userData" v-else @goBack="goBack"></RegisterStep4Component>
     </v-container>
 </template>
 
@@ -58,7 +67,7 @@ export default {
             step4Completed: false,
             step: 1,
             valid: true,
-            form: {},
+            userData: {},
         }
     },
     name: "RegisterComponent",
@@ -68,15 +77,15 @@ export default {
         firstStepComplete(nextStep, form) {
             this.step1Completed = true
             this.step = nextStep
-            this.form = Object.assign(this.form, form)
-            console.log(this.form)
+            this.userData = Object.assign(this.userData, form)
+            console.log(this.userData)
         },
 
         secondStepComplete(nextStep, form) {
             this.step2Completed = true
             this.step = nextStep
-            this.form = Object.assign(this.form, form)
-            console.log(this.form)
+            this.userData = Object.assign(this.userData, form)
+            console.log(this.userData)
         },
         thirdStepComplete(nextStep){
             this.step3Completed = true
@@ -84,7 +93,6 @@ export default {
         },
 
         goBack(step) {
-            console.log('abcd')
             this.step = step
             if(step === 1){
                 this.step1Completed = false
@@ -99,6 +107,10 @@ export default {
                 this.step4Completed = false
             }
 
+        },
+        imageLoaded(image){
+            this.userData = Object.assign(this.userData, image)
+            console.log(this.userData)
         }
     }
 

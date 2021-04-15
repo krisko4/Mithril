@@ -135,15 +135,16 @@ export default {
             }
         },
         nextStep() {
-            this.$emit('thirdStepComplete', 3, {
-                image: this.previewImage
-            })
+            this.$emit('thirdStepComplete', 3)
         },
         goBack() {
             this.$emit('goBack', 2)
         },
         submitImage(){
             setTimeout(() => {
+                this.$emit('imageLoaded', {
+                    image: this.previewImage
+                })
                 this.$toast.success('Image uploaded successfully.')
                 this.imageLoaded = false
             }, 1000)
