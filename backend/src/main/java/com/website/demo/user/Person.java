@@ -2,7 +2,6 @@ package com.website.demo.user;
 
 import com.website.demo.address.Address;
 import com.website.demo.authorities.AppUserRole;
-import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.schedule.Schedule;
 import com.website.demo.visit.Visit;
 import lombok.Getter;
@@ -22,9 +21,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "person")
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Person implements UserDetails {
+@Table(name = "app_user")
+public class AppUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,12 +36,15 @@ public class Person implements UserDetails {
 //    private LocalDate birthdate;
     @OneToMany(mappedBy = "doctor")
     private Set<Visit> visitSet;
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
     @ManyToMany
     @JoinTable(name = "doctor_schedule", joinColumns = {@JoinColumn(name = "doctor_id")}, inverseJoinColumns = {@JoinColumn(name = "schedule_id")})
     private Set<Schedule> schedules;
+
+
+
     @Enumerated(value = EnumType.STRING)
     private AppUserRole role;
     private boolean accountNonExpired;
@@ -51,13 +52,13 @@ public class Person implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean enabled;
 
-    public Person(String firstName,
-                  String secondName,
-                  String lastName,
-                  String email,
-                  String password,
-                  String phone,
-                  AppUserRole role) {
+    public AppUser(String firstName,
+                   String secondName,
+                   String lastName,
+                   String email,
+                   String password,
+                   String phone,
+                   AppUserRole role) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
@@ -75,6 +76,8 @@ public class Person implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+        Set<SimpleGrantedAuthority> roleGrantedAuthorities = role.getGrantedAuthorities();
+        authorities.addAll(roleGrantedAuthorities);
         return authorities;
     }
 
