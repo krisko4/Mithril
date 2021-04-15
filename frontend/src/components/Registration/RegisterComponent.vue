@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-row justify="center">
-            <v-col cols="6">
+            <v-col cols="12">
                 <v-stepper non-linear
                            v-model="step"
                            alt-labels
@@ -48,7 +48,8 @@
                                 @goBack="goBack"
                                 @thirdStepComplete="thirdStepComplete">
         </RegisterStep3Component>
-        <RegisterStep4Component :userData="userData" v-else @goBack="goBack"></RegisterStep4Component>
+        <RegisterStep4Component :userData="userData" v-else-if="!step4Completed" @fourthStepComplete="fourthStepComplete" @goBack="goBack"></RegisterStep4Component>
+        <MailConfirmComponent v-else :email="userData.email"></MailConfirmComponent>
     </v-container>
 </template>
 
@@ -57,7 +58,7 @@ import RegisterStep1Component from "@/components/Registration/RegisterStep1Compo
 import RegisterStep2Component from "@/components/Registration/RegisterStep2Component";
 import RegisterStep3Component from "@/components/Registration/RegisterStep3Component";
 import RegisterStep4Component from "@/components/Registration/RegisterStep4Component";
-
+import MailConfirmComponent from "@/components/Registration/MailConfirmComponent";
 export default {
     data() {
         return {
@@ -70,8 +71,12 @@ export default {
             userData: {},
         }
     },
+    created(){
+
+    },
+
     name: "RegisterComponent",
-    components: {RegisterStep2Component, RegisterStep1Component, RegisterStep3Component, RegisterStep4Component},
+    components: {RegisterStep2Component, RegisterStep1Component, RegisterStep3Component, RegisterStep4Component, MailConfirmComponent},
     methods: {
 
         firstStepComplete(nextStep, form) {
@@ -90,6 +95,9 @@ export default {
         thirdStepComplete(nextStep) {
             this.step3Completed = true
             this.step = nextStep
+        },
+        fourthStepComplete() {
+            this.step4Completed = true
         },
 
         goBack(step) {

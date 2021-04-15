@@ -76,7 +76,7 @@
                         ></v-text-field>
                         <v-row justify="center">
                             <transition name="fade">
-                                <v-btn color="primary" @click="validateForm" v-if="buttonEnabled" medium>Submit
+                                <v-btn color="primary" @click="validateForm" :disabled="!buttonEnabled" medium>Submit
                                     <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
                                 </v-btn>
                             </transition>

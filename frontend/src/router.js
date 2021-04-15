@@ -3,8 +3,10 @@ import Router from 'vue-router';
 // import RegisterStep1Component from "@/components/Registration/RegisterStep1Component";
 //import RegisterStep2Component from "@/components/Registration/RegisterStep2Component";
 //import RegisterStep3Component from "@/components/Registration/RegisterStep3Component";
-import RegisterComponent from "@/components/Registration/RegisterComponent";
+//import RegisterComponent from "@/components/Registration/RegisterComponent";
 import VisitComponent from "@/components/VisitSaving/VisitComponent";
+//import MailConfirmComponent from "@/components/Registration/MailConfirmComponent";
+import RegisterComponent from "@/components/Registration/RegisterComponent";
 //import RegisterStep4Component from "@/components/Registration/RegisterStep4Component";
 
 
