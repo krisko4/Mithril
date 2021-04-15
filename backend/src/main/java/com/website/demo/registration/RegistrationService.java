@@ -66,9 +66,11 @@ public class RegistrationService {
         );
         String link;
         if (request.getRole().equals(AppUserRole.DOCTOR)) {
-            link = "http://localhost:8080/doctor/registration/confirm?token=" + token;
+          //  link = "http://localhost:8080/doctor/registration/confirm?token=" + token;
+            link = "http://localhost:8080/confirm/" + token;
         } else if (request.getRole().equals(AppUserRole.ADMIN)) {
-            link = "http://localhost:8080/admin/registration/confirm?token=" + token;
+            link = "http://localhost:8080/confirm/" + token;
+          //  link = "http://localhost:8080/admin/registration/confirm?token=" + token;
         } else {
             link = "http://localhost:8080/patient/registration/confirm?token=" + token;
         }

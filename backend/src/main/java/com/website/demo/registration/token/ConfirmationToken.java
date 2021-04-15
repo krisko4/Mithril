@@ -33,7 +33,7 @@ public class ConfirmationToken {
     private LocalDateTime confirmedAt;
     @ManyToOne(fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "appuser_id")
+    @JoinColumn(name = "app_user_id")
     @Cascade({ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DELETE })
     private AppUser appUser;
 
