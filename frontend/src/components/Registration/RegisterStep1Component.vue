@@ -9,8 +9,8 @@
                 <h2 class="display-1 font-weight-thin mb-3">
                     Step 1
                 </h2>
-                <h3 class="display-1 font-weight-thin mb-3">
-                    Login credentials
+                <h3  class="display-1 font-weight-thin mb-3">
+                    <i>Login credentials </i>
                 </h3>
                 <transition name="fade">
                     <p style="color:red;" v-if="errorPopped">{{ error }}</p>

@@ -1,5 +1,18 @@
 <template>
     <v-container>
+        <v-row class="text-center">
+            <v-col class="mb-4">
+                <h1 class="display-2 font-weight-bold mb-3">
+                    Registration panel
+                </h1>
+                <h2 class="display-1 font-weight-thin mb-3">
+                    Step 4
+                </h2>
+                <h3 class="display-1 font-weight-thin mb-3">
+                    <i>Specialization</i>
+                </h3>
+            </v-col>
+        </v-row>
         <v-row justify="center">
             <v-col cols="4">
                 <v-card>

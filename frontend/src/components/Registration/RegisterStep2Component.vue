@@ -10,7 +10,7 @@
                     Step 2
                 </h2>
                 <h3 class="display-1 font-weight-thin mb-3">
-                    Personal data
+                    <i>Personal data</i>
                 </h3>
                 <transition name="fade">
                     <p style="color:red;" v-if="errorPopped">{{ error }}</p>
@@ -26,16 +26,19 @@
                         <v-col cols="6">
 
                         <v-text-field
+                            @keypress="isLetter($event)"
                             label="First name"
                             :rules="[v => !!v || 'Please enter your first name.']"
                             outlined
                             rounded
                             required
                             v-model="firstName"
+                            type="text"
                         ></v-text-field>
                         </v-col>
                         <v-col cols="6">
                             <v-text-field
+                                @keypress="isLetter($event)"
                                 label="Last name"
                                 :rules="[v => !!v || 'Please enter your last name.']"
                                 outlined
@@ -48,6 +51,7 @@
                     <v-row justify="center">
                         <v-col cols="6" align="center">
                             <v-text-field
+                                @keypress="isLetter($event)"
                                 label="Second name (optional)"
                                 outlined
                                 rounded
@@ -56,6 +60,7 @@
                         </v-col>
                         <v-col cols="6">
                             <v-text-field
+                                @keypress="isNumber($event)"
                                 label="Phone"
                                 :rules="[v => !!v || 'Please enter your phone number.']"
                                 rounded
@@ -117,7 +122,10 @@
                                 v-model="address"
                                 :rules="[
                             () => !!address || 'This field is required',
-                            () => address.length <= 25 || 'Address must be less than 25 characters',]"
+                            () => address.length <= 25 || 'Address must be less than 25 characters',
+                            v => /(?=.*[A-Za-z]{3})/.test(v) || 'Your address should contain at least 3 letters.',
+                            ]"
+
                                 label="Address Line"
                                 placeholder="Address"
                                 counter="25"
@@ -129,11 +137,13 @@
                         <v-col cols="6" align="center">
                             <v-text-field
                                 ref="address"
+                                type="number"
                                 v-model="address_2"
                                 :rules="[
-                            () => !!address || 'This field is required',
+                            () => !!address_2 || 'This field is required',
+
                             ]"
-                                label="Address Line No.2"
+                                label="Address Line No.2 (house number)"
                                 placeholder="Address"
                                 counter="5"
                                 outlined
@@ -144,6 +154,7 @@
                         <v-col cols="6">
                             <v-text-field
                                 ref="zip"
+                                v-mask="'##-###'"
                                 v-model="postCode"
                                 :rules="[() => !!postCode || 'This field is required']"
                                 label="ZIP / Postal Code"
@@ -155,6 +166,7 @@
                         </v-col>
                         <v-col cols="6">
                             <v-text-field
+                                @keypress="isLetter($event)"
                                 ref="city"
                                 v-model="city"
                                 :rules="[() => !!city || 'This field is required']"
@@ -167,7 +179,7 @@
                         </v-col>
                         <v-col cols="12">
                             <v-autocomplete
-                                ref="country"
+                                @keypress="isLetter($event)"
                                 v-model="country"
                                 :rules="[() => !!country || 'This field is required']"
                                 :items="countries"
@@ -237,6 +249,7 @@ export default {
                 'lastName': this.lastName,
                 'secondName': this.secondName,
                 'street': this.address,
+                'flatNumber' : this.address_2,
                 'city': this.city,
                 'postCode': this.postCode,
                 'country': this.country,
@@ -245,6 +258,16 @@ export default {
             })
 
             this.$toast.success('Step 2 completed successfully.')
+        },
+        isLetter(e){
+            let char = String.fromCharCode(e.keyCode);
+            if(/^[A-Za-z]+$/.test(char)) return true;
+            else e.preventDefault();
+        },
+        isNumber(e){
+            let char = String.fromCharCode(e.keyCode);
+            if(/^[0-9]+$/.test(char)) return true;
+            else e.preventDefault();
         },
         showButton() {
             this.buttonEnabled = this.valid

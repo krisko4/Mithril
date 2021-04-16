@@ -5,7 +5,10 @@
             color="lightgrey"
             dark
         >
-            EmaMed
+            <v-app-bar-title>
+                Ema
+            </v-app-bar-title>
+
         </v-app-bar>
         <v-main>
             <router-view></router-view>

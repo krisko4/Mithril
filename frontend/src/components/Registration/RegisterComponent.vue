@@ -58,7 +58,7 @@ import RegisterStep1Component from "@/components/Registration/RegisterStep1Compo
 import RegisterStep2Component from "@/components/Registration/RegisterStep2Component";
 import RegisterStep3Component from "@/components/Registration/RegisterStep3Component";
 import RegisterStep4Component from "@/components/Registration/RegisterStep4Component";
-import MailConfirmComponent from "@/components/Registration/MailConfirmComponent";
+import MailConfirmComponent from "@/components/Registration/Confirmation/MailConfirmComponent";
 export default {
     data() {
         return {

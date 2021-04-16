@@ -9,7 +9,7 @@
                     Step 3
                 </h2>
                 <h3 class="display-1 font-weight-thin mb-3">
-                    Profile image
+                    <i>Profile image</i>
                 </h3>
             </v-col>
         </v-row>
@@ -55,7 +55,13 @@
                         <v-card-actions>
                             <v-col  v-if="imageLoaded">
                                 <v-row justify="end">
-                                    <v-btn text color="primary" @click="submitImage">Submit</v-btn>
+                                    <v-btn
+                                        text
+                                        color="primary"
+                                        @click="submitImage"
+                                        :loading="isSubmitLoading"
+                                    >Submit
+                                    </v-btn>
                                 </v-row>
                             </v-col>
 
@@ -94,6 +100,7 @@ export default {
     data() {
         return {
             isLoading: false,
+            isSubmitLoading: false,
             selectedFile: null,
             previewImage: null,
             imageLoaded: false,
@@ -141,13 +148,16 @@ export default {
             this.$emit('goBack', 2)
         },
         submitImage(){
+            this.isSubmitLoading = true
             setTimeout(() => {
                 this.$emit('imageLoaded', {
                     image: this.previewImage
                 })
+                this.isSubmitLoading = false
                 this.$toast.success('Image uploaded successfully.')
                 this.imageLoaded = false
             }, 1000)
+
         }
     }
 }

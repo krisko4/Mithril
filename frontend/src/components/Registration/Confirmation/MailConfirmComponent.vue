@@ -6,7 +6,7 @@
             <v-card-subtitle class="display-1 text--primary">Verify your account</v-card-subtitle>
             <v-divider class="mx-4"></v-divider>
             <v-card-text>Your account has been created, but is inactive. Activation message has been sent to your e-mail: <b>{{email}}</b>
-                <br>To activate your account, please visit your e-mail. In case you've not received an e-mail, please press the following button.</v-card-text>
+                <br>To activate your account, please visit your e-mail. In case you've not received an e-mail, please press the button below.</v-card-text>
 
                 <v-row justify="center">
                     <v-card-actions>
