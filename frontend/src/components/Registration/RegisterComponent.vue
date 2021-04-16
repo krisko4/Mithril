@@ -48,7 +48,13 @@
                                 @goBack="goBack"
                                 @thirdStepComplete="thirdStepComplete">
         </RegisterStep3Component>
-        <RegisterStep4Component :userData="userData" v-else-if="!step4Completed" @fourthStepComplete="fourthStepComplete" @goBack="goBack"></RegisterStep4Component>
+        <RegisterStep4Component :userData="userData"
+                                v-else-if="!step4Completed"
+                                @fourthStepComplete="fourthStepComplete"
+                                :image="image"
+                                @goBack="goBack">
+
+        </RegisterStep4Component>
         <MailConfirmComponent v-else :email="userData.email"></MailConfirmComponent>
     </v-container>
 </template>
@@ -69,6 +75,7 @@ export default {
             step: 1,
             valid: true,
             userData: {},
+            image: null,
         }
     },
     created(){
@@ -92,9 +99,11 @@ export default {
             this.userData = Object.assign(this.userData, form)
             console.log(this.userData)
         },
-        thirdStepComplete(nextStep) {
+        thirdStepComplete(nextStep, image) {
             this.step3Completed = true
             this.step = nextStep
+            this.userData = Object.assign(this.userData, image)
+            console.log(this.userData)
         },
         fourthStepComplete() {
             this.step4Completed = true
@@ -114,8 +123,8 @@ export default {
 
         },
         imageLoaded(image) {
-            this.userData = Object.assign(this.userData, image)
-            console.log(this.userData)
+            this.image = image
+            console.log(this.image)
         }
     }
 

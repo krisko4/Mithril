@@ -50,10 +50,10 @@
                             accept="image/*"
                             @change="onBrowsing"
                         >
-                        <h4 >Drag and drop files to upload.
+                        <h4>Drag and drop files to upload.
                         </h4>
                         <v-card-actions>
-                            <v-col  v-if="imageLoaded">
+                            <v-col v-if="imageLoaded">
                                 <v-row justify="end">
                                     <v-btn
                                         text
@@ -80,7 +80,9 @@
                         left
                     >
                         mdi-arrow-left
-                    </v-icon>Return</v-btn>
+                    </v-icon>
+                    Return
+                </v-btn>
             </v-col>
             <v-col cols="1" align="center">
                 <transition name="fade">
@@ -95,6 +97,8 @@
 </template>
 
 <script>
+//import axios from "axios";
+
 export default {
     name: "RegisterStep3Component",
     data() {
@@ -106,6 +110,7 @@ export default {
             imageLoaded: false,
             buttonEnabled: false,
             elevation: 5,
+            formData: null
         }
     },
     methods: {
@@ -119,20 +124,21 @@ export default {
 
         onBrowsing(e) {
             this.selectedFile = e.target.files[0]
+            console.log(this.selectedFile)
             this.readImage(this.selectedFile)
         },
 
         dragover() {
-           this.elevation=12
+            this.elevation = 12
         },
-        dragend(){
-            this.elevation=5
+        dragend() {
+            this.elevation = 5
         },
-        drop(event){
+        drop(event) {
             event.preventDefault();
             this.readImage(event.dataTransfer.files[0])
         },
-        readImage(val){
+        readImage(val) {
             const fr = new FileReader()
             fr.readAsDataURL(val)
             fr.onload = e => {
@@ -142,20 +148,24 @@ export default {
             }
         },
         nextStep() {
-            this.$emit('thirdStepComplete', 4)
+            this.$emit('thirdStepComplete', 4, {
+                image: this.formData
+            })
         },
         goBack() {
             this.$emit('goBack', 2)
         },
-        submitImage(){
+        submitImage() {
             this.isSubmitLoading = true
+            const formData = new FormData()
+            formData.append('file', this.selectedFile)
+            this.formData = formData
             setTimeout(() => {
-                this.$emit('imageLoaded', {
-                    image: this.previewImage
-                })
+                this.$emit('imageLoaded', formData)
                 this.isSubmitLoading = false
                 this.$toast.success('Image uploaded successfully.')
                 this.imageLoaded = false
+
             }, 1000)
 
         }
