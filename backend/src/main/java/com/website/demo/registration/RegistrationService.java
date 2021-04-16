@@ -67,9 +67,9 @@ public class RegistrationService {
         String link;
         if (request.getRole().equals(AppUserRole.DOCTOR)) {
           //  link = "http://localhost:8080/doctor/registration/confirm?token=" + token;
-            link = "http://localhost:8080/confirm/" + token;
+            link = "http://localhost:8081/confirm/" + token;
         } else if (request.getRole().equals(AppUserRole.ADMIN)) {
-            link = "http://localhost:8080/confirm/" + token;
+            link = "http://localhost:8081/confirm/" + token;
           //  link = "http://localhost:8080/admin/registration/confirm?token=" + token;
         } else {
             link = "http://localhost:8080/patient/registration/confirm?token=" + token;
@@ -81,16 +81,16 @@ public class RegistrationService {
     @Transactional
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
-                .orElseThrow(() -> new IllegalStateException("token not found"));
+                .orElseThrow(() -> new IllegalStateException("Token not found"));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("email already confirmed");
+            throw new IllegalStateException("E-mail already confirmed");
         }
 
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("token expired");
+            throw new IllegalStateException("Token expired");
         }
 
         confirmationTokenService.setConfirmedAt(token);

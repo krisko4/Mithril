@@ -27,6 +27,7 @@ public class RegistrationDoctorController {
         return registrationService.register(request);
     }
 
+    @CrossOrigin
     @GetMapping(path = "confirm")
     public String confirm(@RequestParam("token") String token){
         return registrationService.confirmToken(token);
