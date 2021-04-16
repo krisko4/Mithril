@@ -56,6 +56,7 @@ public class AppUser implements UserDetails {
                    String password,
                    String phone,
                    Address address,
+                   LocalDate birthdate,
                    AppUserRole role) {
         this.firstName = firstName;
         this.secondName = secondName;
@@ -68,6 +69,7 @@ public class AppUser implements UserDetails {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = false;
+        this.birthdate = birthdate;
         this.role = role;
     }
 

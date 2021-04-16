@@ -14,7 +14,9 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +32,9 @@ public class RegistrationService {
 
     public String register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
+        String birthdate = request.getBirthdate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(birthdate, formatter);
         if (!isValidEmail) {
             throw new IllegalStateException(String.format(EMAIL_NOT_VALID_MSG, request.getEmail()));
         }
@@ -61,6 +66,7 @@ public class RegistrationService {
                         request.getPassword(),
                         request.getPhone(),
                         address,
+                        localDate,
                         request.getRole()
                 )
         );

@@ -24,6 +24,7 @@ public class RegistrationRequest {
     private final String street;
     private final Integer flatNumber;
     private final String postCode;
+    private final String birthdate;
     private AppUserRole role;
 
     public void setRole(AppUserRole role) {
