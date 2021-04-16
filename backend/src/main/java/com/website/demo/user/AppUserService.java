@@ -69,4 +69,7 @@ public class AppUserService implements UserDetailsService {
     public List<AppUser> list() {
         return appUserRepository.findAll();
     }
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.website.demo.registration.token;
 
+import com.website.demo.user.AppUser;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +28,9 @@ public class ConfirmationTokenService {
 
     public List<ConfirmationToken> getAll(){
         return confirmationTokenRepository.findAll();
+    }
+
+    public ConfirmationToken findByToken(String token){
+        return confirmationTokenRepository.findByToken(token).get();
     }
 }

@@ -33,6 +33,7 @@ public class AppUser implements UserDetails {
     private String phone;
     private String password;
     private String email;
+    private String imagePath;
     private LocalDate birthdate;
     @OneToMany(mappedBy = "doctor")
     private Set<Visit> visitSet;

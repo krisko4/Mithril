@@ -7,7 +7,9 @@ import com.website.demo.user.AppUser;
 import com.website.demo.user.AppUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,4 +39,18 @@ public class RegistrationDoctorController {
     public Optional<AppUser> getAllConfirmationTokensByUserId(@RequestParam("id") Long id){
         return appUserRepository.findById(id);
     }
+
+    @CrossOrigin
+    @PostMapping("upload")
+    public String uploadImage(@RequestBody MultipartFile file){
+        return registrationService.uploadImage(file);
+    }
+
+    @CrossOrigin
+    @PostMapping("save")
+    public void saveImageToUser(@RequestBody SaveImageToUserRequest request){
+        registrationService.saveImageToUser(request);
+
+    }
+
 }

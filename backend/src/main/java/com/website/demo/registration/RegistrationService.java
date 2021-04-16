@@ -10,10 +10,15 @@ import com.website.demo.user.AppUser;
 import com.website.demo.user.AppUserService;
 import com.website.demo.validation.EmailValidator;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -55,6 +60,7 @@ public class RegistrationService {
             address = requestAddress;
             addressRepository.save(address);
         }
+
 
 
         String token = appUserService.signUp(
@@ -172,5 +178,32 @@ public class RegistrationService {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
+    }
+
+    public String uploadImage(MultipartFile file) {
+
+        // full path to project directory
+        String projectDirectory = new File("").getAbsolutePath();
+        // directory where we want our files to be stored
+        String fileDirectory = projectDirectory + "/src/main/resources/static/";
+        String originalFilename = file.getOriginalFilename();
+        String filePath = fileDirectory + originalFilename;
+        File dest = new File(filePath);
+        try{
+            file.transferTo(dest);
+        }
+        catch (Exception e){
+           e.printStackTrace();
+        }
+        return filePath;
+
+    }
+
+    public void saveImageToUser(SaveImageToUserRequest request) {
+        AppUser appUser = confirmationTokenService.findByToken(request.getToken()).getAppUser();
+        appUser.setImagePath(request.getImagePath());
+        //TODO:
+        // how to update appUser in database using repository?
+
     }
 }
