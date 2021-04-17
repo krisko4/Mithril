@@ -24,7 +24,7 @@ public class RegistrationDoctorController {
 
     @CrossOrigin
     @PostMapping
-    public String register(@RequestBody RegistrationRequest request){
+    public String register(@ModelAttribute RegistrationRequest request){
         request.setRole(AppUserRole.DOCTOR);
         return registrationService.register(request);
     }

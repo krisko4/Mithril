@@ -26,6 +26,7 @@ public class RegistrationRequest {
     private final Integer flatNumber;
     private final String postCode;
     private final String birthdate;
+    private MultipartFile image;
     private AppUserRole role;
 
     public void setRole(AppUserRole role) {

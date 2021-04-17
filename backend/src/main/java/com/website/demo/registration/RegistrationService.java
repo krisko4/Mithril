@@ -61,21 +61,38 @@ public class RegistrationService {
             addressRepository.save(address);
         }
 
-
-
-        String token = appUserService.signUp(
-                new AppUser(
-                        request.getFirstName(),
-                        request.getSecondName(),
-                        request.getLastName(),
-                        request.getEmail(),
-                        request.getPassword(),
-                        request.getPhone(),
-                        address,
-                        localDate,
-                        request.getRole()
-                )
+        AppUser appUser =   new AppUser(
+                request.getFirstName(),
+                request.getSecondName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getPhone(),
+                address,
+                localDate,
+                request.getRole()
         );
+
+        String token = appUserService.signUp(appUser);
+
+        if(request.getImage() != null) {
+            // full path to project directory
+            String projectDirectory = new File("").getAbsolutePath();
+            // directory where we want our files to be stored
+            String fileDirectory = projectDirectory + "/src/main/resources/static/";
+            String originalFilename = request.getImage().getOriginalFilename();
+            String filePath = fileDirectory + originalFilename;
+            File dest = new File(filePath);
+            try {
+                request.getImage().transferTo(dest);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to transfer file to destinated directory.");
+            }
+            appUserService.setImagePath(filePath, appUser.getEmail());
+
+        }
+
+
         String link;
         if (request.getRole().equals(AppUserRole.DOCTOR)) {
           //  link = "http://localhost:8080/doctor/registration/confirm?token=" + token;
@@ -180,6 +197,8 @@ public class RegistrationService {
                 "</div></div>";
     }
 
+    /*
+
     public String uploadImage(MultipartFile file) {
 
         // full path to project directory
@@ -206,4 +225,6 @@ public class RegistrationService {
         // how to update appUser in database using repository?
 
     }
+
+     */
 }

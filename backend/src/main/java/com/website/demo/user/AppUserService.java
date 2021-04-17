@@ -66,6 +66,10 @@ public class AppUserService implements UserDetailsService {
         if (appUserRepository.existsByEmail(email)) throw new IllegalStateException("E-mail already exists");
     }
 
+    public void setImagePath(String imagePath, String email){
+        appUserRepository.setImagePath(imagePath, email);
+    }
+
     public List<AppUser> list() {
         return appUserRepository.findAll();
     }
