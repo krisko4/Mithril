@@ -9,6 +9,7 @@ import com.website.demo.registration.token.ConfirmationTokenService;
 import com.website.demo.user.AppUser;
 import com.website.demo.user.AppUserService;
 import com.website.demo.validation.EmailValidator;
+import com.website.demo.validation.PasswordValidator;
 import lombok.AllArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.data.domain.Example;
@@ -27,8 +28,10 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class RegistrationService {
 
-    private static final String EMAIL_NOT_VALID_MSG = "email %s not valid";
+    private static final String EMAIL_NOT_VALID_MSG = "E-mail %s is invalid";
+    private static final String PASSWORD_NOT_VALID_MSG = "Password %s is invalid";
     private final EmailValidator emailValidator;
+    private final PasswordValidator passwordValidator;
     private final AppUserService appUserService;
     private final AddressRepository addressRepository;
     private final ConfirmationTokenService confirmationTokenService;
@@ -37,11 +40,12 @@ public class RegistrationService {
 
     public String register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
-        String birthdate = request.getBirthdate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate localDate = LocalDate.parse(birthdate, formatter);
+        boolean isValidPassword = passwordValidator.test(request.getPassword());
         if (!isValidEmail) {
             throw new IllegalStateException(String.format(EMAIL_NOT_VALID_MSG, request.getEmail()));
+        }
+        if (!isValidPassword) {
+            throw new IllegalStateException(String.format(PASSWORD_NOT_VALID_MSG, request.getEmail()));
         }
 
         Address requestAddress = new Address(
@@ -60,6 +64,10 @@ public class RegistrationService {
             address = requestAddress;
             addressRepository.save(address);
         }
+
+        String birthdate = request.getBirthdate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(birthdate, formatter);
 
         AppUser appUser =   new AppUser(
                 request.getFirstName(),

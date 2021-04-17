@@ -1,6 +1,10 @@
 package com.website.demo.validation;
 
-public class PasswordValidator {
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Predicate;
+
+public class PasswordValidator implements Predicate<String> {
 
     public static boolean isValid(String password) {
         if (!password.matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")) {
@@ -16,4 +20,15 @@ public class PasswordValidator {
         }
         return true;
     }
+
+
+    @Override
+    public boolean test(String password) {
+        if (!password.matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")) {
+            throw new IllegalStateException("Password is invalid.");
+        }
+        return true;
+    }
+
+
 }
