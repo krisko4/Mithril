@@ -62,6 +62,7 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.enableAppUser(email);
     }
 
+
     public void checkEmailAvailability(String email) {
         if (appUserRepository.existsByEmail(email)) throw new IllegalStateException("E-mail already exists");
     }

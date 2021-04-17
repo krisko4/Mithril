@@ -33,4 +33,8 @@ public class ConfirmationTokenService {
     public ConfirmationToken findByToken(String token){
         return confirmationTokenRepository.findByToken(token).get();
     }
+
+    public AppUser getUserByToken(String token) {
+        return confirmationTokenRepository.findByToken(token).get().getAppUser();
+    }
 }

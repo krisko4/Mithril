@@ -22,5 +22,7 @@ public class AppUserController {
     public List<AppUser> list(){
         return appUserService.list();
     }
+
+
 }
 

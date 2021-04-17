@@ -7,6 +7,7 @@ import com.website.demo.registration.email.EmailSender;
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenService;
 import com.website.demo.user.AppUser;
+import com.website.demo.user.AppUserRepository;
 import com.website.demo.user.AppUserService;
 import com.website.demo.validation.EmailValidator;
 import com.website.demo.validation.PasswordValidator;
@@ -23,6 +24,7 @@ import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -33,12 +35,34 @@ public class RegistrationService {
     private final EmailValidator emailValidator;
     private final PasswordValidator passwordValidator;
     private final AppUserService appUserService;
+    private final AppUserRepository appUserRepository;
     private final AddressRepository addressRepository;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
+    private final String CONFIRMATION_LINK = "http://localhost:8081/confirm/";
 
 
     public String register(RegistrationRequest request) {
+
+        // resending email confirmation message for existing user
+        if(appUserRepository.existsByEmail(request.getEmail())){
+            AppUser appUser = appUserRepository.findByEmail(request.getEmail()).get();
+            if(!appUser.isEnabled()){
+                String token = UUID.randomUUID().toString();
+                ConfirmationToken confirmationToken = new ConfirmationToken(
+                        token,
+                        LocalDateTime.now(),
+                        LocalDateTime.now().plusMinutes(1),
+                        appUser
+                );
+                confirmationTokenService.saveConfirmationToken(confirmationToken);
+                String link = CONFIRMATION_LINK + token;
+                emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
+                return token;
+
+            }
+        }
+
         boolean isValidEmail = emailValidator.test(request.getEmail());
         boolean isValidPassword = passwordValidator.test(request.getPassword());
         if (!isValidEmail) {
@@ -101,16 +125,7 @@ public class RegistrationService {
         }
 
 
-        String link;
-        if (request.getRole().equals(AppUserRole.DOCTOR)) {
-          //  link = "http://localhost:8080/doctor/registration/confirm?token=" + token;
-            link = "http://localhost:8081/confirm/" + token;
-        } else if (request.getRole().equals(AppUserRole.ADMIN)) {
-            link = "http://localhost:8081/confirm/" + token;
-          //  link = "http://localhost:8080/admin/registration/confirm?token=" + token;
-        } else {
-            link = "http://localhost:8080/patient/registration/confirm?token=" + token;
-        }
+        String link = "http://localhost:8081/confirm/" + token;
         emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
         return token;
     }
@@ -205,4 +220,18 @@ public class RegistrationService {
                 "</div></div>";
     }
 
+    public String resendEmail(String email, String firstName) {
+        AppUser appUser = appUserRepository.findByEmail(email).get();
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(1),
+                appUser
+        );
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        String link = CONFIRMATION_LINK + token;
+        emailSender.send(email, buildEmail(firstName, link));
+        return token;
+    }
 }

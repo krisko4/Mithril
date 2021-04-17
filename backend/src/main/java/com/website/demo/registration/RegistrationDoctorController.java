@@ -1,8 +1,11 @@
 package com.website.demo.registration;
 
+import antlr.Token;
+import com.github.javafaker.App;
 import com.website.demo.authorities.AppUserRole;
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenRepository;
+import com.website.demo.registration.token.ConfirmationTokenService;
 import com.website.demo.user.AppUser;
 import com.website.demo.user.AppUserRepository;
 import lombok.AllArgsConstructor;
@@ -19,7 +22,7 @@ import java.util.Optional;
 public class RegistrationDoctorController {
 
     private final RegistrationService registrationService;
-    private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final ConfirmationTokenService confirmationTokenService;
     private final AppUserRepository appUserRepository;
 
     @CrossOrigin
@@ -39,6 +42,25 @@ public class RegistrationDoctorController {
     public Optional<AppUser> getAllConfirmationTokensByUserId(@RequestParam("id") Long id){
         return appUserRepository.findById(id);
     }
+
+    @CrossOrigin
+    @PostMapping("resendEmail")
+    public void resendEmail(@RequestBody RegistrationRequest registrationRequest){
+        registrationService.resendEmail(registrationRequest.getEmail(), registrationRequest.getFirstName());
+    }
+
+    @CrossOrigin
+    @PostMapping("resendEmailToken")
+    public void resendEmailToken(@RequestBody TokenRequest tokenRequest){
+        AppUser appUser = confirmationTokenService.getUserByToken(tokenRequest.getToken());
+        registrationService.resendEmail(appUser.getEmail(), appUser.getFirstName());
+    }
+
+
+
+
+
+
 
 
 }

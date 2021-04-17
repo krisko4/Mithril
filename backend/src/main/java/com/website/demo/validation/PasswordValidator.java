@@ -1,9 +1,10 @@
 package com.website.demo.validation;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 
 import java.util.function.Predicate;
-
+@Service
 public class PasswordValidator implements Predicate<String> {
 
     public static boolean isValid(String password) {
