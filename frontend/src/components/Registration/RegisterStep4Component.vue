@@ -111,27 +111,8 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 },
             })
-                .then((response) => {
-                    console.log(response)
-                    console.log(this.image)
+                .then(() => {
                     this.$emit('fourthStepComplete', this.userData.email)
-                    /*
-                    if (this.image) {
-                        axios.post("http://localhost:8080/doctor/registration/upload", this.image, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data'
-                            }
-                        }).then((response1) => {
-                            console.log('filePath: ' + response1.data)
-                            axios.post("http://localhost:8080/doctor/registration/save", {
-                                token: response.data,
-                                imagePath: response1.data
-                            })
-                        })
-                    }
-                    this.$emit('fourthStepComplete', this.userData.email)
-
-                     */
                 })
 
         }
