@@ -148,12 +148,12 @@ export default {
             }
         },
         nextStep() {
-            this.$emit('thirdStepComplete', 4, {
+            this.$emit('thirdStepComplete', {
                 image: this.selectedFile
             })
         },
         goBack() {
-            this.$emit('goBack', 2)
+            this.$emit('goBack')
         },
         submitImage() {
             this.isSubmitLoading = true

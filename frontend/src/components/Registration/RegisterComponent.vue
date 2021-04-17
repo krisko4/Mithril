@@ -35,27 +35,28 @@
                 </v-stepper>
             </v-col>
         </v-row>
+
         <RegisterStep1Component
-            v-if="!step1Completed"
+            v-show="step === 1"
             @firstStepComplete="firstStepComplete">
         </RegisterStep1Component>
         <RegisterStep2Component @goBack="goBack"
-                                v-else-if="!step2Completed"
+                                v-show="step === 2"
                                 @secondStepComplete="secondStepComplete"
         ></RegisterStep2Component>
-        <RegisterStep3Component v-else-if="!step3Completed"
+        <RegisterStep3Component v-show="step === 3"
                                 @imageLoaded="imageLoaded"
                                 @goBack="goBack"
                                 @thirdStepComplete="thirdStepComplete">
         </RegisterStep3Component>
         <RegisterStep4Component :userData="userData"
-                                v-else-if="!step4Completed"
+                                v-show="step === 4"
                                 @fourthStepComplete="fourthStepComplete"
                                 :image="image"
                                 @goBack="goBack">
 
         </RegisterStep4Component>
-        <MailConfirmComponent v-else :firstName="userData.firstName" :email="userData.email"></MailConfirmComponent>
+        <MailConfirmComponent v-show="step === 5" :firstName="userData.firstName" :email="userData.email"></MailConfirmComponent>
     </v-container>
 </template>
 
@@ -68,14 +69,11 @@ import MailConfirmComponent from "@/components/Registration/Confirmation/MailCon
 export default {
     data() {
         return {
-            step1Completed: false,
-            step2Completed: false,
-            step3Completed: false,
-            step4Completed: false,
             step: 1,
             valid: true,
             userData: {},
             image: null,
+
         }
     },
     created(){
@@ -87,8 +85,7 @@ export default {
     methods: {
 
         firstStepComplete(nextStep, form) {
-            this.step1Completed = true
-            this.step = nextStep
+            this.step = 2
             this.userData = Object.assign(this.userData, form)
             console.log(this.userData)
             for(const element in this.userData){
@@ -96,39 +93,28 @@ export default {
             }
         },
 
-        secondStepComplete(nextStep, form) {
-            this.step2Completed = true
-            this.step = nextStep
+        secondStepComplete(form) {
+            this.step = 3
             this.userData = Object.assign(this.userData, form)
             console.log(this.userData)
         },
-        thirdStepComplete(nextStep, image) {
-            this.step3Completed = true
-            this.step = nextStep
+        thirdStepComplete(image) {
+            this.step = 4
             this.userData = Object.assign(this.userData, image)
             console.log(this.userData)
         },
         fourthStepComplete() {
-            this.step4Completed = true
+            this.step = 5
         },
 
-        goBack(step) {
-            this.step = step
-            if (step === 1) {
-                this.step1Completed = false
-            } else if (step === 2) {
-                this.step2Completed = false
-            } else if (step === 3) {
-                this.step3Completed = false
-            } else {
-                this.step4Completed = false
-            }
-
+        goBack() {
+            this.step--
         },
         imageLoaded(image) {
             this.image = image
             console.log(this.image)
-        }
+        },
+
     }
 
 }

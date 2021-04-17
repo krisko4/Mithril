@@ -1,10 +1,9 @@
 <template>
-    <v-container>
+    <v-container fill-height fluid>
        <ConfirmationSuccessComponent v-if="confirmationSucceeded"></ConfirmationSuccessComponent>
         <EmailAlreadyConfirmedComponent v-if="emailAlreadyConfirmed"></EmailAlreadyConfirmedComponent>
         <TokenExpiredComponent :token="this.$route.params.token" v-if="tokenExpired"></TokenExpiredComponent>
     </v-container>
-
 </template>
 
 <script>

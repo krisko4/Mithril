@@ -161,7 +161,7 @@ export default {
             })
                 .then((response) => {
                         console.log(response.data)
-                        this.$emit('firstStepComplete', 2, {
+                        this.$emit('firstStepComplete', {
                             'email': this.email,
                             'password': this.password
                         })
