@@ -10,7 +10,7 @@
 
                 <v-row justify="center">
                     <v-card-actions>
-                    <v-btn large rounded big color="orange">Resend confirmation e-mail</v-btn>
+                    <v-btn large rounded big @click="resendEmail" color="orange">Resend confirmation e-mail</v-btn>
                     </v-card-actions>
                 </v-row>
             <v-card-text>Once confirmed, your account will be available to use.</v-card-text>
@@ -23,10 +23,23 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: "MailConfirmComponent",
     props:{
-        email: String
+        email: String,
+        firstName: String
+    },
+    methods: {
+        resendEmail(){
+            axios.post('http://localhost:8080/doctor/registration/resendEmail', {
+                email: this.email,
+                firstName: this.firstName
+            }).then((response) => {
+                console.log(response)
+            })
+        }
     }
 }
 </script>

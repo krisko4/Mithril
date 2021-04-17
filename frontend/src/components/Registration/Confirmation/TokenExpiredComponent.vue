@@ -9,7 +9,7 @@
                     <v-row justify="center">
                         <v-card-actions>
                             <v-col cols="6">
-                                <v-btn rounded big color="primary">RESEND CONFIRMATION E-MAIL</v-btn>
+                                <v-btn rounded big @click="refresh" color="primary">RESEND CONFIRMATION E-MAIL</v-btn>
                             </v-col>
 
                         </v-card-actions>
@@ -26,11 +26,24 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: "TokenExpiredComponent",
-    methods:{
+    props : {
+        token: String
+    },
+    methods: {
         goBack(){
             this.$router.push({name:'home'})
+        },
+        refresh(){
+            axios.post('http://localhost:8080/doctor/registration/resendEmailToken', {
+                token: this.token
+            })
+                .then((response) => {
+                console.log(response)
+            })
         }
     }
 }

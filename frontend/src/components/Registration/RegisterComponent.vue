@@ -55,7 +55,7 @@
                                 @goBack="goBack">
 
         </RegisterStep4Component>
-        <MailConfirmComponent v-else :email="userData.email"></MailConfirmComponent>
+        <MailConfirmComponent v-else :firstName="userData.firstName" :email="userData.email"></MailConfirmComponent>
     </v-container>
 </template>
 

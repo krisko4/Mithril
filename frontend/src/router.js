@@ -9,6 +9,9 @@ import VisitComponent from "@/components/VisitSaving/VisitComponent";
 //import RegisterStep4Component from "@/components/Registration/RegisterStep4Component";
 import ConfirmationComponent from "@/components/Registration/Confirmation/ConfirmationComponent";
 import App from "@/App";
+//import ConfirmationSuccessComponent from "@/components/Registration/Confirmation/ConfirmationSuccessComponent";
+import LoginComponent from "@/components/Login/LoginComponent";
+import TokenExpiredComponent from "@/components/Registration/Confirmation/TokenExpiredComponent";
 Vue.use(Router);
 
 const RouterVue = new Router({
@@ -28,13 +31,28 @@ const RouterVue = new Router({
         {
             path: '/confirm/:token',
             name: 'confirm',
-            component: ConfirmationComponent
+            component: ConfirmationComponent,
+            meta: {
+                reload: false
+            }
+
         },
         {
             path: '',
             name: 'home',
             component: App
+        },
+        {
+            path: '/test',
+            name: 'test',
+            component: TokenExpiredComponent
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: LoginComponent
         }
+
 
     ],
     props:{

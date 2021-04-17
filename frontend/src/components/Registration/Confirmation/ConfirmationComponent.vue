@@ -2,7 +2,7 @@
     <v-container>
        <ConfirmationSuccessComponent v-if="confirmationSucceeded"></ConfirmationSuccessComponent>
         <EmailAlreadyConfirmedComponent v-if="emailAlreadyConfirmed"></EmailAlreadyConfirmedComponent>
-        <TokenExpiredComponent v-if="tokenExpired"></TokenExpiredComponent>
+        <TokenExpiredComponent :token="this.$route.params.token" v-if="tokenExpired"></TokenExpiredComponent>
     </v-container>
 
 </template>

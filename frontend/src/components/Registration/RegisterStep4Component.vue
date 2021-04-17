@@ -112,7 +112,7 @@ export default {
                 },
             })
                 .then(() => {
-                    this.$emit('fourthStepComplete', this.userData.email)
+                    this.$emit('fourthStepComplete', this.userData.email, this.userData.firstName)
                 })
 
         }
