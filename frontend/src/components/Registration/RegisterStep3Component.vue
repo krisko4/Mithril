@@ -110,7 +110,7 @@ export default {
             imageLoaded: false,
             buttonEnabled: false,
             elevation: 5,
-            formData: null
+            formData: null,
         }
     },
     methods: {
@@ -149,7 +149,7 @@ export default {
         },
         nextStep() {
             this.$emit('thirdStepComplete', 4, {
-                image: this.formData
+                image: this.selectedFile
             })
         },
         goBack() {
@@ -157,11 +157,11 @@ export default {
         },
         submitImage() {
             this.isSubmitLoading = true
-            const formData = new FormData()
-            formData.append('file', this.selectedFile)
-            this.formData = formData
+           // const formData = new FormData()
+          //  formData.append('image', this.selectedFile)
+         //   this.formData = formData
             setTimeout(() => {
-                this.$emit('imageLoaded', formData)
+                this.$emit('imageLoaded', this.selectedFile)
                 this.isSubmitLoading = false
                 this.$toast.success('Image uploaded successfully.')
                 this.imageLoaded = false

@@ -91,6 +91,9 @@ export default {
             this.step = nextStep
             this.userData = Object.assign(this.userData, form)
             console.log(this.userData)
+            for(const element in this.userData){
+                console.log(element + ':' + this.userData[element])
+            }
         },
 
         secondStepComplete(nextStep, form) {

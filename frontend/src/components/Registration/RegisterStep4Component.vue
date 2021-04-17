@@ -72,7 +72,7 @@ export default {
     name: "RegisterStep4Component",
     props: {
         userData: Object,
-        image: FormData,
+        image: File,
     },
     data() {
         return {
@@ -96,10 +96,26 @@ export default {
         },
         registerDoctor() {
             console.log(this.userData)
-            axios.post("http://localhost:8080/doctor/registration", this.userData)
+            const formData = new FormData()
+            if(this.image){
+                for(const element in this.userData){
+                    formData.append(element.toString(), this.userData[element])
+                }
+                for (const value of formData.values()) {
+                    console.log(value);
+                }
+            }
+
+            axios.post("http://localhost:8080/doctor/registration", formData, {
+                headers:{
+                    'Content-Type': 'multipart/form-data'
+                },
+            })
                 .then((response) => {
                     console.log(response)
                     console.log(this.image)
+                    this.$emit('fourthStepComplete', this.userData.email)
+                    /*
                     if (this.image) {
                         axios.post("http://localhost:8080/doctor/registration/upload", this.image, {
                             headers: {
@@ -114,7 +130,10 @@ export default {
                         })
                     }
                     this.$emit('fourthStepComplete', this.userData.email)
+
+                     */
                 })
+
         }
     },
 
