@@ -40,17 +40,5 @@ public class RegistrationDoctorController {
         return appUserRepository.findById(id);
     }
 
-    @CrossOrigin
-    @PostMapping("upload")
-    public String uploadImage(@RequestBody MultipartFile file){
-        return registrationService.uploadImage(file);
-    }
-
-    @CrossOrigin
-    @PostMapping("save")
-    public void saveImageToUser(@RequestBody SaveImageToUserRequest request){
-        registrationService.saveImageToUser(request);
-
-    }
 
 }

@@ -197,34 +197,4 @@ public class RegistrationService {
                 "</div></div>";
     }
 
-    /*
-
-    public String uploadImage(MultipartFile file) {
-
-        // full path to project directory
-        String projectDirectory = new File("").getAbsolutePath();
-        // directory where we want our files to be stored
-        String fileDirectory = projectDirectory + "/src/main/resources/static/";
-        String originalFilename = file.getOriginalFilename();
-        String filePath = fileDirectory + originalFilename;
-        File dest = new File(filePath);
-        try{
-            file.transferTo(dest);
-        }
-        catch (Exception e){
-           e.printStackTrace();
-        }
-        return filePath;
-
-    }
-
-    public void saveImageToUser(SaveImageToUserRequest request) {
-        AppUser appUser = confirmationTokenService.findByToken(request.getToken()).getAppUser();
-        appUser.setImagePath(request.getImagePath());
-        //TODO:
-        // how to update appUser in database using repository?
-
-    }
-
-     */
 }
