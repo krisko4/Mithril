@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-row justify="center">
-            <v-col cols="12">
+            <v-col cols="12" sm="8">
                 <v-stepper non-linear
                            v-model="step"
                            alt-labels
@@ -84,7 +84,7 @@ export default {
     components: {RegisterStep2Component, RegisterStep1Component, RegisterStep3Component, RegisterStep4Component, MailConfirmComponent},
     methods: {
 
-        firstStepComplete(nextStep, form) {
+        firstStepComplete(form) {
             this.step = 2
             this.userData = Object.assign(this.userData, form)
             console.log(this.userData)

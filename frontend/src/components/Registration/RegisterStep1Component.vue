@@ -21,11 +21,7 @@
 
 
             <v-row justify="center">
-                <v-col cols="3">
-                    <v-flex
-                        xs-12
-                        md-4
-                    >
+                <v-col cols="3" sm="5" xs="8" xl="3" lg="4">
                         <v-text-field
                             type="email"
                             :rules="emailRules"
@@ -74,14 +70,13 @@
                             required
                             v-model="confirmPassword"
                         ></v-text-field>
-                        <v-row justify="center">
+                        <v-row justify="center" class="mt-2">
                             <transition name="fade">
                                 <v-btn color="primary" @click="validateForm" :disabled="!buttonEnabled" medium>Submit
                                     <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
                                 </v-btn>
                             </transition>
                         </v-row>
-                    </v-flex>
                 </v-col>
             </v-row>
         </v-form>
@@ -153,6 +148,7 @@ export default {
             if (this.email !== this.confirmEmail) {
                 this.error = "E-mails are different."
                 this.errorPopped = true;
+                return
             }
             axios.get("http://localhost:8080/users/email", {
                 params: {
@@ -161,6 +157,7 @@ export default {
             })
                 .then((response) => {
                         console.log(response.data)
+                        console.log(this.email)
                         this.$emit('firstStepComplete', {
                             'email': this.email,
                             'password': this.password
@@ -171,20 +168,6 @@ export default {
                 this.error = error.response.data.message
                 this.errorPopped = true
             })
-
-
-            //   axios.post('http://localhost:8080/doctors/register', {
-            //     password: this.password,
-            //        email: this.email,
-
-            //   }).then(()=>{
-            //      this.$toast.success('Step 1 completed successfully.')
-
-            //     this.$emit('firstStepComplete', 2)
-            //    }).catch((error)=>{
-            //      this.error = error.response.data.message
-            //      this.errorPopped = true
-            //    })
 
 
         }

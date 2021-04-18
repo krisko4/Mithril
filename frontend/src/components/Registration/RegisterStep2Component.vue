@@ -25,16 +25,16 @@
                     <v-row justify="center">
                         <v-col cols="6">
 
-                        <v-text-field
-                            @keypress="isLetter($event)"
-                            label="First name"
-                            :rules="[v => !!v || 'Please enter your first name.']"
-                            outlined
-                            rounded
-                            required
-                            v-model="firstName"
-                            type="text"
-                        ></v-text-field>
+                            <v-text-field
+                                @keypress="isLetter($event)"
+                                label="First name"
+                                :rules="[v => !!v || 'Please enter your first name.']"
+                                outlined
+                                rounded
+                                required
+                                v-model="firstName"
+                                type="text"
+                            ></v-text-field>
                         </v-col>
                         <v-col cols="6">
                             <v-text-field
@@ -47,7 +47,7 @@
                                 v-model="lastName"
                             ></v-text-field>
                         </v-col>
-                        </v-row>
+                    </v-row>
                     <v-row justify="center">
                         <v-col cols="6" align="center">
                             <v-text-field
@@ -70,50 +70,50 @@
                             ></v-text-field>
                         </v-col>
                     </v-row>
-                        <v-col cols="12">
-                            <v-dialog
-                                ref="dialog"
-                                v-model="modal"
-                                :return-value.sync="date"
-                                persistent
-                                width="290px"
-                            >
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-text-field
-                                        v-model="date"
-                                        label="Birthdate"
-                                        prepend-icon="mdi-calendar"
-                                        readonly
-                                        outlined
-                                        rounded
-                                        v-bind="attrs"
-                                        v-on="on"
-                                    ></v-text-field>
-                                </template>
-                                <v-date-picker
+                    <v-col cols="12">
+                        <v-dialog
+                            ref="dialog"
+                            v-model="modal"
+                            :return-value.sync="date"
+                            persistent
+                            width="290px"
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
                                     v-model="date"
-                                    scrollable
-                                    :allowed-dates="allowedDates"
+                                    label="Birthdate"
+                                    prepend-icon="mdi-calendar"
+                                    readonly
+                                    outlined
+                                    rounded
+                                    v-bind="attrs"
+                                    v-on="on"
+                                ></v-text-field>
+                            </template>
+                            <v-date-picker
+                                v-model="date"
+                                scrollable
+                                :allowed-dates="allowedDates"
+                            >
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    text
+                                    color="primary"
+                                    @click="modal = false"
                                 >
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                        text
-                                        color="primary"
-                                        @click="modal = false"
-                                    >
-                                        Cancel
-                                    </v-btn>
-                                    <v-btn
-                                        text
-                                        color="primary"
-                                        @click="$refs.dialog.save(date)"
-                                    >
-                                        OK
-                                    </v-btn>
-                                </v-date-picker>
-                            </v-dialog>
+                                    Cancel
+                                </v-btn>
+                                <v-btn
+                                    text
+                                    color="primary"
+                                    @click="$refs.dialog.save(date)"
+                                >
+                                    OK
+                                </v-btn>
+                            </v-date-picker>
+                        </v-dialog>
 
-                        </v-col>
+                    </v-col>
 
                     <v-row justify="center">
                         <v-col cols="6" align="center">
@@ -205,15 +205,13 @@
                         </v-btn>
                     </v-col>
                     <v-col cols="3" align="center">
-                            <v-btn color="primary" @click="validateForm" :disabled="!buttonEnabled" medium>Submit
-                                <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
-                            </v-btn>
+                        <v-btn color="primary" @click="validateForm" :disabled="!buttonEnabled" medium>Submit
+                            <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+                        </v-btn>
                     </v-col>
                 </v-row>
             </v-col>
         </v-row>
-
-
 
 
     </v-container>
@@ -244,12 +242,12 @@ export default {
     methods: {
         validateForm() {
             console.log(this.form)
-            this.$emit('secondStepComplete', 3, {
+            this.$emit('secondStepComplete', {
                 'firstName': this.firstName,
                 'lastName': this.lastName,
                 'secondName': this.secondName,
                 'street': this.address,
-                'flatNumber' : this.address_2,
+                'flatNumber': this.address_2,
                 'city': this.city,
                 'postCode': this.postCode,
                 'country': this.country,
@@ -259,14 +257,14 @@ export default {
 
             this.$toast.success('Step 2 completed successfully.')
         },
-        isLetter(e){
+        isLetter(e) {
             let char = String.fromCharCode(e.keyCode);
-            if(/^[A-Za-z]+$/.test(char)) return true;
+            if (/^[A-Za-z]+$/.test(char)) return true;
             else e.preventDefault();
         },
-        isNumber(e){
+        isNumber(e) {
             let char = String.fromCharCode(e.keyCode);
-            if(/^[0-9]+$/.test(char)) return true;
+            if (/^[0-9]+$/.test(char)) return true;
             else e.preventDefault();
         },
         showButton() {
