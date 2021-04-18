@@ -2,6 +2,8 @@ package com.website.demo.registration;
 
 import antlr.Token;
 import com.github.javafaker.App;
+import com.website.demo.address.Address;
+import com.website.demo.address.AddressService;
 import com.website.demo.authorities.AppUserRole;
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenRepository;
@@ -16,6 +18,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path = "doctor/registration")
 @AllArgsConstructor
@@ -23,33 +26,49 @@ public class RegistrationDoctorController {
 
     private final RegistrationService registrationService;
     private final ConfirmationTokenService confirmationTokenService;
-    private final AppUserRepository appUserRepository;
+    private final AddressService addressService;
 
-    @CrossOrigin
+
+
     @PostMapping
     public String register(@ModelAttribute RegistrationRequest request){
         request.setRole(AppUserRole.DOCTOR);
-        return registrationService.register(request);
+        Address requestAddress = new Address(
+                request.getCountry(),
+                request.getCity(),
+                request.getStreet(),
+                request.getFlatNumber(),
+                request.getPostCode()
+        );
+        AppUser appUser =   new AppUser(
+                request.getFirstName(),
+                request.getSecondName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getPhone(),
+                addressService.save(requestAddress),
+                registrationService.birthdayToLocalDate(request.getBirthdate()),
+                request.getRole()
+        );
+        return registrationService.register(appUser, request.getImage());
     }
 
-    @CrossOrigin
+
     @GetMapping(path = "confirm")
     public String confirm(@RequestParam("token") String token){
         return registrationService.confirmToken(token);
     }
 
-    @GetMapping("tokenbyuserid")
-    public Optional<AppUser> getAllConfirmationTokensByUserId(@RequestParam("id") Long id){
-        return appUserRepository.findById(id);
-    }
 
-    @CrossOrigin
+
+
     @PostMapping("resendEmail")
     public void resendEmail(@RequestBody RegistrationRequest registrationRequest){
         registrationService.resendEmail(registrationRequest.getEmail(), registrationRequest.getFirstName());
     }
 
-    @CrossOrigin
+
     @PostMapping("resendEmailToken")
     public void resendEmailToken(@RequestBody TokenRequest tokenRequest){
         AppUser appUser = confirmationTokenService.getUserByToken(tokenRequest.getToken());

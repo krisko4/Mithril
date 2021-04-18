@@ -1,5 +1,6 @@
 package com.website.demo.registration;
 
+import com.github.javafaker.App;
 import com.website.demo.address.Address;
 import com.website.demo.address.AddressRepository;
 import com.website.demo.authorities.AppUserRole;
@@ -42,44 +43,39 @@ public class RegistrationService {
     private final String CONFIRMATION_LINK = "http://localhost:8081/confirm/";
 
 
-    public String register(RegistrationRequest request) {
+    public LocalDate birthdayToLocalDate(String birthdateString){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(birthdateString, formatter);
+    }
+
+    public String register(AppUser appUser, MultipartFile image) {
 
         // resending email confirmation message for existing user
-        if(appUserRepository.existsByEmail(request.getEmail())){
-            AppUser appUser = appUserRepository.findByEmail(request.getEmail()).get();
+        if(appUserRepository.existsByEmail(appUser.getEmail())){
+            appUser = appUserRepository.findByEmail(appUser.getEmail()).get();
             if(!appUser.isEnabled()){
-                String token = UUID.randomUUID().toString();
-                ConfirmationToken confirmationToken = new ConfirmationToken(
-                        token,
-                        LocalDateTime.now(),
-                        LocalDateTime.now().plusMinutes(1),
-                        appUser
-                );
-                confirmationTokenService.saveConfirmationToken(confirmationToken);
-                String link = CONFIRMATION_LINK + token;
-                emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
-                return token;
-
+                resendEmail(appUser.getEmail(), CONFIRMATION_LINK);
             }
         }
 
-        boolean isValidEmail = emailValidator.test(request.getEmail());
-        boolean isValidPassword = passwordValidator.test(request.getPassword());
+        boolean isValidEmail = emailValidator.test(appUser.getEmail());
+        boolean isValidPassword = passwordValidator.test(appUser.getPassword());
         if (!isValidEmail) {
-            throw new IllegalStateException(String.format(EMAIL_NOT_VALID_MSG, request.getEmail()));
+            throw new IllegalStateException(String.format(EMAIL_NOT_VALID_MSG, appUser.getEmail()));
         }
         if (!isValidPassword) {
-            throw new IllegalStateException(String.format(PASSWORD_NOT_VALID_MSG, request.getEmail()));
+            throw new IllegalStateException(String.format(PASSWORD_NOT_VALID_MSG, appUser.getEmail()));
         }
 
-        Address requestAddress = new Address(
+ /*       Address requestAddress = new Address(
                 request.getCountry(),
                 request.getCity(),
                 request.getStreet(),
                 request.getFlatNumber(),
                 request.getPostCode()
         );
-
+*/
+        /*
         Address address;
         boolean addressExists = addressRepository.exists(Example.of(requestAddress));
         if (addressExists) {
@@ -87,11 +83,12 @@ public class RegistrationService {
         } else {
             address = requestAddress;
             addressRepository.save(address);
-        }
+        }*/
+      //  Address address = addressRepository.save(requestAddress);
 
-        String birthdate = request.getBirthdate();
+   /*     String birthdateString = request.getBirthdate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate localDate = LocalDate.parse(birthdate, formatter);
+        LocalDate birthdate = LocalDate.parse(birthdateString, formatter);
 
         AppUser appUser =   new AppUser(
                 request.getFirstName(),
@@ -101,22 +98,22 @@ public class RegistrationService {
                 request.getPassword(),
                 request.getPhone(),
                 address,
-                localDate,
+                birthdate,
                 request.getRole()
-        );
+        );*/
 
         String token = appUserService.signUp(appUser);
 
-        if(request.getImage() != null) {
+        if(image != null) {
             // full path to project directory
             String projectDirectory = new File("").getAbsolutePath();
             // directory where we want our files to be stored
             String fileDirectory = projectDirectory + "/src/main/resources/static/";
-            String originalFilename = request.getImage().getOriginalFilename();
+            String originalFilename = image.getOriginalFilename();
             String filePath = fileDirectory + originalFilename;
             File dest = new File(filePath);
             try {
-                request.getImage().transferTo(dest);
+                image.transferTo(dest);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to transfer file to destinated directory.");
             }
@@ -124,9 +121,8 @@ public class RegistrationService {
 
         }
 
-
         String link = "http://localhost:8081/confirm/" + token;
-        emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
+        emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), link));
         return token;
     }
 
@@ -226,7 +222,7 @@ public class RegistrationService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(1),
+                LocalDateTime.now().plusMinutes(10),
                 appUser
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);

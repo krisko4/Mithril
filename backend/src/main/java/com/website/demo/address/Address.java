@@ -19,14 +19,14 @@ public class Address {
     private String country;
     private String city;
     private String street;
-    private Integer flat_number;
+    private Integer flatNumber;
     private String postCode;
 
     public Address(String country, String city, String street, Integer flat_number, String postCode) {
         this.country = country;
         this.city = city;
         this.street = street;
-        this.flat_number = flat_number;
+        this.flatNumber = flat_number;
         this.postCode = postCode;
     }
 }
