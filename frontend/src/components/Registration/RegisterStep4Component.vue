@@ -95,17 +95,12 @@ export default {
             this.$emit('goBack', 3)
         },
         registerDoctor() {
-            console.log(this.userData)
             const formData = new FormData()
             if(this.image){
                 for(const element in this.userData){
                     formData.append(element.toString(), this.userData[element])
                 }
-                for (const value of formData.values()) {
-                    console.log(value);
-                }
             }
-
             axios.post("http://localhost:8080/doctor/registration", formData, {
                 headers:{
                     'Content-Type': 'multipart/form-data'
