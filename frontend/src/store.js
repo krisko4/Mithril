@@ -17,7 +17,7 @@ export const store = new Vuex.Store({
     mutations: {
         getDoctors(state) {
             if (state.date) {
-                axios.get('http://localhost:8080/doctors/' + state.date).then(response => {
+                axios.get('http://localhost:8080/users/doctors/' + state.date).then(response => {
                     state.doctors = response.data
                     state.doctorsAchieved = true
                 })

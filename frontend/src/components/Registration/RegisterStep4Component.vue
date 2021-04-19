@@ -53,6 +53,7 @@
                                     color="primary"
                                     v-if="buttonVisible"
                                     text
+                                    :loading="registerLoading"
                                     @click="registerDoctor"
                                 >Submit
                                 </v-btn>
@@ -78,6 +79,7 @@ export default {
         return {
             items: [],
             loading: false,
+            registerLoading: false,
             search: '',
             value: '',
         }
@@ -95,6 +97,7 @@ export default {
             this.$emit('goBack', 3)
         },
         registerDoctor() {
+            this.registerLoading = true
             const formData = new FormData()
             if(this.image){
                 for(const element in this.userData){
@@ -108,6 +111,8 @@ export default {
             })
                 .then(() => {
                     this.$emit('fourthStepComplete', this.userData.email, this.userData.firstName)
+                    this.$toast.success('Congratulations! You have registered successfully.')
+                    this.registerLoading = false
                 })
 
         }

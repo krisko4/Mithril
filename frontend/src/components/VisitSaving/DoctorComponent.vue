@@ -7,7 +7,7 @@
                     elevation="20"
                 >
                     <v-img
-                        src="https://cdn.vuetifyjs.com/images/lists/ali.png"
+                        :src="imgSrc"
                         height="300px"
                         dark
                     >
@@ -119,6 +119,7 @@ export default {
             hours: [],
             selectedItem: undefined,
             hourIndex: '',
+            imgSrc: '',
         }
     },
     computed: {
@@ -135,6 +136,7 @@ export default {
     methods: {
         getVisitHours(doctor) {
             this.doctor = doctor
+            this.imgSrc = "http://localhost:8080/images/" + doctor.imageName
             axios.get('http://localhost:8080/visits/get',{
                 params: {
                     date : this.date,
@@ -142,6 +144,7 @@ export default {
                 }
             }).then((response) => {
                 this.hours = response.data
+                console.log(this.hours)
             })
 
         },

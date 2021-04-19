@@ -1,5 +1,4 @@
 <template>
-    <v-container>
         <v-row justify="center">
             <v-col cols="3">
                 <v-autocomplete
@@ -14,8 +13,6 @@
                 </v-autocomplete>
             </v-col>
         </v-row>
-
-    </v-container>
 </template>
 
 <script>
