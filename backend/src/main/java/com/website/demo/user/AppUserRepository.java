@@ -6,12 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     Optional<AppUser> findByEmail(String email);
+
     boolean existsByEmail(String email);
 
     @Transactional
@@ -23,6 +26,8 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Transactional
     @Modifying
     @Query("UPDATE AppUser a " +
-            "SET a.imagePath = ?1 WHERE a.email = ?2")
-    void setImagePath(String imagePath, String email);
+            "SET a.imageName = ?1 WHERE a.email = ?2")
+    void setImageName(String imagePath, String email);
+
+    List<DoctorDto> findAllBySchedules_Date(LocalDate date);
 }

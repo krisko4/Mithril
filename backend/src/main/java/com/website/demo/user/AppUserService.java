@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -67,14 +68,18 @@ public class AppUserService implements UserDetailsService {
         if (appUserRepository.existsByEmail(email)) throw new IllegalStateException("E-mail already exists");
     }
 
-    public void setImagePath(String imagePath, String email){
-        appUserRepository.setImagePath(imagePath, email);
+    public void setImageName(String imageName, String email){
+        appUserRepository.setImageName(imageName, email);
     }
 
     public List<AppUser> list() {
         return appUserRepository.findAll();
     }
 
+
+    public List<DoctorDto> getAvailableDoctorsByDate(LocalDate date){
+        return appUserRepository.findAllBySchedules_Date(date);
+    }
 
 
 }

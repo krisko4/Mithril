@@ -108,7 +108,7 @@ public class RegistrationService {
             // full path to project directory
             String projectDirectory = new File("").getAbsolutePath();
             // directory where we want our files to be stored
-            String fileDirectory = projectDirectory + "/src/main/resources/static/";
+            String fileDirectory = projectDirectory + "/src/main/images/";
             String originalFilename = image.getOriginalFilename();
             String filePath = fileDirectory + originalFilename;
             File dest = new File(filePath);
@@ -117,7 +117,7 @@ public class RegistrationService {
             } catch (Exception e) {
                 throw new RuntimeException("Failed to transfer file to destinated directory.");
             }
-            appUserService.setImagePath(filePath, appUser.getEmail());
+            appUserService.setImageName(originalFilename, appUser.getEmail());
 
         }
 

@@ -12,6 +12,6 @@ import static org.hibernate.loader.Loader.SELECT;
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
 
-    @Query(value = "select * from visit where cast(date as DATE) = ?1 and doctor_id = ?2", nativeQuery = true)
+    @Query(value = "select * from visit where cast(date as DATE) = ?1 and app_user_id = ?2", nativeQuery = true)
     List<Visit> findAllVisitsForOneDoctorByDate(String date, Long id);
 }

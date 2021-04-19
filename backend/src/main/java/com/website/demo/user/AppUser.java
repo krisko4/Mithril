@@ -33,7 +33,7 @@ public class AppUser implements UserDetails {
     private String phone;
     private String password;
     private String email;
-    private String imagePath;
+    private String imageName;
     private LocalDate birthdate;
     @OneToMany(mappedBy = "doctor")
     private Set<Visit> visitSet;
@@ -41,7 +41,7 @@ public class AppUser implements UserDetails {
     @JoinColumn(name = "address_id")
     private Address address;
     @ManyToMany
-    @JoinTable(name = "doctor_schedule", joinColumns = {@JoinColumn(name = "doctor_id")}, inverseJoinColumns = {@JoinColumn(name = "schedule_id")})
+    @JoinTable(name = "doctor_schedule", joinColumns = {@JoinColumn(name = "app_user_id")}, inverseJoinColumns = {@JoinColumn(name = "schedule_id")})
     private Set<Schedule> schedules;
     @Enumerated(value = EnumType.STRING)
     private AppUserRole role;

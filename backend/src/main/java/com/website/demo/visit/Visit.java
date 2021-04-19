@@ -37,7 +37,7 @@ public class Visit {
     private String description;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
-    @JoinColumn(name = "doctor_id")
+    @JoinColumn(name = "app_user_id")
     private AppUser doctor;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
