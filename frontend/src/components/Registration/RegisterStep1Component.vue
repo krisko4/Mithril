@@ -17,7 +17,7 @@
                 </transition>
             </v-col>
         </v-row>
-        <v-form ref="form" v-model="valid" class="login" @submit.prevent="validateForm">
+        <v-form ref="form" v-model="valid" class="login">
 
 
             <v-row justify="center">
@@ -72,7 +72,7 @@
                         ></v-text-field>
                         <v-row justify="center" class="mt-2">
                             <transition name="fade">
-                                <v-btn color="primary" @click="validateForm" :disabled="!buttonEnabled" medium>Submit
+                                <v-btn color="primary" @click="validateAndContinue" :disabled="!buttonEnabled" medium>Submit
                                     <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
                                 </v-btn>
                             </transition>
@@ -138,7 +138,7 @@ export default {
         },
 
 
-        validateForm() {
+        validateAndContinue() {
             this.errorPopped = false;
             if (this.password !== this.confirmPassword) {
                 this.error = "Passwords are different."

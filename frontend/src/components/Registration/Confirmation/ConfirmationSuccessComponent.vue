@@ -14,7 +14,7 @@
                             <v-btn rounded big color="primary" @click="goBack">Return</v-btn>
                         </v-col>
                         <v-col cols="6">
-                            <v-btn rounded big color="primary">Sign up</v-btn>
+                            <v-btn rounded big color="primary" @click="moveToLogin">Sign in</v-btn>
                         </v-col>
                         </v-card-actions>
                     </v-row>
@@ -36,7 +36,10 @@ export default {
     name: "ConfirmationSuccessComponent",
     methods:{
         goBack(){
-            this.$router.push({name:'home'})
+            this.$router.push({name: 'home'})
+        },
+        moveToLogin(){
+            this.$router.push({name: 'login'})
         }
     },
 
