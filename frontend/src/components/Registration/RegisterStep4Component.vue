@@ -98,14 +98,13 @@ export default {
         },
         registerDoctor() {
             this.registerLoading = true
+            console.log(this.userData)
             const formData = new FormData()
-            if(this.image){
-                for(const element in this.userData){
-                    formData.append(element.toString(), this.userData[element])
-                }
+            for (const element in this.userData) {
+                formData.append(element.toString(), this.userData[element])
             }
             axios.post("http://localhost:8080/doctor/registration", formData, {
-                headers:{
+                headers: {
                     'Content-Type': 'multipart/form-data'
                 },
             })
@@ -114,6 +113,12 @@ export default {
                     this.$toast.success('Congratulations! You have registered successfully.')
                     this.registerLoading = false
                 })
+                .catch((error) => {
+                        this.$toast.error('Registration failed. Some of the fields are invalid.')
+                        console.log(error)
+                        this.registerLoading = false
+                    }
+                )
 
         }
     },

@@ -110,7 +110,7 @@ export default {
 
             emailRules: [
                 v => !!v || "Please enter your e-mail.",
-                v => /.+@.+/.test(v) || 'Correct e-mail example: example@example.com'
+                v => /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(v) || 'Correct e-mail example: example@example.com'
             ],
 
             buttonEnabled: false,

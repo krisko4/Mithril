@@ -167,7 +167,7 @@ export default {
             }
         },
         nextStep() {
-            if(this.previewImage && !this.image){
+            if(!this.image){
                 this.$toast.warning('Your image has not been submitted. To upload, please press the submit button.', {
                     duration : 4000,
                 })
@@ -183,7 +183,7 @@ export default {
             this.isSubmitLoading = true
             setTimeout(() => {
                 this.image = this.selectedFile
-                this.$emit('imageLoaded', this.image)
+              //  this.$emit('imageLoaded', this.image)
                 this.isSubmitLoading = false
                 this.$toast.success('Image uploaded successfully.')
 

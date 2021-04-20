@@ -45,7 +45,6 @@
                                 @secondStepComplete="secondStepComplete"
         ></RegisterStep2Component>
         <RegisterStep3Component v-show="step === 3"
-                                @imageLoaded="imageLoaded"
                                 @goBack="goBack"
                                 @thirdStepComplete="thirdStepComplete">
         </RegisterStep3Component>
@@ -100,7 +99,11 @@ export default {
         },
         thirdStepComplete(image) {
             this.step = 4
-            this.userData = Object.assign(this.userData, image)
+            console.log(image)
+            if(image === null) {
+                console.log('wlazlem tu')
+                this.userData = Object.assign(this.userData, image)
+            }
             console.log(this.userData)
         },
         fourthStepComplete() {
@@ -110,10 +113,10 @@ export default {
         goBack() {
             this.step--
         },
-        imageLoaded(image) {
-            this.image = image
-            console.log(this.image)
-        },
+  //      imageLoaded(image) {
+   //         this.image = image
+    //        console.log(this.image)
+   //     },
 
     }
 
