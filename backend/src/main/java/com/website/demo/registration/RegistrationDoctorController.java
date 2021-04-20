@@ -71,8 +71,8 @@ public class RegistrationDoctorController {
 
 
     @PostMapping("resendEmail")
-    public void resendEmail(@RequestBody RegistrationRequest registrationRequest){
-        registrationService.resendEmail(registrationRequest.getEmail(), registrationRequest.getFirstName());
+    public void resendEmail(@RequestBody ConfirmationRequest confirmationRequest){
+        registrationService.resendEmail(confirmationRequest.getEmail(), confirmationRequest.getFirstName());
     }
 
 

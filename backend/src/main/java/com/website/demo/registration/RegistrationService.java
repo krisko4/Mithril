@@ -50,7 +50,7 @@ public class RegistrationService {
                 resendEmail(appUser.getEmail(), CONFIRMATION_LINK);
             }
         }
-
+/*
         boolean isValidEmail = emailValidator.test(appUser.getEmail());
         boolean isValidPassword = passwordValidator.test(appUser.getPassword());
         if (!isValidEmail) {
@@ -58,7 +58,7 @@ public class RegistrationService {
         }
         if (!isValidPassword) {
             throw new IllegalStateException(String.format(PASSWORD_NOT_VALID_MSG, appUser.getEmail()));
-        }
+        }*/
 
  /*       Address requestAddress = new Address(
                 request.getCountry(),
@@ -113,7 +113,7 @@ public class RegistrationService {
             appUserService.setImageName(originalFilename, appUser.getEmail());
 
         }
-        emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), CONFIRMATION_LINK));
+        emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), CONFIRMATION_LINK + token));
         return token;
     }
 

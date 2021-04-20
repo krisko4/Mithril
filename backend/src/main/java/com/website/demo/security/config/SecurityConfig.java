@@ -1,6 +1,8 @@
 package com.website.demo.security.config;
 
 
+//import com.website.demo.security.utils.JWTAuthenticationEntryPoint;
+import com.website.demo.security.utils.JWTRequestFilter;
 import com.website.demo.user.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +12,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @AllArgsConstructor
@@ -19,19 +23,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AppUserService appUserService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JWTRequestFilter jwtRequestFilter;
+  //  private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("**/registration/**").permitAll()
-                .antMatchers("/specializations/**").permitAll()
-                .anyRequest().permitAll();
+                .antMatchers("/login")
+                .permitAll();
+               // .and()
+            //    .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+             //   .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+     //http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
@@ -42,5 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(appUserService);
         return provider;
     }
+
+
 }
 

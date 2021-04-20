@@ -3,7 +3,13 @@ package com.website.demo.user;
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,16 +26,27 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AppUserService implements UserDetailsService {
 
+
+
     private final static String USER_NOT_FOUND_MSG = "user with email %s not found";
     private final static String EMAIL_TAKEN_MSG = "email %s is taken";
     private final AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
+
+
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return appUserRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
+
+    public String findFirstNameByEmail(String email){
+        return appUserRepository.findByEmail(email).get().getFirstName();
+    }
+
+
 
     public String signUp(AppUser appUser) {
         boolean userExists = appUserRepository.findByEmail(appUser.getEmail()).isPresent();
@@ -39,7 +56,6 @@ public class AppUserService implements UserDetailsService {
         }
 
         String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
-
         appUser.setPassword(encodedPassword);
 
         AppUser save = appUserRepository.save(appUser);
@@ -54,7 +70,6 @@ public class AppUserService implements UserDetailsService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        //TODO: send email
 
         return token;
     }

@@ -1,5 +1,6 @@
 package com.website.demo.user;
 
+import com.github.javafaker.App;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +16,13 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     Optional<AppUser> findByEmail(String email);
 
+    Optional<AppUser> findByPassword(String password);
+
     boolean existsByEmail(String email);
+
+
+
+    Optional<AppUser> findByEmailAndPassword(String email, String password);
 
     @Transactional
     @Modifying

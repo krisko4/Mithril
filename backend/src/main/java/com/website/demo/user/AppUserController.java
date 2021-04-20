@@ -17,9 +17,8 @@ public class AppUserController {
     private final AppUserService appUserService;
 
 
-
     @GetMapping("email")
-    public void isEmailTaken(@RequestParam("email") String email) {
+    public void checkEmailAvailability(@RequestParam("email") String email) {
         appUserService.checkEmailAvailability(email);
     }
 
@@ -33,6 +32,12 @@ public class AppUserController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
         LocalDate localDate = LocalDate.parse(date, formatter);
         return appUserService.getAvailableDoctorsByDate(localDate);
+    }
+
+    @CrossOrigin
+    @GetMapping("nameByMail")
+    public String findFirstNameByEmail(@RequestParam String email){
+        return appUserService.findFirstNameByEmail(email);
     }
 
 
