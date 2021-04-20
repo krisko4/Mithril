@@ -12,6 +12,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -49,6 +51,11 @@ public class AppUser implements UserDetails {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
+
+    public AppUser(String firstName, String secondName){
+        this.firstName = firstName;
+        this.secondName = secondName;
+    }
 
     public AppUser(String firstName,
                    String secondName,

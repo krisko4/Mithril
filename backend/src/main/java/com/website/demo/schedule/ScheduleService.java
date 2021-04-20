@@ -18,7 +18,7 @@ public class ScheduleService {
     }
     
     public Schedule findScheduleForDoctorByDate(String date, Long doctor_id){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d", Locale.US);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
         LocalDate localDate = LocalDate.parse(date, formatter);
         return scheduleRepository.findById(scheduleRepository.findScheduleIDForDoctorByDate(localDate, doctor_id)).orElseThrow(()-> null);
     }

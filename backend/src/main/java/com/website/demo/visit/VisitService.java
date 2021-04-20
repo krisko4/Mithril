@@ -49,18 +49,19 @@ public class VisitService {
     }
 
     public List<LocalTime> getVisitsForDoctorByDate(String date, Long doctor_id){
-
-        List<Visit> visitList = getVisitsByDate(date, doctor_id);
-        List<LocalTime> visitHourList = new ArrayList<>();
-        for (Visit visit : visitList) {
-            int hour = visit.getDate().getHour();
-            int minute = visit.getDate().getMinute();
-            LocalTime visitHour = LocalTime.of(hour, minute);
-            visitHourList.add(visitHour);
-        }
         Schedule schedule = scheduleService.findScheduleForDoctorByDate(date, doctor_id);
         LocalTime startHour = schedule.getStartHour();
         LocalTime endHour = schedule.getEndHour();
+        List<Visit> visitList = getVisitsByDate(date, doctor_id);
+        List<LocalTime> visitHourList = new ArrayList<>();
+        if(!visitList.isEmpty()) {
+            for (Visit visit : visitList) {
+                int hour = visit.getDate().getHour();
+                int minute = visit.getDate().getMinute();
+                LocalTime visitHour = LocalTime.of(hour, minute);
+                visitHourList.add(visitHour);
+            }
+        }
         List<LocalTime> hourList = new ArrayList<>();
         while (startHour.isBefore(endHour)) {
             if (!visitHourList.contains(startHour)){

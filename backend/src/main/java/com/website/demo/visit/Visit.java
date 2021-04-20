@@ -32,7 +32,7 @@ public class Visit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm")
+    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     private LocalDateTime date;
     private String description;
     @ManyToOne(cascade = CascadeType.ALL)

@@ -30,7 +30,7 @@ public class AppUserController {
 
     @GetMapping("doctors/{date}")
     public List<DoctorDto> getAvailableDoctorsByDate(@PathVariable String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d", Locale.US);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
         LocalDate localDate = LocalDate.parse(date, formatter);
         return appUserService.getAvailableDoctorsByDate(localDate);
     }

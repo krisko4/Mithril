@@ -1,9 +1,7 @@
 package com.website.demo.registration;
 
-import com.github.javafaker.App;
-import com.website.demo.address.Address;
+
 import com.website.demo.address.AddressRepository;
-import com.website.demo.authorities.AppUserRole;
 import com.website.demo.registration.email.EmailSender;
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenService;
@@ -13,15 +11,10 @@ import com.website.demo.user.AppUserService;
 import com.website.demo.validation.EmailValidator;
 import com.website.demo.validation.PasswordValidator;
 import lombok.AllArgsConstructor;
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.mail.Multipart;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -120,9 +113,7 @@ public class RegistrationService {
             appUserService.setImageName(originalFilename, appUser.getEmail());
 
         }
-
-        String link = "http://localhost:8081/confirm/" + token;
-        emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), link));
+        emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), CONFIRMATION_LINK));
         return token;
     }
 

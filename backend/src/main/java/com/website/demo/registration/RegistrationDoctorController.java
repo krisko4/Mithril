@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
@@ -29,9 +30,15 @@ public class RegistrationDoctorController {
     private final AddressService addressService;
 
 
+    @PostMapping("test")
+    public String test(@RequestBody @Valid RegistrationRequest request){
+        AppUser appUser = new AppUser(request.getFirstName(), request.getSecondName());
+        return "abc";
+    }
+
 
     @PostMapping
-    public String register(@ModelAttribute RegistrationRequest request){
+    public String register(@ModelAttribute @Valid RegistrationRequest request){
         request.setRole(AppUserRole.DOCTOR);
         Address requestAddress = new Address(
                 request.getCountry(),
