@@ -1,6 +1,7 @@
 package com.website.demo.login;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -12,7 +13,8 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping
-    public String login(@RequestBody LoginRequest loginRequest) throws Exception {
+    @ResponseBody
+    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
         return loginService.login(loginRequest.getEmail(), loginRequest.getPassword());
     }
 

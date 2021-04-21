@@ -4,21 +4,15 @@ import com.website.demo.security.utils.JWTUtil;
 import com.website.demo.user.AppUser;
 import com.website.demo.user.AppUserRepository;
 import com.website.demo.user.AppUserService;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-import java.util.Optional;
 
 
 @Service
@@ -32,10 +26,11 @@ public class LoginService {
     private final AppUserService appUserService;
     private final JWTUtil jwtUtil;
 
-    public String login(String email, String password) {
+    public LoginResponse login(String email, String password) {
         authenticate(email, password);
         AppUser appUser = (AppUser) appUserService.loadUserByUsername(email);
-        return jwtUtil.generateToken(appUser);
+        String token =  jwtUtil.generateToken(appUser);
+        return new LoginResponse(token, email, appUser.getFirstName());
 
 
     }

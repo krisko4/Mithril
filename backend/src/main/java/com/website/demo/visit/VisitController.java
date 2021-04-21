@@ -23,6 +23,7 @@ public class VisitController {
         visitService.addVisit(visitRequest);
     }
 
+    @CrossOrigin
     @GetMapping
     public List<Visit> getAllVisits() {
         return visitService.getAllVisits();
