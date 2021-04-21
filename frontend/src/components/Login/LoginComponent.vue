@@ -101,8 +101,10 @@ export default {
                 email: this.email,
                 password: this.password
             }).then((response) => {
-                localStorage.setItem('token', JSON.stringify(response.data));
-                console.log(response)
+                console.log(response.data)
+                localStorage.setItem('email', this.email)
+                localStorage.setItem('user', response.data.token);
+                localStorage.setItem('firstName', response.data.firstName);
                 this.$router.push({name: 'home'})
             }).catch((error) => {
                 this.errorPopped = true

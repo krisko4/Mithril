@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state:{
+        token: '' | localStorage.getItem('token'),
         date: '',
         patient: '',
         doctors: [],
@@ -24,7 +25,6 @@ export const store = new Vuex.Store({
             }
         },
 
-    }
-
+    },
 
 });

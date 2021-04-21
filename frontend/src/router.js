@@ -1,17 +1,15 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-// import RegisterStep1Component from "@/components/Registration/RegisterStep1Component";
-//import RegisterStep2Component from "@/components/Registration/RegisterStep2Component";
-//import RegisterStep3Component from "@/components/Registration/RegisterStep3Component";
 import RegisterComponent from "@/components/Registration/RegisterComponent";
 import VisitComponent from "@/components/VisitSaving/VisitComponent";
-//import MailConfirmComponent from "@/components/Registration/MailConfirmComponent";
-//import RegisterStep4Component from "@/components/Registration/RegisterStep4Component";
 import ConfirmationComponent from "@/components/Registration/Confirmation/ConfirmationComponent";
-import App from "@/App";
-//import ConfirmationSuccessComponent from "@/components/Registration/Confirmation/ConfirmationSuccessComponent";
 import LoginComponent from "@/components/Login/LoginComponent";
 import TokenExpiredComponent from "@/components/Registration/Confirmation/TokenExpiredComponent";
+import axios from "axios";
+import DoctorPanelComponent from "@/components/DoctorPanel/DoctorPanelComponent";
+
+
+
 Vue.use(Router);
 
 const RouterVue = new Router({
@@ -35,12 +33,14 @@ const RouterVue = new Router({
             meta: {
                 reload: false
             }
-
         },
         {
             path: '',
             name: 'home',
-            component: App
+            meta: {
+                requiresAuth: true
+            },
+            component: DoctorPanelComponent
         },
         {
             path: '/test',
@@ -50,14 +50,38 @@ const RouterVue = new Router({
         {
             path: '/login',
             name: 'login',
-            component: LoginComponent
+            component: LoginComponent,
+
         }
 
 
     ],
     props:{
         default: true
-    }
+    },
+
+
+
 });
+
+RouterVue.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        console.log(localStorage.getItem('user'))
+        if (localStorage.getItem('user') === null) {
+            next({name: 'login'})
+        } else {
+            axios.get('http://localhost:8080/jwt', {
+                headers: {
+                    'Authorization' : 'Bearer ' + localStorage.getItem('user')
+                }
+            }).then(() => next())
+                .catch(() => {
+                next({name: 'login'})
+            })
+        }
+    } else {
+        next()
+    }
+})
 
 export default RouterVue;
