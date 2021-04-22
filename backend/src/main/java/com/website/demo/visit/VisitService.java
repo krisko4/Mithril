@@ -44,15 +44,21 @@ public class VisitService {
         return visitRepository.findAll();
     }
 
-    public List<Visit> getVisitsByDate(String date, Long id) {
-        return visitRepository.findAllVisitsForOneDoctorByDate(date, id);
+    public List<VisitDto> getAllVisitsForDoctorByDate(String date, Long id) {
+        List<Visit> visitList = visitRepository.findAllVisitsForOneDoctorByDate(date, id);
+        List<VisitDto> responseList = new ArrayList<>();
+        for(Visit visit : visitList){
+            VisitDto visitDto = new VisitDto(visit.getDate(), visit.getPatient().getFirstName() + " " + visit.getPatient().getLastName(), visit.getDescription());
+            responseList.add(visitDto);
+        }
+        return responseList;
     }
 
-    public List<LocalTime> getVisitsForDoctorByDate(String date, Long doctor_id){
+    public List<LocalTime> getAvailableVisitHoursForDoctorByDate(String date, Long doctor_id){
         Schedule schedule = scheduleService.findScheduleForDoctorByDate(date, doctor_id);
         LocalTime startHour = schedule.getStartHour();
         LocalTime endHour = schedule.getEndHour();
-        List<Visit> visitList = getVisitsByDate(date, doctor_id);
+        List<Visit> visitList = visitRepository.findAllVisitsForOneDoctorByDate(date, doctor_id);
         List<LocalTime> visitHourList = new ArrayList<>();
         if(!visitList.isEmpty()) {
             for (Visit visit : visitList) {

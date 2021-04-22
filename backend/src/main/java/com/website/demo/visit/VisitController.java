@@ -12,13 +12,13 @@ import java.util.List;
 
 @RestController
 @Data
-@RequestMapping("/visits")
+@RequestMapping("visits")
 public class VisitController {
 
     private final VisitService visitService;
 
     @CrossOrigin
-    @PostMapping("/add")
+    @PostMapping("add")
     public void addVisit(@RequestBody VisitRequest visitRequest) {
         visitService.addVisit(visitRequest);
     }
@@ -30,10 +30,18 @@ public class VisitController {
     }
 
     @CrossOrigin
-    @GetMapping("/get")
-    public List<LocalTime> getVisitsForDoctorByDate(@RequestParam String date, @RequestParam Long doctor_id) {
-        return visitService.getVisitsForDoctorByDate(date, doctor_id);
+    @GetMapping("get/hours")
+    public List<LocalTime> getAvailableVisitHoursForDoctorByDate(@RequestParam String date, @RequestParam Long doctor_id) {
+        return visitService.getAvailableVisitHoursForDoctorByDate(date, doctor_id);
     }
+
+    @CrossOrigin
+    @GetMapping("/get/all")
+    public List<VisitDto> getAllVisitsForDoctorByDate(@RequestParam String date, @RequestParam Long doctor_id){
+        return visitService.getAllVisitsForDoctorByDate(date, doctor_id);
+    }
+
+
 
 //    @GetMapping("/bydate")
 //    public List<Visit> getVisitsBy(VisitRequest visitRequest){
