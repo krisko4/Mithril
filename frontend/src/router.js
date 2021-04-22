@@ -75,7 +75,8 @@ RouterVue.beforeEach((to, from, next) => {
                     'Authorization' : 'Bearer ' + localStorage.getItem('user')
                 }
             }).then(() => next())
-                .catch(() => {
+                .catch((error) => {
+                    console.log(error)
                 next({name: 'login'})
             })
         }

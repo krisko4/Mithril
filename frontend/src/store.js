@@ -12,7 +12,8 @@ export const store = new Vuex.Store({
         patient: '',
         doctors: [],
         doctorsAchieved: false,
-        patientSelected: false
+        patientSelected: false,
+        cardIndex: null
 
     },
     mutations: {

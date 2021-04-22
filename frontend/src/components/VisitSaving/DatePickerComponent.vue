@@ -1,16 +1,10 @@
 <template>
-
-    <v-row justify="center">
         <v-date-picker
             v-model="date"
             elevation="24"
             color="indigo"
         >
         </v-date-picker>
-
-    </v-row>
-
-
 </template>
 
 <script>

@@ -1,48 +1,75 @@
 <template>
-<v-app>
-    <v-app-bar app>
-        <v-app-bar-nav-icon
-            @click="drawer = true"
-        ></v-app-bar-nav-icon>
-        <v-app-bar-title>Title</v-app-bar-title>
-        <v-spacer></v-spacer>
-        <v-btn text @click="logout">
-            Sign out
-            <v-icon>mdi-exit-to-app</v-icon>
-        </v-btn>
-    </v-app-bar>
-    <Navigation></Navigation>
+<v-app style="background-color: whitesmoke">
+
     <v-main>
-        <DoctorHomeComponent @cardChosen="cardChosen" v-show="cardIndex === null"></DoctorHomeComponent>
-        <DoctorScheduleComponent v-show="cardIndex === 2"></DoctorScheduleComponent>
+    <Navigation  @navigationClosed="navigationClosed" :navigationOpened="navigationOpened" @navigationChosen="navigationChosen"></Navigation>
+        <v-img gradient="to top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)" height="700px" src="https://imageproxy.themaven.net/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fmaven-user-photos%2Fcancerconnect%2Fcolon-cancer%2FgdZ0-CoMmkOJnjahj_em8A%2FofYjfdSPzkSkUXeC9Sr3nQ">
+            <v-toolbar style="background-color: transparent">
+                <v-app-bar-nav-icon @click=openNavigationDrawer></v-app-bar-nav-icon>
+                <v-toolbar-title>Title</v-toolbar-title>
+            </v-toolbar>
+            <v-container fill-height>
+                <v-container>
+                <v-row>
+                    <div class="text-uppercase font-weight-bold mb-4 display-3">Hello, {{name}}</div>
+                </v-row>
+                <v-row>
+                    <div class="mb-4 display-2 font-weight-light">Welcome to your personal doctor panel</div>
+                </v-row>
+                    <v-row>
+                        <div class="mb-4 display-1 font-weight-light">Enjoy your work</div>
+                    </v-row>
+                </v-container>
+            </v-container>
+        </v-img>
+    <v-main
+    >
+        <DoctorHomeComponentV2 @cardChosen="cardChosen" v-show="cardIndex === null"></DoctorHomeComponentV2>
+        <DoctorVisitsComponent @goBack="loadHomeComponent" v-show="cardIndex === 0"></DoctorVisitsComponent>
+    </v-main>
     </v-main>
 </v-app>
 </template>
 
 <script>
 import Navigation from "@/components/DoctorPanel/Navigation";
-import DoctorScheduleComponent from "@/components/DoctorPanel/DoctorScheduleComponent";
-import DoctorHomeComponent from "@/components/DoctorPanel/DoctorHomeComponent";
+import DoctorVisitsComponent from "@/components/DoctorPanel/DoctorVisitsComponent";
+import DoctorHomeComponentV2 from "@/components/DoctorPanel/DoctorHomeComponentV2";
+//import DoctorHomeComponent from "@/components/DoctorPanel/DoctorHomeComponent";
+//import axios from "axios";
 export default {
     name: "DoctorPanelComponent",
-    components: {DoctorScheduleComponent, Navigation, DoctorHomeComponent},
+    components: {DoctorHomeComponentV2, DoctorVisitsComponent, Navigation},
     data(){
         return{
-            cardIndex: null
+            cardIndex: null,
+            navigationOpened: false,
+            name: localStorage.getItem('firstName'),
+
         }
     },
     methods:{
+        navigationChosen(index){
+            this.cardIndex = index
+        },
         cardChosen(index){
             this.cardIndex = index
         },
         logout() {
             localStorage.removeItem('user')
             this.$router.push({name: 'login'})
+        },
+        openNavigationDrawer(){
+            this.navigationOpened = !this.navigationOpened
+        },
+        loadHomeComponent(){
+            this.cardIndex = null
+        },
+        navigationClosed(){
+            this.navigationOpened = false
         }
     },
-    created(){
-        console.log(this.cardIndex)
-    }
+
 }
 </script>
 

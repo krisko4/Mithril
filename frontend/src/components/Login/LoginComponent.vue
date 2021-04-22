@@ -1,4 +1,5 @@
 <template>
+    <v-main style="background-color: whitesmoke">
     <v-container fill-height>
         <MailConfirmComponent v-if="!isAccountActive" :email="email"></MailConfirmComponent>
 <v-container v-else>
@@ -52,14 +53,16 @@
     </v-col>
     </v-row>
     <v-row justify="center" class="mt-2">
+
         <transition name="fade">
-            <v-btn color="primary" @click="login" :disabled="!buttonEnabled" medium>Sign in
-                <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+            <v-btn large class="my-1 mx-sm-1 w-full w-sm-auto" color="primary" @click="login" :disabled="!buttonEnabled" >Sign in
             </v-btn>
         </transition>
+
     </v-row>
 </v-container>
     </v-container>
+    </v-main>
 </template>
 
 <script>
@@ -71,6 +74,7 @@ export default {
 
     data(){
         return{
+            image: { backgroundImage : null},
             isAccountActive: true,
             email: '',
             password: '',
@@ -105,6 +109,7 @@ export default {
                 localStorage.setItem('email', this.email)
                 localStorage.setItem('user', response.data.token);
                 localStorage.setItem('firstName', response.data.firstName);
+                localStorage.setItem('id', response.data.id)
                 this.$router.push({name: 'home'})
             }).catch((error) => {
                 this.errorPopped = true

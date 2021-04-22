@@ -1,4 +1,5 @@
 <template>
+    <v-main style="background-color: whitesmoke">
     <v-container>
         <v-row justify="center">
             <v-col cols="12" sm="8">
@@ -57,6 +58,7 @@
         </RegisterStep4Component>
         <MailConfirmComponent v-show="step === 5" :email="userData.email"></MailConfirmComponent>
     </v-container>
+    </v-main>
 </template>
 
 <script>

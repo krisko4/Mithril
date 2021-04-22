@@ -4,8 +4,8 @@
             <v-col cols="5" align="center">
                 <v-card
                 >
-                    <v-card-title class="display-1 font-weight-bold mb-3">Hello, {{ name }}</v-card-title>
-                    <v-card-subtitle class="font-weight-bold mb-1">Good to see you</v-card-subtitle>
+                    <v-card-title class="text-h2 text-sm-h2 text-md-h2 text-lg-h2">Hello, {{ name }}</v-card-title>
+                    <v-card-subtitle class="text-h6 text-sm-h5 secondary--text mt-4 w-full w-md-8-12 w-xl-half mx-auto">Good to see you!</v-card-subtitle>
                     <v-divider class="mx-4"></v-divider>
                     <v-container fluid>
                         <v-row dense>
@@ -53,14 +53,13 @@ export default {
             name: localStorage.getItem('firstName') || '',
             cardIndex: null,
             cards: [
-                {title: 'Check my visits', src: 'http://localhost:8080/images/static/visit.jpg', flex: 6, index: 0},
-                {title: 'Check my patients', src: 'http://localhost:8080/images/static/doctor-patient.jpg', flex: 6, index: 1},
-                {title: 'Plan my schedule', src: 'http://localhost:8080/images/static/schedule.jpg', flex: 6, index: 2},
+                {title: 'My visits', src: 'http://localhost:8080/images/static/visit.jpg', flex: 6, index: 0},
+                {title: 'My patients', src: 'http://localhost:8080/images/static/doctor-patient.jpg', flex: 6, index: 1},
+                {title: 'My schedule', src: 'http://localhost:8080/images/static/schedule.jpg', flex: 6, index: 2},
                 {title: 'Forum', src: 'http://localhost:8080/images/static/forum.png', flex: 6, index: 3},
             ],
         }
     },
-    computed: {},
     methods: {
         redirect(index) {
             console.log(index)
