@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 @Data
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class PatientController {
 
     private final PatientService patientService;
 
-    @CrossOrigin
+
     @GetMapping
     public List<PatientDto> getPatients(){
         return patientService.getPatients().stream()
@@ -36,10 +37,16 @@ public class PatientController {
         return patientService.findPatientById(id);
     }
 
-    @CrossOrigin
+
     @GetMapping("/bychar")
     public List<PatientDto> getPatientsByChar(@RequestParam String character){
         return patientService.getPatientsByChar(character);
+    }
+
+
+    @GetMapping("/byDoctor/")
+    public List<PatientDto> getPatientsForDoctor(@RequestParam Long doctor_id){
+        return patientService.getPatientsForDoctor(doctor_id).stream().map(PatientDto::from).collect(Collectors.toList());
     }
 
 

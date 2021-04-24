@@ -3,6 +3,7 @@ package com.website.demo.patient;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.website.demo.address.Address;
+import com.website.demo.user.AppUser;
 import com.website.demo.visit.Visit;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -31,13 +32,17 @@ public class Patient {
     private String secondName;
     private String lastName;
     private String pesel;
-    private LocalDate birthDate;
+    private LocalDate birthdate;
     private String phone;
+    private String email;
     @ManyToOne(optional = false)
     @JoinColumn(name = "address_id")
     private Address address;
     @OneToMany(mappedBy = "patient")
     private Set<Visit> visitSet;
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private AppUser appUser;
 
     public Patient(String firstName, String lastName, String secondName) {
         this.firstName = firstName;

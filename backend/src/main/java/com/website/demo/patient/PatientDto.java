@@ -21,9 +21,10 @@ public class PatientDto {
     private String secondName;
     private String lastName;
     private String pesel;
-    private LocalDate birthDate;
+    private LocalDate birthdate;
     private String phone;
-    private AddressDto address;
+    private Address address;
+    private String email;
    // private Set<VisitDto> visit;
 
     public static PatientDto from(Patient patient){
@@ -33,9 +34,10 @@ public class PatientDto {
         patientDto.secondName = patient.getSecondName();
         patientDto.lastName = patient.getLastName();
         patientDto.pesel = patient.getPesel();
-        patientDto.birthDate = patient.getBirthDate();
+        patientDto.birthdate = patient.getBirthdate();
         patientDto.phone = patient.getPhone();
-        patientDto.address = AddressDto.from(patient.getAddress());
+        patientDto.address = patient.getAddress();
+        patientDto.email = patient.getEmail();
        // patientDto.visit = patient.getVisitSet().stream().map(VisitDto::new).collect(Collectors.toSet());
         return patientDto;
     }

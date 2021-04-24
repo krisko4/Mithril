@@ -44,4 +44,9 @@ public class PatientService {
     public List<PatientDto> getPatientsByChar(String character) {
         return patientRepository.findByFirstNameStartsWith(character);
     }
+
+
+    public List<Patient> getPatientsForDoctor(Long doctor_id) {
+        return patientRepository.findByDoctor(doctor_id);
+    }
 }

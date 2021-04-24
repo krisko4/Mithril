@@ -30,7 +30,8 @@ public class LoginService {
         authenticate(email, password);
         AppUser appUser = (AppUser) appUserService.loadUserByUsername(email);
         String token =  jwtUtil.generateToken(appUser);
-        return new LoginResponse(token, email, appUser.getFirstName(), appUser.getId());
+        return new LoginResponse(
+                token, email, appUser.getFirstName(), appUser.getId(), appUser.getImageName());
 
 
     }
