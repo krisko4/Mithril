@@ -1,6 +1,4 @@
 <template>
-        <v-row justify="center">
-            <v-col cols="3">
                 <v-autocomplete
                     placeholder="Fill in patient data"
                     prepend-icon="mdi-database-search"
@@ -11,8 +9,6 @@
                     cache-items
                 >
                 </v-autocomplete>
-            </v-col>
-        </v-row>
 </template>
 
 <script>
@@ -48,6 +44,7 @@ export default {
             if (!val) {
                 this.items = []
                 this.loading = false
+                this.$store.state.patientSelected = false
                 return
             }
             axios.get("http://localhost:8080/patients/bychar", {

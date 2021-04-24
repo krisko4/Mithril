@@ -1,12 +1,14 @@
 <template>
 <v-app style="background-color: whitesmoke">
-
     <v-main>
-    <Navigation  @navigationClosed="navigationClosed" :navigationOpened="navigationOpened" @navigationChosen="navigationChosen"></Navigation>
+    <Navigation :navigationOpened="navigationOpened" @navigationChosen="navigationChosen"></Navigation>
         <v-img gradient="to top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)" height="700px" src="https://imageproxy.themaven.net/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fmaven-user-photos%2Fcancerconnect%2Fcolon-cancer%2FgdZ0-CoMmkOJnjahj_em8A%2FofYjfdSPzkSkUXeC9Sr3nQ">
             <v-toolbar style="background-color: transparent">
                 <v-app-bar-nav-icon @click=openNavigationDrawer></v-app-bar-nav-icon>
                 <v-toolbar-title>Title</v-toolbar-title>
+                <v-row justify="end" class="mr-4" >
+                    <v-btn text @click="logout">Sign out</v-btn>
+                </v-row>
             </v-toolbar>
             <v-container fill-height>
                 <v-container>
@@ -17,15 +19,18 @@
                     <div class="mb-4 display-2 font-weight-light">Welcome to your personal doctor panel</div>
                 </v-row>
                     <v-row>
-                        <div class="mb-4 display-1 font-weight-light">Enjoy your work</div>
+                        <div class="mb-4 display-1 font-weight-light font-italic">Enjoy your work</div>
                     </v-row>
                 </v-container>
             </v-container>
         </v-img>
-    <v-main
+
+    <v-main class="mt-4"
     >
         <DoctorHomeComponentV2 @cardChosen="cardChosen" v-show="cardIndex === null"></DoctorHomeComponentV2>
         <DoctorVisitsComponent @goBack="loadHomeComponent" v-show="cardIndex === 0"></DoctorVisitsComponent>
+        <VisitCalendar v-show="cardIndex === 2"></VisitCalendar>
+        <PatientTableComponent v-show="cardIndex === 1" @goBack="loadHomeComponent"></PatientTableComponent>
     </v-main>
     </v-main>
 </v-app>
@@ -35,13 +40,15 @@
 import Navigation from "@/components/DoctorPanel/Navigation";
 import DoctorVisitsComponent from "@/components/DoctorPanel/DoctorVisitsComponent";
 import DoctorHomeComponentV2 from "@/components/DoctorPanel/DoctorHomeComponentV2";
-//import DoctorHomeComponent from "@/components/DoctorPanel/DoctorHomeComponent";
-//import axios from "axios";
+import VisitCalendar from "@/components/DoctorPanel/VisitCalendar";
+import PatientTableComponent from "@/components/DoctorPanel/PatientTableComponent";
+
 export default {
     name: "DoctorPanelComponent",
-    components: {DoctorHomeComponentV2, DoctorVisitsComponent, Navigation},
+    components: {PatientTableComponent, VisitCalendar, DoctorHomeComponentV2, DoctorVisitsComponent, Navigation},
     data(){
         return{
+            isActive: false,
             cardIndex: null,
             navigationOpened: false,
             name: localStorage.getItem('firstName'),
@@ -57,6 +64,12 @@ export default {
         },
         logout() {
             localStorage.removeItem('user')
+            localStorage.removeItem('id')
+            localStorage.removeItem('email')
+            localStorage.removeItem('firstName')
+            if(localStorage.getItem('imageName') != null){
+                localStorage.removeItem('imageName')
+            }
             this.$router.push({name: 'login'})
         },
         openNavigationDrawer(){
@@ -65,9 +78,7 @@ export default {
         loadHomeComponent(){
             this.cardIndex = null
         },
-        navigationClosed(){
-            this.navigationOpened = false
-        }
+
     },
 
 }

@@ -110,6 +110,9 @@ export default {
                 localStorage.setItem('user', response.data.token);
                 localStorage.setItem('firstName', response.data.firstName);
                 localStorage.setItem('id', response.data.id)
+                if(response.data.imageName != null) {
+                    localStorage.setItem('imageName', response.data.imageName)
+                }
                 this.$router.push({name: 'home'})
             }).catch((error) => {
                 this.errorPopped = true

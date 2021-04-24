@@ -102,9 +102,9 @@ export default {
         thirdStepComplete(image) {
             this.step = 4
             console.log(image)
-            if(image === null) {
+            if(image != null) {
                 console.log('wlazlem tu')
-                this.userData = Object.assign(this.userData, image)
+                this.userData = Object.assign(this.userData, {'image': image})
             }
             console.log(this.userData)
         },

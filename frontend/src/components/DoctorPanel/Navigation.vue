@@ -12,10 +12,10 @@
         >
             <v-list-item>
                 <v-list-item-avatar>
-                    <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+                    <v-img :src="imgSrc"></v-img>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                    <v-list-item-title>{{name}}</v-list-item-title>
+                    <v-list-item-title>{{ name }}</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
 
@@ -51,7 +51,7 @@
                     <v-list-item-icon>
                         <v-icon>mdi-account-heart</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>My patients</v-list-item-title>
+                    <v-list-item-title @click="cardIndex = 1; redirect(cardIndex)">My patients</v-list-item-title>
                 </v-list-item>
 
             </v-list-item-group>
@@ -62,11 +62,12 @@
 <script>
 export default {
     name: "Navigation",
-    props:{
+    props: {
         navigationOpened: Boolean
     },
-    data(){
-        return{
+    data() {
+        return {
+            imgSrc: 'http://localhost:8080/images/doctors/' + localStorage.getItem('imageName'),
             cardIndex: null,
             name: localStorage.getItem('firstName'),
             drawer: this.navigationOpened
@@ -74,20 +75,24 @@ export default {
         }
     },
     watch: {
-      navigationOpened(){
-         this.drawer = this.navigationOpened
-      }
+        navigationOpened() {
+            this.drawer = true
+        }
     },
 
-
-    methods: {
-        redirect(){
-            this.$emit('navigationChosen', this.cardIndex)
+    created(){
+        if(localStorage.getItem('imageName') === null ){
+            this.imgSrc = 'http://localhost:8080/images/static/avatar.png'
         }
     },
 
 
-
+    methods: {
+        redirect() {
+            this.drawer = false
+            this.$emit('navigationChosen', this.cardIndex)
+        }
+    },
 
 
 }

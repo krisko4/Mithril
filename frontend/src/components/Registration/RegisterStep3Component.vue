@@ -172,9 +172,7 @@ export default {
                     duration : 4000,
                 })
             }
-            this.$emit('thirdStepComplete', {
-                image: this.image
-            })
+            this.$emit('thirdStepComplete', this.image)
         },
         goBack() {
             this.$emit('goBack')
@@ -183,7 +181,6 @@ export default {
             this.isSubmitLoading = true
             setTimeout(() => {
                 this.image = this.selectedFile
-              //  this.$emit('imageLoaded', this.image)
                 this.isSubmitLoading = false
                 this.$toast.success('Image uploaded successfully.')
 

@@ -11,8 +11,13 @@
         <v-row justify="center">
             <DatePickerComponent class="mt-8"/>
         </v-row>
+        <v-row justify="center">
+            <v-col cols="3">
+                <PatientSearchComponent></PatientSearchComponent>
+            </v-col>
+        </v-row>
 
-        <PatientSearchComponent></PatientSearchComponent>
+
         <v-row justify="center">
                 <v-btn @click="getDoctors" :disabled="!date || !patientSelected" color="indigo" class="white--text">Submit
                 </v-btn>

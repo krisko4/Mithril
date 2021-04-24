@@ -54,15 +54,6 @@ export default {
             console.log(index)
             this.cardIndex = index
             this.$emit('cardChosen', index)
-
-
-            /*      axios.get('http://localhost:8080/jwt', {
-                      headers: {
-                          Authorization : 'Bearer ' + localStorage.getItem('user')
-                      }
-                  }).then(((response)=>{
-                      console.log(response)
-                  }))*/
         },
 
     }

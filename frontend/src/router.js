@@ -4,9 +4,10 @@ import RegisterComponent from "@/components/Registration/RegisterComponent";
 import VisitComponent from "@/components/VisitSaving/VisitComponent";
 import ConfirmationComponent from "@/components/Registration/Confirmation/ConfirmationComponent";
 import LoginComponent from "@/components/Login/LoginComponent";
-import TokenExpiredComponent from "@/components/Registration/Confirmation/TokenExpiredComponent";
 import axios from "axios";
 import DoctorPanelComponent from "@/components/DoctorPanel/DoctorPanelComponent";
+
+import PatientDetailsComponent from "@/components/DoctorPanel/PatientDetailsComponent";
 
 
 
@@ -45,7 +46,7 @@ const RouterVue = new Router({
         {
             path: '/test',
             name: 'test',
-            component: TokenExpiredComponent
+            component: PatientDetailsComponent
         },
         {
             path: '/login',
