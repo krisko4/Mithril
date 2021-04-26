@@ -36,13 +36,13 @@
                         <v-tabs-slider color="primary"></v-tabs-slider>
                     </v-tabs>
                     <v-divider></v-divider>
-                    <v-container ma-0 pa-0 v-show="index !== 2">
+                    <v-container ma-0 pa-0 v-show="tabIndex !== 2">
                         <v-carousel height="300px"
                                     hide-delimiter-background
                                     v-model="itemIndex"
-                                    v-if="isCarouselNotRefreshing"
+
                         >
-                            <v-carousel-item v-model="dodo" v-for="(item, i) in items" :key="i"
+                            <v-carousel-item v-for="(item, i) in items" :key="i"
                                              gradient="to top, rgba(0,0,0,.44), rgba(0,0,0,.44)"
                                              src="https://cdn.vuetifyjs.com/images/cards/forest.jpg">
                                 <v-container class="fill-height">
@@ -67,7 +67,8 @@
                             <v-card-text>
                                 <VisitTimelineComponent :visits="visits"
                                                         v-if="isVisitListNotEmpty"></VisitTimelineComponent>
-                                <strong v-else>You don't have any visits on {{ dayString }}. Enjoy your free time
+                                <strong v-else>You don't have any visits on {{ items[itemIndex].dayString }}. Enjoy your
+                                    free time
                                     :)</strong>
                             </v-card-text>
                             <v-card-actions>
@@ -104,7 +105,7 @@ export default {
             month: '',
             isVisitListNotEmpty: false,
             year: null,
-            index: null,
+            tabIndex: null,
             chosenTab: null,
             today: '',
             visits: null,
@@ -112,92 +113,110 @@ export default {
             day: null,
             date: new Date(),
             dialog: false,
-            isCarouselNotRefreshing: true,
             items: [],
-            dodo: null
         }
     },
     created() {
-        this.getDate(this.date)
-        for (let i = 1; i < 4; i++) {
-            const fullDate = new Date()
-            const newDate = fullDate.setDate(fullDate.getDate() + i)
-            this.getDate(new Date(newDate), null, null)
-        }
-
-
+        this.setDates()
     },
     watch: {
 
-        '$store.state.date'() {
-            console.log(this.$store.state.date)
-            this.dialog = false
-            this.date = new Date(this.$store.state.date)
-            this.getDate(this.date)
+        itemIndex() {
             this.getVisits()
-}
         },
 
-        methods: {
-
-            goBack() {
-                this.$emit('goBack')
-            },
-
-            openCalendarTab() {
-                this.isVisitListNotEmpty = false
-                this.dialog = true
-            },
-
-            getVisits() {
-                axios.get('http://localhost:8080/visits/get/all', {
-                    params: {
-                        doctor_id: localStorage.getItem('id'),
-                        date: this.date
-                    }
-                }).then((response) => {
-                    this.visits = response.data
-                    this.isVisitListNotEmpty = response.data.length !== 0;
-                })
-            },
-
-            openTab(tab) {
-                this.index = this.tabs.indexOf(tab)
-                const fullDate = new Date()
-                if (this.index === 1) {
-                    const newDate = fullDate.setDate(fullDate.getDate() + 1)
-                    this.date = new Date(newDate)
-                    this.itemIndex = 1
-                } else {
-                    this.date = fullDate
-                    this.itemIndex = 0
-                }
-                this.getVisits()
-
-            },
-
-            getDate(fullDate) {
-
-                this.day = String(fullDate.getDate()).padStart(2, '0');
-                const month = String(fullDate.getMonth() + 1).padStart(2, '0');
-                this.year = fullDate.getFullYear();
-
-                // date in yyyy-mm-dd format
-                this.today = [this.year, month, this.day].join('-');
-
-                const dateStringArray = fullDate.toDateString().split(' ');
-                this.dayString = this.days.filter(element => element.startsWith(dateStringArray[0]))[0]
-                this.month = this.months.filter(element => element.startsWith(dateStringArray[1]))[0]
-
-                this.items.push(
-                    {'day': this.day, 'dayString': this.dayString, 'month': this.month, 'year': this.year}
-                )
-
-
-            },
+        '$store.state.date'(val) {
+            if(val === null){
+                return
+            }
+            this.dialog = false
+            this.items = []
+            this.setDates(true)
+            this.getVisits()
+            this.$store.state.date = null
 
         }
+    },
+
+    methods: {
+
+        setDates(isCalendarUsed) {
+            this.items = []
+            for (let i = 0; i < 4; i++) {
+                let fullDate
+                if (isCalendarUsed) {
+                    fullDate = new Date(this.$store.state.date)
+                } else {
+                    fullDate = new Date()
+                }
+                const newDate = fullDate.setDate(fullDate.getDate() + i)
+                this.getDate(new Date(newDate))
+                this.insertNewItem()
+            }
+            this.itemIndex = 0
+        },
+
+
+        insertNewItem() {
+            this.items.push(
+                {
+                    'day': this.day,
+                    'dayString': this.dayString,
+                    'month': this.month,
+                    'year': this.year,
+                    'date': this.today
+                }
+            )
+        },
+
+        goBack() {
+            this.$emit('goBack')
+        },
+
+        openCalendarTab() {
+            this.isVisitListNotEmpty = false
+            this.dialog = true
+        },
+
+        getVisits() {
+            axios.get('http://localhost:8080/visits/get/all', {
+                params: {
+                    doctor_id: localStorage.getItem('id'),
+                    date: this.items[this.itemIndex].date
+                }
+            }).then((response) => {
+                this.visits = response.data
+                this.isVisitListNotEmpty = response.data.length !== 0;
+            })
+        },
+
+        openTab(tab) {
+            this.tabIndex = this.tabs.indexOf(tab)
+            this.setDates()
+            if (this.tabIndex === 1) {
+                this.itemIndex = 1
+            } else {
+                this.itemIndex = 0
+            }
+            this.getVisits()
+        },
+
+        getDate(fullDate) {
+
+            this.day = String(fullDate.getDate()).padStart(2, '0');
+            const month = String(fullDate.getMonth() + 1).padStart(2, '0');
+            this.year = fullDate.getFullYear();
+            // date in yyyy-mm-dd format
+            this.today = [this.year, month, this.day].join('-');
+            const dateStringArray = fullDate.toDateString().split(' ');
+            this.dayString = this.days.filter(element => element.startsWith(dateStringArray[0]))[0]
+            this.month = this.months.filter(element => element.startsWith(dateStringArray[1]))[0]
+            console.log(this.dayString)
+
+        },
+
     }
+}
 </script>
 
 <style scoped>
