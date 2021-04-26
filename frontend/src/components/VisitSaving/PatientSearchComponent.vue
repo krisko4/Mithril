@@ -1,14 +1,13 @@
 <template>
-                <v-autocomplete
-                    placeholder="Fill in patient data"
-                    prepend-icon="mdi-database-search"
-                    :search-input.sync="search"
-                    :loading="loading"
-                    :items="items"
-                    label="Patients"
-                    cache-items
-                >
-                </v-autocomplete>
+    <v-autocomplete
+        placeholder="Fill in patient data"
+        prepend-icon="mdi-database-search"
+        :search-input.sync="search"
+        :loading="loading"
+        :items="items"
+        label="Patients"
+    >
+    </v-autocomplete>
 </template>
 
 <script>
@@ -24,9 +23,7 @@ export default {
     },
     watch: {
         search(val) {
-            if(this.items.includes(val)){
-                this.$store.state.patientSelected = true
-            }
+            this.$store.state.patientSelected = false
             this.loading = true
             this.findPatientsDebounced(val)
         },
@@ -36,7 +33,7 @@ export default {
             clearTimeout(this._searchTimerId)
             this._searchTimerId = setTimeout(() => {
                 this.findPatients(val)
-            }, 500)
+            }, 300)
 
         },
 
@@ -52,15 +49,24 @@ export default {
                     character: val
                 }
             }).then((response) => {
+                // this means empty response was returned
+                if(response.data.length === 0 && this.items.includes(val)){
+                    this.$store.state.patientSelected = true
+                    return
+                }
                 response.data.forEach((patient) => {
                     this.$store.state.patient = patient
                     const patientData = patient.firstName + " " + patient.lastName + " " + patient.pesel;
                     if (!this.items.includes(patientData)) {
                         this.items.push(patientData)
                     }
+                    if (patientData === val) {
+                        this.$store.state.patientSelected = true
+                    }
                 })
             }).finally(() => {
                 this.loading = false
+
             })
 
         }

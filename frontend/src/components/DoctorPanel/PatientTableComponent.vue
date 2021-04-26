@@ -1,85 +1,118 @@
 <template>
-<v-container>
-    <v-row justify="center">
-    <v-col cols="9">
-    <v-card>
-        <v-card-title>
-            Patients
-        </v-card-title>
-        <v-card-subtitle>
-            <v-row justify="space-between">
-                <v-col cols="5">
-                    <v-text-field
-                        v-model="search"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        single-line
-                        hide-details
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="7" align="end">
-                <v-dialog max-width="400"
-                          v-model="newPatient">
-                    <template v-slot:activator="on" v-on="on">
-                            <v-btn @click="addNewPatient" color="primary">New patient</v-btn>
-                    </template>
-                    <template>
-                       <v-card>
-                           <v-card-title>
-                               Add new patient to your table
-                           </v-card-title>
-                           <v-card-actions>
-                                   <PatientSearchComponent></PatientSearchComponent>
-                           </v-card-actions>
-                          <v-card-text align="end">
-                                  <v-btn color="primary" :disabled="!patientSelected">Add</v-btn>
-                          </v-card-text>
-                       </v-card>
-                    </template>
-                </v-dialog>
-                </v-col>
-            </v-row>
-        </v-card-subtitle>
-        <v-data-table
-            v-model="selected"
-            :headers="headers"
-            :items="patients"
-            :single-select="singleSelect"
-            item-key="name"
+    <v-container>
+        <v-row justify="center">
+            <v-col cols="10">
+                <v-card>
+                    <v-card-title>
+                        Patients
+                    </v-card-title>
+                    <v-card-subtitle>
+                        <v-row justify="space-between">
+                            <v-col cols="5">
+                                <v-text-field
+                                    v-model="search"
+                                    append-icon="mdi-magnify"
+                                    label="Search"
+                                    single-line
+                                    hide-details
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="7" align="end">
+                                <v-dialog max-width="400"
+                                          v-model="newPatientDialog">
+                                    <template v-slot:activator="on" v-on="on">
+                                        <v-btn @click="openNewPatientDialog" color="primary">New patient</v-btn>
+                                    </template>
+                                    <template>
+                                        <v-card>
+                                            <v-card-title>
+                                                Add new patient to your table
+                                            </v-card-title>
+                                            <v-card-actions>
+                                                <PatientSearchComponent></PatientSearchComponent>
+                                            </v-card-actions>
+                                            <v-card-text align="end">
+                                                <v-btn color="primary" @click="addNewPatient"
+                                                       :disabled="!patientSelected && !patientAlreadyAdded">Add
+                                                </v-btn>
+                                            </v-card-text>
+                                        </v-card>
+                                    </template>
+                                </v-dialog>
+                            </v-col>
+                        </v-row>
+                    </v-card-subtitle>
+                    <v-data-table
+                        :headers="headers"
+                        :items="patients"
+                        :single-select="singleSelect"
+                        item-key="name"
+                        :search="search"
+                    >
+                        <template v-slot:item="{ item }">
+                            <v-dialog max-width="400" v-model="patientDetails">
+                                <template v-slot:activator="on" v-on="on">
+                                    <tr @click="showPatientDetails(item)">
+                                        <td>{{ item.firstName }}</td>
+                                        <td class="text-xs-right">{{ item.secondName }}</td>
+                                        <td class="text-xs-right">{{ item.lastName }}</td>
+                                        <td class="text-xs-right">{{ item.pesel }}</td>
+                                        <td class="text-xs-right">{{ item.birthdate }}</td>
+                                        <td class="text-xs-right">{{ item.phone }}</td>
+                                        <td class="text-xs-right">{{ item.email }}</td>
+                                        <td class="text-xs-right">{{ item.street }}</td>
+                                        <td class="text-xs-right">{{ item.flatNumber }}</td>
+                                        <td class="text-xs-right">{{ item.postCode }}</td>
+                                        <td class="text-xs-right">{{ item.city }}</td>
+                                        <v-dialog v-model="deleteDialog" max-width="500" :retain-focus="false">
+                                            <template v-slot:activator="{on}" v-on="on">
+                                                <td>
+                                                    <v-icon
+                                                        @click="openDeleteDialog"
+                                                        color="primary"
+                                                    >
+                                                        mdi-delete
+                                                    </v-icon>
+                                                </td>
+                                            </template>
+                                            <template>
+                                                <v-card>
+                                                    <v-card-title>
+                                                        Patient removal
+                                                    </v-card-title>
+                                                    <v-card-text>
+                                                        Are you sure you want to remove <b>{{ patientData.firstName }}
+                                                        {{ patientData.lastName }}</b> from your table?
+                                                    </v-card-text>
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn color="blue darken-1" text @click="closeDeleteDialog">
+                                                            Cancel
+                                                        </v-btn>
+                                                        <v-btn color="blue darken-1" text @click="deletePatient">Yes,
+                                                            I'm sure
+                                                        </v-btn>
+                                                        <v-spacer></v-spacer>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </template>
+                                        </v-dialog>
+                                    </tr>
+                                </template>
+                                <template>
+                                    <PatientDetailsComponent :patientData="patientData"></PatientDetailsComponent>
+                                </template>
+                            </v-dialog>
+                        </template>
+                    </v-data-table>
+                    <v-card-actions>
+                        <v-btn text color="primary" @click="goBack">Return</v-btn>
+                    </v-card-actions>
 
-            :search="search"
-        >
-            <template v-slot:item="{ item }" >
-                <v-dialog max-width="400" v-model="patientDetails">
-                <template v-slot:activator="on" v-on="on">
-                <tr @click="showPatientDetails(item)">
-                    <td>{{ item.firstName }}</td>
-                    <td class="text-xs-right">{{item.secondName }}</td>
-                    <td class="text-xs-right">{{item.lastName }}</td>
-                    <td class="text-xs-right">{{item.pesel }}</td>
-                    <td class="text-xs-right">{{item.birthdate }}</td>
-                    <td class="text-xs-right">{{item.phone }}</td>
-                    <td class="text-xs-right">{{item.email }}</td>
-                    <td class="text-xs-right">{{item.street }}</td>
-                    <td class="text-xs-right">{{item.flatNumber }}</td>
-                    <td class="text-xs-right">{{item.postCode }}</td>
-                    <td class="text-xs-right">{{item.city }}</td>
-                </tr>
-                </template>
-                <template>
-                   <PatientDetailsComponent :patientData="patientData"></PatientDetailsComponent>
-                </template>
-            </v-dialog>
-            </template>
-        </v-data-table>
-        <v-card-actions>
-            <v-btn text color="primary" @click="goBack">Return</v-btn>
-        </v-card-actions>
-
-    </v-card>
-    </v-col>
-    </v-row>
-</v-container>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -91,38 +124,116 @@ import PatientSearchComponent from "@/components/VisitSaving/PatientSearchCompon
 export default {
     name: "PatientListComponent",
     components: {PatientDetailsComponent, PatientSearchComponent},
-    data(){
+    data() {
         return {
-            newPatient: false,
+            newPatientDialog: false,
             findPatient: '',
             patientDetails: false,
             search: '',
             singleSelect: true,
-            selected: [],
-            patients : [],
-            patientData: null
+            patients: [],
+            patientData: '',
+            patientAlreadyAdded: false,
+            deleteDialog: false,
         }
 
     },
-    methods:{
-       showPatientDetails(item){
-           console.log(item)
-           this.patientData = item
-           this.patientDetails = true
-       },
-        goBack(){
+    methods: {
+        showPatientDetails(item) {
+            this.patientData = item
+            if (!this.deleteDialog) {
+                this.patientDetails = true
+            }
+
+        },
+        goBack() {
             this.$emit('goBack')
         },
-        addNewPatient(){
-           this.newPatient = true
+        openNewPatientDialog() {
+            this.newPatientDialog = true
+        },
+        openDeleteDialog() {
+            this.deleteDialog = true
+        },
+        closeDeleteDialog() {
+            this.deleteDialog = false
+        },
+        addNewPatient() {
+
+            //TODO: not working
+            axios.put('http://localhost:8080/patients/addDoctor', {
+                'doctorID': localStorage.getItem('id'),
+                'patientID': this.patientData.id
+            }, {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('user')
+                    }
+                }
+                ).then((response) => {
+                console.log(response)
+            }).finally(() => {
+                this.newPatientDialog = false
+            })
+        },
+        deletePatient() {
+            const patient = this.patients.filter((element) => {
+                if (element.pesel === this.patientData.pesel) {
+                    return element
+                }
+            })
+            if (patient) {
+                axios.put('http://localhost:8080/patients/removeDoctor', {
+
+                        'doctorID': localStorage.getItem('id'),
+                        'patientID': this.patientData.id
+
+                    }, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('user')
+                        },
+                    }
+                ).then((response) => {
+                    console.log(response)
+                }).finally(() => {
+                    this.patients.splice(this.patients.indexOf(patient), 1)
+                    this.deleteDialog = false
+                })
+            }
+
+        }
+
+
+    },
+
+    watch: {
+        '$store.state.patientSelected'(val) {
+            console.log(this.$store.state.patient.pesel)
+            console.log(this.patients)
+            // if patientSelected is true <=> button is enabled, check if such patient is already present in the table
+            // if so, disable button
+            if (val) {
+                this.patients.filter((element) => {
+                    if (element.pesel === this.$store.state.patient.pesel) {
+                        this.$store.state.patientSelected = false
+                    }
+                })
+
+                //  this.patients.forEach((element) =>{
+                //       if(element.pesel === this.$store.state.patient.pesel)
+                //      {
+                //          this.$store.state.patientSelected = false
+                //     }
+                //     })
+            }
         }
     },
+
     computed: {
 
         patientSelected() {
             return this.$store.state.patientSelected
         },
-        headers () {
+        headers() {
             return [
                 {
                     text: 'First name',
@@ -135,30 +246,35 @@ export default {
                     value: 'secondName',
 
                 },
-                { text: 'Last name', value: 'lastName' },
-                { text: 'PESEL', value: 'pesel' },
-                { text: 'Date of birth', value: 'birthdate' },
-                { text: 'Phone', value: 'phone' },
-                { text: 'E-mail', value: 'email' },
-                { text: 'Street', value: 'street' },
-                { text: 'Flat number', value: 'flatNumber' },
-                { text: 'Post code', value: 'postCode' },
-                { text: 'City', value: 'city' },
+                {text: 'Last name', value: 'lastName'},
+                {text: 'PESEL', value: 'pesel'},
+                {text: 'Date of birth', value: 'birthdate'},
+                {text: 'Phone', value: 'phone'},
+                {text: 'E-mail', value: 'email'},
+                {text: 'Street', value: 'street'},
+                {text: 'Flat number', value: 'flatNumber'},
+                {text: 'Post code', value: 'postCode'},
+                {text: 'City', value: 'city'},
+                {text: 'Actions', value: 'actions', sortable: false},
 
             ]
         },
 
     },
 
-    created(){
+    created() {
         axios.get('http://localhost:8080/patients/byDoctor/', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('user')
+            },
             params: {
-                doctor_id : localStorage.getItem('id')
+                doctor_id: localStorage.getItem('id')
             }
-        } ).then((response) => {
+        }).then((response) => {
             response.data.forEach((element) => {
                 this.patients.push(
                     {
+                        id: element.id,
                         firstName: element.firstName,
                         secondName: element.secondName,
                         lastName: element.lastName,
