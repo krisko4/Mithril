@@ -1,2 +1,2 @@
 # Clinic
-Simple clinic database
+Simple web application using Vue, Spring and MSSQL Database
