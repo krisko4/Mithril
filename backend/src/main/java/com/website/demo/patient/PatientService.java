@@ -54,7 +54,8 @@ public class PatientService {
         patientRepository.removeDoctorForPatient(doctorID, patientID);
     }
 
-    public void addDoctorForPatient(Long doctorID, Long patientID) {
+    public Patient addDoctorForPatient(Long doctorID, Long patientID) {
         patientRepository.addDoctorForPatient(doctorID, patientID);
+        return patientRepository.findById(patientID).get();
     }
 }

@@ -55,8 +55,8 @@ public class PatientController {
     }
 
     @PutMapping("addDoctor")
-    public void addDoctorForPatient(@RequestBody DoctorPatientIDRequest doctorPatientIDRequest){
-        patientService.addDoctorForPatient(doctorPatientIDRequest.getDoctorID(), doctorPatientIDRequest.getPatientID());
+    public PatientDto addDoctorForPatient(@RequestBody DoctorPatientIDRequest doctorPatientIDRequest){
+        return PatientDto.from(patientService.addDoctorForPatient(doctorPatientIDRequest.getDoctorID(), doctorPatientIDRequest.getPatientID()));
     }
 
     @PostMapping
