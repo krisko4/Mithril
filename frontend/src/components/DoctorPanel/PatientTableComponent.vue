@@ -29,11 +29,11 @@
                                                 Add new patient to your table
                                             </v-card-title>
                                             <v-card-actions>
-                                                <PatientSearchComponent></PatientSearchComponent>
+                                                <PatientSearchComponent v-if="newPatientDialog"></PatientSearchComponent>
                                             </v-card-actions>
                                             <v-card-text align="end">
                                                 <v-btn color="primary" @click="addNewPatient"
-                                                       :disabled="!patientSelected && !patientAlreadyAdded">Add
+                                                       :disabled="!patientSelected">Add
                                                 </v-btn>
                                             </v-card-text>
                                         </v-card>
@@ -133,7 +133,6 @@ export default {
             singleSelect: true,
             patients: [],
             patientData: '',
-            patientAlreadyAdded: false,
             deleteDialog: false,
         }
 
@@ -144,7 +143,6 @@ export default {
             if (!this.deleteDialog) {
                 this.patientDetails = true
             }
-
         },
         goBack() {
             this.$emit('goBack')
@@ -160,17 +158,33 @@ export default {
         },
         addNewPatient() {
 
-            //TODO: not working
+            console.log(this.$store.state.patient)
             axios.put('http://localhost:8080/patients/addDoctor', {
                 'doctorID': localStorage.getItem('id'),
-                'patientID': this.patientData.id
+                'patientID': this.$store.state.patient.id
             }, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('user')
                     }
                 }
                 ).then((response) => {
-                console.log(response)
+                    console.log(response.data)
+                this.patients.push(
+                    {
+                        id: response.data.id,
+                        firstName: response.data.firstName,
+                        secondName: response.data.secondName,
+                        lastName: response.data.lastName,
+                        pesel: response.data.pesel,
+                        birthdate: response.data.birthdate,
+                        phone: response.data.phone,
+                        email: response.data.email,
+                        street: response.data.address.street,
+                        flatNumber: response.data.address.flatNumber,
+                        postCode: response.data.address.postCode,
+                        city: response.data.address.city
+
+                    })
             }).finally(() => {
                 this.newPatientDialog = false
             })
@@ -207,29 +221,22 @@ export default {
 
     watch: {
         '$store.state.patientSelected'(val) {
-            console.log(this.$store.state.patient.pesel)
-            console.log(this.patients)
             // if patientSelected is true <=> button is enabled, check if such patient is already present in the table
             // if so, disable button
+            console.log(this.patients)
+            console.log(val)
             if (val) {
                 this.patients.filter((element) => {
                     if (element.pesel === this.$store.state.patient.pesel) {
                         this.$store.state.patientSelected = false
                     }
                 })
-
-                //  this.patients.forEach((element) =>{
-                //       if(element.pesel === this.$store.state.patient.pesel)
-                //      {
-                //          this.$store.state.patientSelected = false
-                //     }
-                //     })
             }
-        }
+        },
+
     },
 
     computed: {
-
         patientSelected() {
             return this.$store.state.patientSelected
         },
