@@ -29,12 +29,34 @@
                                                 Add new patient to your table
                                             </v-card-title>
                                             <v-card-actions>
-                                                <PatientSearchComponent v-if="newPatientDialog"></PatientSearchComponent>
+                                                <PatientSearchComponent
+                                                    v-if="newPatientDialog"></PatientSearchComponent>
                                             </v-card-actions>
                                             <v-card-text align="end">
-                                                <v-btn color="primary" @click="addNewPatient"
-                                                       :disabled="!patientSelected">Add
-                                                </v-btn>
+                                                <v-dialog max-width="300" v-model="warningDialog">
+                                                    <template v-slot:activator="on" v-on="on">
+                                                        <v-btn color="primary" @click="addNewPatient"
+                                                               :disabled="!patientSelected">Add
+                                                        </v-btn>
+                                                    </template>
+                                                    <template>
+                                                        <v-card>
+                                                           <v-card-title>Warning</v-card-title>
+                                                            <v-card-text>Patient <b>{{$store.state.patient.firstName}} {{$store.state.patient.lastName}}</b> is already a patient of doctor <b>Jerzy Owsiak</b>. Are you sure you want to place him as your patient?</v-card-text>
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="blue darken-1" text @click="closeWarningDialog">
+                                                                    Cancel
+                                                                </v-btn>
+                                                                <v-btn color="blue darken-1" text @click="submitNewPatient">Yes,
+                                                                    I'm sure
+                                                                </v-btn>
+                                                                <v-spacer></v-spacer>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </template>
+                                                </v-dialog>
+
                                             </v-card-text>
                                         </v-card>
                                     </template>
@@ -134,10 +156,14 @@ export default {
             patients: [],
             patientData: '',
             deleteDialog: false,
+            warningDialog: false
         }
 
     },
     methods: {
+        closeWarningDialog(){
+            this.warningDialog = false
+        },
         showPatientDetails(item) {
             this.patientData = item
             if (!this.deleteDialog) {
@@ -156,18 +182,16 @@ export default {
         closeDeleteDialog() {
             this.deleteDialog = false
         },
-        addNewPatient() {
-
-            axios.put('http://localhost:8080/patients/addDoctor', {
-                'doctorID': localStorage.getItem('id'),
-                'patientID': this.$store.state.patient.id
-            }, {
+        submitNewPatient(){
+            axios.patch('http://localhost:8080/patients/addDoctor', {
+                    'doctorID': localStorage.getItem('id'),
+                    'patientID': this.$store.state.patient.id
+                }, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('user')
                     }
                 }
-                ).then((response) => {
-                    console.log(response.data)
+            ).then((response) => {
                 this.patients.push(
                     {
                         id: response.data.id,
@@ -186,33 +210,35 @@ export default {
                     })
             }).finally(() => {
                 this.newPatientDialog = false
+                this.warningDialog = false
             })
         },
-        deletePatient() {
-            // make sure the patient we want to delete is in our table and return his data
-            const patient = this.patients.filter((element) => {
-                if (element.pesel === this.patientData.pesel) {
-                    return element
-                }
-            })
-            if (patient) {
-                axios.put('http://localhost:8080/patients/removeDoctor', {
 
-                        'doctorID': localStorage.getItem('id'),
-                        'patientID': this.patientData.id
-
-                    }, {
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem('user')
-                        },
-                    }
-                ).then(() => {
-                    this.patients.splice(this.patients.indexOf(patient[0]), 1)
-                }).finally(() => {
-                    this.deleteDialog = false
-                })
+        addNewPatient() {
+            if(this.$store.state.patient.doctorID){
+                this.newPatientDialog = false
+                this.warningDialog = true
+                return
             }
+            this.submitNewPatient()
 
+        },
+        deletePatient() {
+            axios.patch('http://localhost:8080/patients/removeDoctor', {
+
+                    'doctorID': localStorage.getItem('id'),
+                    'patientID': this.patientData.id
+
+                }, {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('user')
+                    },
+                }
+            ).then(() => {
+                this.patients.splice(this.patients.indexOf(this.patientData), 1)
+            }).finally(() => {
+                this.deleteDialog = false
+            })
         }
 
 
@@ -225,7 +251,6 @@ export default {
             if (val) {
                 this.patients.filter((element) => {
                     if (element.pesel === this.$store.state.patient.pesel) {
-                        console.log('duplicate')
                         this.$store.state.patientSelected = false
                     }
                 })
