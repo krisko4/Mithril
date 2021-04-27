@@ -49,12 +49,12 @@ public class PatientController {
         return patientService.getPatientsForDoctor(doctor_id).stream().map(PatientDto::from).collect(Collectors.toList());
     }
 
-    @PutMapping("removeDoctor")
+    @PatchMapping("removeDoctor")
     public void removeDoctorForPatient(@RequestBody DoctorPatientIDRequest doctorPatientIDRequest){
         patientService.removeDoctorForPatient(doctorPatientIDRequest.getDoctorID(), doctorPatientIDRequest.getPatientID());
     }
 
-    @PutMapping("addDoctor")
+    @PatchMapping("addDoctor")
     public PatientDto addDoctorForPatient(@RequestBody DoctorPatientIDRequest doctorPatientIDRequest){
         return PatientDto.from(patientService.addDoctorForPatient(doctorPatientIDRequest.getDoctorID(), doctorPatientIDRequest.getPatientID()));
     }
