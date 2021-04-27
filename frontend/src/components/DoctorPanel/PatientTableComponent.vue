@@ -158,7 +158,6 @@ export default {
         },
         addNewPatient() {
 
-            console.log(this.$store.state.patient)
             axios.put('http://localhost:8080/patients/addDoctor', {
                 'doctorID': localStorage.getItem('id'),
                 'patientID': this.$store.state.patient.id
@@ -190,6 +189,7 @@ export default {
             })
         },
         deletePatient() {
+            // make sure the patient we want to delete is in our table and return his data
             const patient = this.patients.filter((element) => {
                 if (element.pesel === this.patientData.pesel) {
                     return element
@@ -206,10 +206,9 @@ export default {
                             'Authorization': 'Bearer ' + localStorage.getItem('user')
                         },
                     }
-                ).then((response) => {
-                    console.log(response)
+                ).then(() => {
+                    this.patients.splice(this.patients.indexOf(patient[0]), 1)
                 }).finally(() => {
-                    this.patients.splice(this.patients.indexOf(patient), 1)
                     this.deleteDialog = false
                 })
             }
@@ -223,11 +222,10 @@ export default {
         '$store.state.patientSelected'(val) {
             // if patientSelected is true <=> button is enabled, check if such patient is already present in the table
             // if so, disable button
-            console.log(this.patients)
-            console.log(val)
             if (val) {
                 this.patients.filter((element) => {
                     if (element.pesel === this.$store.state.patient.pesel) {
+                        console.log('duplicate')
                         this.$store.state.patientSelected = false
                     }
                 })
