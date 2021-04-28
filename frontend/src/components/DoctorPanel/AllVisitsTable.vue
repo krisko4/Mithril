@@ -61,13 +61,19 @@ export default {
                 }
             })
                 .then((response) => {
-                    console.log(response)
                     response.data.forEach((element) => {
                         this.patients.push(
                             {
                                 date: element.date.replace(/T/g, ' '),
                                 patientFullName: element.patientFirstName + ' ' + element.patientSecondName + ' ' + element.patientLastName,
-                                doctorFullName: element.doctorFirstName + ' ' + element.doctorSecondName + ' ' + element.doctorLastName
+                                doctorFullName: element.doctor.firstName + ' ' + element.doctor.secondName + ' ' + element.doctor.lastName,
+                                description: element.description,
+                                interview: element.interview,
+                                medicine: element.medicine,
+                                reason: element.reason,
+                                research: element.research,
+                                referrals: element.referrals
+
                             }
                         )
                     })

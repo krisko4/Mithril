@@ -42,7 +42,7 @@
                                                     <template>
                                                         <v-card>
                                                            <v-card-title>Warning</v-card-title>
-                                                            <v-card-text>Patient <b>{{$store.state.patient.firstName}} {{$store.state.patient.lastName}}</b> is already a patient of doctor <b>Jerzy Owsiak</b>. Are you sure you want to place him as your patient?</v-card-text>
+                                                            <v-card-text>Patient <b>{{$store.state.patient.firstName}} {{$store.state.patient.lastName}}</b> is already a patient of doctor <b>{{doctorName}}</b>. Are you sure you want to place him as your patient?</v-card-text>
                                                             <v-card-actions>
                                                                 <v-spacer></v-spacer>
                                                                 <v-btn color="blue darken-1" text @click="closeWarningDialog">
@@ -68,7 +68,7 @@
                         <PatientDetailsComponent :patientData="patientData"></PatientDetailsComponent>
                     </v-dialog>
                     <v-dialog v-model="historyDialog" max-width="600">
-                        <PatientHistoryComponent :patientData="patientData"></PatientHistoryComponent>
+                        <PatientHistoryComponent v-if="historyDialog" :patientData="patientData"></PatientHistoryComponent>
                     </v-dialog>
                     <v-dialog v-model="deleteDialog" max-width="500">
                         <PatientDeleteComponent @deleteDialogClosed="closeDeleteDialog" @patientDeleteSubmitted="deletePatient" :patientData="patientData"></PatientDeleteComponent>
@@ -140,6 +140,7 @@ export default {
             deleteDialog: false,
             warningDialog: false,
             historyDialog: false,
+            doctorName: ''
         }
 
     },
@@ -205,11 +206,24 @@ export default {
 
         addNewPatient() {
             if(this.$store.state.patient.doctorID){
-                this.newPatientDialog = false
-                this.warningDialog = true
-                return
+                axios.get('http://localhost:8080/users/' + this.$store.state.patient.doctorID + '/getName', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('user')
+                    }
+                })
+                .then((response) => {
+                    this.doctorName = response.data
+
+                }).finally(() =>{
+                    this.newPatientDialog = false
+                    this.warningDialog = true
+                })
+
             }
-            this.submitNewPatient()
+            else{
+                this.submitNewPatient()
+            }
+
 
         },
         deletePatient() {
