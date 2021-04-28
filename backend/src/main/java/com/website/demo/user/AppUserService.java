@@ -97,4 +97,8 @@ public class AppUserService implements UserDetailsService {
     }
 
 
+    public String getNameById(Long id) {
+        AppUser appUser = appUserRepository.findById(id).get();
+        return appUser.getFirstName() + " " + appUser.getSecondName() + " " + appUser.getLastName();
+    }
 }

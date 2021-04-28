@@ -34,7 +34,11 @@ public class Visit {
     private Long id;
     @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     private LocalDateTime date;
-    private String description;
+    private String reason;
+    private String interview;
+    private String research;
+    private String referrals;
+    private String medicine;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "app_user_id")

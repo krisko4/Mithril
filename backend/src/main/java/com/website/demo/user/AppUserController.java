@@ -34,10 +34,14 @@ public class AppUserController {
         return appUserService.getAvailableDoctorsByDate(localDate);
     }
 
-    @CrossOrigin
     @GetMapping("nameByMail")
     public String findFirstNameByEmail(@RequestParam String email){
         return appUserService.findFirstNameByEmail(email);
+    }
+
+    @GetMapping("{id}/getName")
+    public String getNameById(@PathVariable Long id){
+        return appUserService.getNameById(id);
     }
 
 

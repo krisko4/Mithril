@@ -5,6 +5,7 @@ package com.website.demo.visit;
 import com.website.demo.patient.Patient;
 import com.website.demo.patient.PatientDto;
 import com.website.demo.user.AppUser;
+import com.website.demo.user.DoctorDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,9 +24,12 @@ public class VisitDto {
     private String patientFirstName;
     private String patientSecondName;
     private String patientLastName;
-    private String doctorFirstName;
-    private String doctorSecondName;
-    private String doctorLastName;
+    private DoctorDto doctor;
+    private String reason;
+    private String interview;
+    private String research;
+    private String referrals;
+    private String medicine;
 
     public static VisitDto from(Visit visit){
         VisitDto visitDto = new VisitDto();
@@ -33,10 +37,12 @@ public class VisitDto {
         visitDto.patientFirstName = visit.getPatient().getFirstName();
         visitDto.patientSecondName =  visit.getPatient().getSecondName();
         visitDto.patientLastName =  visit.getPatient().getLastName();
-        visitDto.doctorFirstName = visit.getDoctor().getFirstName();
-        visitDto.doctorSecondName = visit.getDoctor().getSecondName();
-        visitDto.doctorLastName = visit.getDoctor().getLastName();
-        visitDto.description = visit.getDescription();
+        visitDto.doctor = DoctorDto.from(visit.getDoctor());
+        visitDto.reason = visit.getReason();
+        visitDto.interview = visit.getInterview();
+        visitDto.research = visit.getResearch();
+        visitDto.referrals = visit.getReferrals();
+        visitDto.medicine = visit.getMedicine();
         return visitDto;
     }
 
