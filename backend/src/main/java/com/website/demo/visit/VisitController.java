@@ -9,7 +9,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 @Data
 @RequestMapping("visits")
@@ -17,28 +19,37 @@ public class VisitController {
 
     private final VisitService visitService;
 
-    @CrossOrigin
+
     @PostMapping("add")
     public void addVisit(@RequestBody VisitRequest visitRequest) {
         visitService.addVisit(visitRequest);
     }
 
-    @CrossOrigin
+
     @GetMapping
     public List<Visit> getAllVisits() {
         return visitService.getAllVisits();
     }
 
-    @CrossOrigin
+
     @GetMapping("get/hours")
     public List<LocalTime> getAvailableVisitHoursForDoctorByDate(@RequestParam String date, @RequestParam Long doctor_id) {
         return visitService.getAvailableVisitHoursForDoctorByDate(date, doctor_id);
     }
 
-    @CrossOrigin
     @GetMapping("/get/all")
     public List<VisitDto> getAllVisitsForDoctorByDate(@RequestParam String date, @RequestParam Long doctor_id){
         return visitService.getAllVisitsForDoctorByDate(date, doctor_id);
+    }
+
+    @GetMapping("forPatient")
+    public List<VisitDto> getAllVisitsForPatient(@RequestParam Long patientID){
+        return visitService.getAllVisitsForPatient(patientID).stream().map(VisitDto::from).collect(Collectors.toList());
+    }
+
+    @GetMapping("forPatientAndDoctor")
+    public List<VisitDto> getAllVisitsForPatient(@RequestParam Long patientID, @RequestParam Long doctorID){
+        return visitService.getAllVisitsForPatientAndDoctor(patientID, doctorID).stream().map(VisitDto::from).collect(Collectors.toList());
     }
 
 
