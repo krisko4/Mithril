@@ -64,6 +64,15 @@
                             </v-col>
                         </v-row>
                     </v-card-subtitle>
+                    <v-dialog max-width="400" v-model="patientDetails">
+                        <PatientDetailsComponent :patientData="patientData"></PatientDetailsComponent>
+                    </v-dialog>
+                    <v-dialog v-model="historyDialog" max-width="600">
+                        <PatientHistoryComponent :patientData="patientData"></PatientHistoryComponent>
+                    </v-dialog>
+                    <v-dialog v-model="deleteDialog" max-width="500">
+                        <PatientDeleteComponent @deleteDialogClosed="closeDeleteDialog" @patientDeleteSubmitted="deletePatient" :patientData="patientData"></PatientDeleteComponent>
+                    </v-dialog>
                     <v-data-table
                         :headers="headers"
                         :items="patients"
@@ -72,9 +81,7 @@
                         :search="search"
                     >
                         <template v-slot:item="{ item }">
-                            <v-dialog max-width="400" v-model="patientDetails">
-                                <template v-slot:activator="on" v-on="on">
-                                    <tr @click="showPatientDetails(item)">
+                                    <tr @click.stop="showPatientDetails(item)">
                                         <td>{{ item.firstName }}</td>
                                         <td class="text-xs-right">{{ item.secondName }}</td>
                                         <td class="text-xs-right">{{ item.lastName }}</td>
@@ -86,45 +93,18 @@
                                         <td class="text-xs-right">{{ item.flatNumber }}</td>
                                         <td class="text-xs-right">{{ item.postCode }}</td>
                                         <td class="text-xs-right">{{ item.city }}</td>
-                                        <v-dialog v-model="deleteDialog" max-width="500" :retain-focus="false">
-                                            <template v-slot:activator="{on}" v-on="on">
-                                                <td>
-                                                    <v-icon
-                                                        @click="openDeleteDialog"
-                                                        color="primary"
-                                                    >
-                                                        mdi-delete
-                                                    </v-icon>
-                                                </td>
-                                            </template>
-                                            <template>
-                                                <v-card>
-                                                    <v-card-title>
-                                                        Patient removal
-                                                    </v-card-title>
-                                                    <v-card-text>
-                                                        Are you sure you want to remove <b>{{ patientData.firstName }}
-                                                        {{ patientData.lastName }}</b> from your table?
-                                                    </v-card-text>
-                                                    <v-card-actions>
-                                                        <v-spacer></v-spacer>
-                                                        <v-btn color="blue darken-1" text @click="closeDeleteDialog">
-                                                            Cancel
-                                                        </v-btn>
-                                                        <v-btn color="blue darken-1" text @click="deletePatient">Yes,
-                                                            I'm sure
-                                                        </v-btn>
-                                                        <v-spacer></v-spacer>
-                                                    </v-card-actions>
-                                                </v-card>
-                                            </template>
-                                        </v-dialog>
+                                        <td class="text-xs-right">
+                                            <v-btn color="primary" x-small  @click.stop="openHistoryDialog(item)">Check</v-btn>
+                                        </td>
+                                        <td>
+                                            <v-icon
+                                                @click.stop="openDeleteDialog(item)"
+                                                color="primary"
+                                            >
+                                                mdi-delete
+                                            </v-icon>
+                                        </td>
                                     </tr>
-                                </template>
-                                <template>
-                                    <PatientDetailsComponent :patientData="patientData"></PatientDetailsComponent>
-                                </template>
-                            </v-dialog>
                         </template>
                     </v-data-table>
                     <v-card-actions>
@@ -141,11 +121,13 @@
 import axios from "axios";
 import PatientDetailsComponent from "@/components/DoctorPanel/PatientDetailsComponent";
 import PatientSearchComponent from "@/components/VisitSaving/PatientSearchComponent";
+import PatientHistoryComponent from "@/components/DoctorPanel/PatientHistoryComponent";
+import PatientDeleteComponent from "@/components/DoctorPanel/PatientDeleteComponent";
 
 
 export default {
     name: "PatientListComponent",
-    components: {PatientDetailsComponent, PatientSearchComponent},
+    components: {PatientDeleteComponent, PatientHistoryComponent, PatientDetailsComponent, PatientSearchComponent},
     data() {
         return {
             newPatientDialog: false,
@@ -156,32 +138,38 @@ export default {
             patients: [],
             patientData: '',
             deleteDialog: false,
-            warningDialog: false
+            warningDialog: false,
+            historyDialog: false,
         }
 
     },
     methods: {
+
+        openHistoryDialog(item){
+            this.patientData = item
+            this.historyDialog = true
+        },
         closeWarningDialog(){
             this.warningDialog = false
         },
         showPatientDetails(item) {
             this.patientData = item
-            if (!this.deleteDialog) {
-                this.patientDetails = true
-            }
+            this.patientDetails = true
         },
         goBack() {
             this.$emit('goBack')
         },
+        closeDeleteDialog(){
+          this.deleteDialog = false
+        },
         openNewPatientDialog() {
             this.newPatientDialog = true
         },
-        openDeleteDialog() {
+        openDeleteDialog(item) {
+            this.patientData = item
             this.deleteDialog = true
         },
-        closeDeleteDialog() {
-            this.deleteDialog = false
-        },
+
         submitNewPatient(){
             axios.patch('http://localhost:8080/patients/addDoctor', {
                     'doctorID': localStorage.getItem('id'),
@@ -211,6 +199,7 @@ export default {
             }).finally(() => {
                 this.newPatientDialog = false
                 this.warningDialog = false
+                this.$toast.success('Patient added successfully')
             })
         },
 
@@ -285,6 +274,7 @@ export default {
                 {text: 'Flat number', value: 'flatNumber'},
                 {text: 'Post code', value: 'postCode'},
                 {text: 'City', value: 'city'},
+                {text: 'History', value: 'history', sortable: false},
                 {text: 'Actions', value: 'actions', sortable: false},
 
             ]

@@ -25,7 +25,10 @@ export default {
             }
         }
     },
-    methods: {}
+    methods: {},
+    created() {
+        console.log('zrobiwszy')
+    }
 }
 </script>
 

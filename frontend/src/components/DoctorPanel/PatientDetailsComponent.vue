@@ -86,6 +86,9 @@ export default {
             dialog: true,
         }
     },
+    created() {
+        console.log('crieted')
+    }
 
 }
 </script>
