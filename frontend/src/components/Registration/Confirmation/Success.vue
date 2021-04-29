@@ -33,7 +33,7 @@
 
 
 export default {
-    name: "ConfirmationSuccessComponent",
+    name: "Success",
     methods:{
         goBack(){
             this.$router.push({name: 'home'})

@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title>Patient medical history</v-card-title>
         <v-card-subtitle class="mt-1">In this card you can browse through medical history and previous visits of your patient</v-card-subtitle>
-        <v-img src="https://img.lovepik.com/element/40171/5187.png_860.png" height="300px">
+        <v-img src="https://anmj.org.au/wp-content/uploads/2020/03/Older-patient-specialling-in-acute-MAIN-WEB.jpg" height="300px">
         </v-img>
         <v-card-title>{{patientData.firstName}} {{patientData.secondName}} {{patientData.lastName}}</v-card-title>
         <v-card-subtitle>Patient</v-card-subtitle>
@@ -13,18 +13,18 @@
             <v-tab @click="openMyVisits">My visits</v-tab>
             </v-row>
         </v-tabs>
-        <PatientDetailsComponentV2 :patientData="patientData" v-if="tabIndex === 0"></PatientDetailsComponentV2>
-        <AllVisitsTable :patientData="patientData" :tabIndex="tabIndex" v-if="tabIndex === 1 || tabIndex === 2"></AllVisitsTable>
+        <PatientDetailsV2 :patientData="patientData" v-if="tabIndex === 0"></PatientDetailsV2>
+        <VisitTable :patientData="patientData" :tabIndex="tabIndex" v-if="tabIndex === 1 || tabIndex === 2"></VisitTable>
 
     </v-card>
 </template>
 
 <script>
-import PatientDetailsComponentV2 from "@/components/DoctorPanel/PatientDetailsComponentV2";
-import AllVisitsTable from "@/components/DoctorPanel/AllVisitsTable";
+import PatientDetailsV2 from "@/components/DoctorPanel/MyPatients/PatientHistory/PatientDetailsV2";
+import VisitTable from "@/components/DoctorPanel/MyPatients/PatientHistory/VisitTable";
 export default {
-    name: "PatientHistoryComponent",
-    components: {AllVisitsTable, PatientDetailsComponentV2},
+    name: "PatientHistory",
+    components: {VisitTable, PatientDetailsV2},
     props:{
         patientData: Object
     },

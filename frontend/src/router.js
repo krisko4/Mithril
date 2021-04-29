@@ -1,13 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import RegisterComponent from "@/components/Registration/RegisterComponent";
+import Registration from "@/components/Registration/Registration";
 import VisitComponent from "@/components/VisitSaving/VisitComponent";
-import ConfirmationComponent from "@/components/Registration/Confirmation/ConfirmationComponent";
-import LoginComponent from "@/components/Login/LoginComponent";
+import Confirmation from "@/components/Registration/Confirmation/Confirmation";
+import Login from "@/components/Login/Login";
 import axios from "axios";
-import DoctorPanelComponent from "@/components/DoctorPanel/DoctorPanelComponent";
-
-import PatientDetailsComponent from "@/components/DoctorPanel/PatientDetailsComponent";
+import DoctorPanel from "@/components/DoctorPanel/DoctorPanel";
+import PatientDetailsComponent from "@/components/DoctorPanel/MyPatients/PatientDetails";
 
 
 
@@ -20,7 +19,7 @@ const RouterVue = new Router({
         {
             path: '/register',
             name: 'register',
-            component: RegisterComponent
+            component: Registration
         },
         {
             path: '/visit',
@@ -30,7 +29,7 @@ const RouterVue = new Router({
         {
             path: '/confirm/:token',
             name: 'confirm',
-            component: ConfirmationComponent,
+            component: Confirmation,
             meta: {
                 reload: false
             }
@@ -41,7 +40,7 @@ const RouterVue = new Router({
             meta: {
                 requiresAuth: true
             },
-            component: DoctorPanelComponent
+            component: DoctorPanel
         },
         {
             path: '/test',
@@ -51,7 +50,7 @@ const RouterVue = new Router({
         {
             path: '/login',
             name: 'login',
-            component: LoginComponent,
+            component: Login,
 
         }
 

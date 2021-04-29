@@ -67,9 +67,9 @@
 
 <script>
 import axios from "axios";
-import MailConfirmComponent from "@/components/Registration/Confirmation/MailConfirmComponent";
+import MailConfirmComponent from "@/components/Registration/Confirmation/MailConfirmation";
 export default {
-    name: "LoginComponent",
+    name: "Login",
     components: {MailConfirmComponent},
 
     data(){

@@ -27,10 +27,10 @@
 
     <v-main class="mt-4"
     >
-        <DoctorHomeComponentV2 @cardChosen="cardChosen" v-show="cardIndex === null"></DoctorHomeComponentV2>
-        <DoctorVisitsComponent @goBack="loadHomeComponent" v-show="cardIndex === 0"></DoctorVisitsComponent>
-        <VisitCalendar v-show="cardIndex === 2"></VisitCalendar>
-        <PatientTableComponent v-show="cardIndex === 1" @goBack="loadHomeComponent"></PatientTableComponent>
+        <HomePage @cardChosen="cardChosen" v-show="cardIndex === null"></HomePage>
+        <VisitCard @goBack="loadHomeComponent" v-show="cardIndex === 0"></VisitCard>
+        <MyCalendar v-show="cardIndex === 2"></MyCalendar>
+        <PatientTable v-show="cardIndex === 1" @goBack="loadHomeComponent"></PatientTable>
     </v-main>
     </v-main>
 </v-app>
@@ -38,14 +38,14 @@
 
 <script>
 import Navigation from "@/components/DoctorPanel/Navigation";
-import DoctorVisitsComponent from "@/components/DoctorPanel/DoctorVisitsComponent";
-import DoctorHomeComponentV2 from "@/components/DoctorPanel/DoctorHomeComponentV2";
-import VisitCalendar from "@/components/DoctorPanel/VisitCalendar";
-import PatientTableComponent from "@/components/DoctorPanel/PatientTableComponent";
+import VisitCard from "@/components/DoctorPanel/MyVisits/VisitCard";
+import HomePage from "@/components/DoctorPanel/HomePage";
+import MyCalendar from "@/components/DoctorPanel/MySchedule/MyCalendar";
+import PatientTable from "@/components/DoctorPanel/MyPatients/PatientTable";
 
 export default {
-    name: "DoctorPanelComponent",
-    components: {PatientTableComponent, VisitCalendar, DoctorHomeComponentV2, DoctorVisitsComponent, Navigation},
+    name: "DoctorPanel",
+    components: {PatientTable, MyCalendar, HomePage, VisitCard, Navigation},
     data(){
         return{
             isActive: false,

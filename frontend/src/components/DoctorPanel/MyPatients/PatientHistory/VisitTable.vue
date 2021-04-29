@@ -3,11 +3,11 @@
         <v-row justify="center">
             <v-col cols="10">
                 <v-dialog v-model="visitDetailsDialog" max-width="500">
-                    <VisitDetailsComponent :visitData="visitData"></VisitDetailsComponent>
+                    <VisitDetails :visitData="visitData"></VisitDetails>
                 </v-dialog>
                 <v-data-table
                     :headers="headers"
-                    :items="patients"
+                    :items="visits"
                     :single-select="singleSelect"
                     item-key="name"
                     :search="search"
@@ -31,11 +31,11 @@
 
 <script>
 import axios from "axios";
-import VisitDetailsComponent from "@/components/DoctorPanel/VisitDetailsComponent";
+import VisitDetails from "@/components/DoctorPanel/MyPatients/PatientHistory/VisitDetails";
 
 export default {
-    name: "AllVisitsTable",
-    components: {VisitDetailsComponent},
+    name: "VisitTable",
+    components: {VisitDetails},
     props: {
         patientData: Object,
         tabIndex: Number
@@ -44,12 +44,32 @@ export default {
         return {
             search: '',
             singleSelect: true,
-            patients: [],
+            visits: [],
             visitDetailsDialog: false,
             visitData: null
         }
     },
     methods: {
+
+        addVisit(element){
+            this.visits.push(
+                {
+                    date: element.date.replace(/T/g, ' '),
+                    patientFullName: element.patientFirstName + ' ' + element.patientSecondName + ' ' + element.patientLastName,
+                    doctorFullName: element.doctor.firstName + ' ' + element.doctor.secondName + ' ' + element.doctor.lastName,
+                    doctorImg: element.doctor.imageName,
+                    description: element.description,
+                    interview: element.interview,
+                    medicine: element.medicine,
+                    reason: element.reason,
+                    research: element.research,
+                    referrals: element.referrals
+
+                }
+            )
+        },
+
+
         openVisitDetailsDialog(item) {
             this.visitData = item
             this.visitDetailsDialog = true
@@ -62,20 +82,7 @@ export default {
             })
                 .then((response) => {
                     response.data.forEach((element) => {
-                        this.patients.push(
-                            {
-                                date: element.date.replace(/T/g, ' '),
-                                patientFullName: element.patientFirstName + ' ' + element.patientSecondName + ' ' + element.patientLastName,
-                                doctorFullName: element.doctor.firstName + ' ' + element.doctor.secondName + ' ' + element.doctor.lastName,
-                                description: element.description,
-                                interview: element.interview,
-                                medicine: element.medicine,
-                                reason: element.reason,
-                                research: element.research,
-                                referrals: element.referrals
-
-                            }
-                        )
+                      this.addVisit(element)
                     })
                 })
         },
@@ -87,20 +94,14 @@ export default {
                 }
             }).then((response) => {
                 response.data.forEach((element) => {
-                    this.patients.push(
-                        {
-                            date: element.date.replace(/T/g, ' '),
-                            patientFullName: element.patientFirstName + ' ' + element.patientSecondName + ' ' + element.patientLastName,
-                            doctorFullName: element.doctorFirstName + ' ' + element.doctorSecondName + ' ' + element.doctorLastName
-                        }
-                    )
+                   this.addVisit(element)
                 })
             })
         }
     },
     watch: {
         tabIndex(val) {
-            this.patients = []
+            this.visits = []
             if (val === 1) {
                 this.getAllVisitsForPatient()
             } else if (val === 2) {

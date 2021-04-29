@@ -69,7 +69,7 @@
 
 <script>
 export default {
-    name: "PatientDetailsComponentV2",
+    name: "PatientDetailsV2",
     props:{
         patientData: Object
     },

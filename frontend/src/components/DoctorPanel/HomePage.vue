@@ -47,7 +47,7 @@
 
 
 export default {
-    name: "Home",
+    name: "HomePage",
     data() {
         return {
             name: localStorage.getItem('firstName') || '',

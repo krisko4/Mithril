@@ -27,7 +27,7 @@
 
 <script>
 export default {
-    name: "VisitCalendar",
+    name: "MyCalendar",
     data() {
         return {
             type : 'week',

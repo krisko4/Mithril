@@ -37,36 +37,36 @@
             </v-col>
         </v-row>
 
-        <RegisterStep1Component
+        <Step1
             v-show="step === 1"
             @firstStepComplete="firstStepComplete">
-        </RegisterStep1Component>
-        <RegisterStep2Component @goBack="goBack"
+        </Step1>
+        <Step2 @goBack="goBack"
                                 v-show="step === 2"
                                 @secondStepComplete="secondStepComplete"
-        ></RegisterStep2Component>
-        <RegisterStep3Component v-show="step === 3"
+        ></Step2>
+        <Step3 v-show="step === 3"
                                 @goBack="goBack"
                                 @thirdStepComplete="thirdStepComplete">
-        </RegisterStep3Component>
-        <RegisterStep4Component :userData="userData"
+        </Step3>
+        <Step4 :userData="userData"
                                 v-show="step === 4"
                                 @fourthStepComplete="fourthStepComplete"
                                 :image="image"
                                 @goBack="goBack">
 
-        </RegisterStep4Component>
+        </Step4>
         <MailConfirmComponent v-show="step === 5" :email="userData.email"></MailConfirmComponent>
     </v-container>
     </v-main>
 </template>
 
 <script>
-import RegisterStep1Component from "@/components/Registration/RegisterStep1Component";
-import RegisterStep2Component from "@/components/Registration/RegisterStep2Component";
-import RegisterStep3Component from "@/components/Registration/RegisterStep3Component";
-import RegisterStep4Component from "@/components/Registration/RegisterStep4Component";
-import MailConfirmComponent from "@/components/Registration/Confirmation/MailConfirmComponent";
+import Step1 from "@/components/Registration/Step1";
+import Step2 from "@/components/Registration/Step2";
+import Step3 from "@/components/Registration/Step3";
+import Step4 from "@/components/Registration/Step4";
+import MailConfirmComponent from "@/components/Registration/Confirmation/MailConfirmation";
 export default {
     data() {
         return {
@@ -77,21 +77,15 @@ export default {
 
         }
     },
-    created(){
-
-    },
 
     name: "RegisterComponent",
-    components: {RegisterStep2Component, RegisterStep1Component, RegisterStep3Component, RegisterStep4Component, MailConfirmComponent},
+    components: {Step2, Step1, Step3, Step4, MailConfirmComponent},
     methods: {
 
         firstStepComplete(form) {
             this.step = 2
             this.userData = Object.assign(this.userData, form)
             console.log(this.userData)
-            for(const element in this.userData){
-                console.log(element + ':' + this.userData[element])
-            }
         },
 
         secondStepComplete(form) {
@@ -103,7 +97,6 @@ export default {
             this.step = 4
             console.log(image)
             if(image != null) {
-                console.log('wlazlem tu')
                 this.userData = Object.assign(this.userData, {'image': image})
             }
             console.log(this.userData)
@@ -115,10 +108,7 @@ export default {
         goBack() {
             this.step--
         },
-  //      imageLoaded(image) {
-   //         this.image = image
-    //        console.log(this.image)
-   //     },
+
 
     }
 

@@ -29,7 +29,7 @@
                                 </v-tab>
                             </template>
                             <template>
-                                <DatePickerComponent></DatePickerComponent>
+                                <DatePicker></DatePicker>
                             </template>
                         </v-dialog>
 
@@ -65,11 +65,9 @@
                         </v-carousel>
                         <v-container class="fill-height">
                             <v-card-text>
-                                <VisitTimelineComponent :visits="visits"
-                                                        v-if="isVisitListNotEmpty"></VisitTimelineComponent>
-                                <strong v-else>You don't have any visits on {{ items[itemIndex].dayString }}. Enjoy your
-                                    free time
-                                    :)</strong>
+                                <VisitTimeline :visits="visits"
+                                                        v-if="isVisitListNotEmpty"></VisitTimeline>
+                                <strong v-else>You don't have any visits on {{ items[itemIndex].dayString }}.</strong>
                             </v-card-text>
                             <v-card-actions>
                                 <v-btn text color="primary" @click="goBack">Return</v-btn>
@@ -87,14 +85,14 @@
 
 <script>
 
-import VisitTimelineComponent from "@/components/DoctorPanel/VisitTimelineComponent";
+import VisitTimeline from "@/components/DoctorPanel/MyVisits/VisitTimeline";
 import axios from "axios";
-import DatePickerComponent from "@/components/VisitSaving/DatePickerComponent";
+import DatePicker from "@/components/VisitSaving/DatePicker";
 
 
 export default {
-    name: "DoctorVisitsComponent",
-    components: {DatePickerComponent, VisitTimelineComponent},
+    name: "MyVisits",
+    components: {DatePicker, VisitTimeline},
     data() {
         return {
             itemIndex: 0,

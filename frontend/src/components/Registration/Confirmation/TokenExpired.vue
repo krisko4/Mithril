@@ -29,7 +29,7 @@
 import axios from "axios";
 
 export default {
-    name: "TokenExpiredComponent",
+    name: "TokenExpired",
     props : {
         token: String
     },

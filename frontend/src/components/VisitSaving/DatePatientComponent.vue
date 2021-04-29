@@ -9,7 +9,7 @@
             </h2>
         </v-row>
         <v-row justify="center">
-            <DatePickerComponent class="mt-8"/>
+            <DatePicker class="mt-8"/>
         </v-row>
         <v-row justify="center">
             <v-col cols="3">
@@ -31,12 +31,12 @@
 </template>
 
 <script>
-import DatePickerComponent from "@/components/VisitSaving/DatePickerComponent";
+import DatePicker from "@/components/VisitSaving/DatePicker";
 import PatientSearchComponent from "@/components/VisitSaving/PatientSearchComponent";
 
 
 export default {
-    components: {DatePickerComponent, PatientSearchComponent},
+    components: {DatePicker, PatientSearchComponent},
     computed: {
         date() {
             return this.$store.state.date

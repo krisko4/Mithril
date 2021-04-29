@@ -35,7 +35,7 @@
 
 <script>
 export default {
-    name: "DoctorHomeComponentV2",
+    name: "HomePageV2",
     data() {
         return {
             name: localStorage.getItem('firstName') || '',

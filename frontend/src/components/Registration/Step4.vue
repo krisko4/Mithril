@@ -70,7 +70,7 @@
 import axios from 'axios'
 
 export default {
-    name: "RegisterStep4Component",
+    name: "Step4",
     props: {
         userData: Object,
         image: File,

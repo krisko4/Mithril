@@ -1,7 +1,7 @@
 <template>
 
         <v-card>
-            <v-img src="https://img.lovepik.com/element/40171/5187.png_860.png" height="300px">
+            <v-img src="https://www.satoeurope.com/images/markets/patient-positive-identification-4.jpg" height="300px">
 
             </v-img>
             <v-card-title>{{patientData.firstName}} {{patientData.secondName}} {{patientData.lastName}}</v-card-title>
@@ -77,7 +77,7 @@
 
 <script>
 export default {
-    name: "PatientDetailsComponent",
+    name: "PatientDetails",
     props:{
         patientData: Object
     },
@@ -86,9 +86,6 @@ export default {
             dialog: true,
         }
     },
-    created() {
-        console.log('crieted')
-    }
 
 }
 </script>

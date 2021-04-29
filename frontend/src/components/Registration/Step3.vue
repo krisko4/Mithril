@@ -113,7 +113,7 @@
 
 
 export default {
-    name: "RegisterStep3Component",
+    name: "Step3",
     data() {
         return {
             isLoading: false,

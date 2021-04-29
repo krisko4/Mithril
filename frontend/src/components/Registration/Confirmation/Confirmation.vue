@@ -1,20 +1,20 @@
 <template>
     <v-container fill-height fluid>
-       <ConfirmationSuccessComponent v-if="confirmationSucceeded"></ConfirmationSuccessComponent>
-        <EmailAlreadyConfirmedComponent v-if="emailAlreadyConfirmed"></EmailAlreadyConfirmedComponent>
-        <TokenExpiredComponent :token="this.$route.params.token" v-if="tokenExpired"></TokenExpiredComponent>
+       <Success v-if="confirmationSucceeded"></Success>
+        <MailAlreadyConfirmed v-if="emailAlreadyConfirmed"></MailAlreadyConfirmed>
+        <TokenExpired :token="this.$route.params.token" v-if="tokenExpired"></TokenExpired>
     </v-container>
 </template>
 
 <script>
 
 import axios from 'axios'
-import ConfirmationSuccessComponent from "@/components/Registration/Confirmation/ConfirmationSuccessComponent";
-import EmailAlreadyConfirmedComponent from "@/components/Registration/Confirmation/EmailAlreadyConfirmedComponent";
-import TokenExpiredComponent from "@/components/Registration/Confirmation/TokenExpiredComponent";
+import Success from "@/components/Registration/Confirmation/Success";
+import MailAlreadyConfirmed from "@/components/Registration/Confirmation/MailAlreadyConfirmed";
+import TokenExpired from "@/components/Registration/Confirmation/TokenExpired";
 export default {
-    name: "ConfirmationComponent",
-    components: {TokenExpiredComponent, EmailAlreadyConfirmedComponent, ConfirmationSuccessComponent},
+    name: "Confirmation",
+    components: {TokenExpired, MailAlreadyConfirmed, Success},
     data(){
         return{
             tokenExpired: false,

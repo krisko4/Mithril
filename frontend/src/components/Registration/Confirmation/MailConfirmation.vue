@@ -26,7 +26,7 @@
 import axios from "axios";
 
 export default {
-    name: "MailConfirmComponent",
+    name: "MailConfirmation",
     data(){
       return{
           firstName: '',

@@ -91,7 +91,7 @@
 import axios from "axios";
 
 export default {
-    name: "RegisterStep1Component",
+    name: "Step1",
 
 
     data() {

@@ -43,7 +43,7 @@
 
 <script>
 export default {
-    name: "EmailAlreadyConfirmedComponent",
+    name: "MailAlreadyConfirmed",
     methods:{
         goBack(){
             this.$router.push({name : 'home'})

@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-row justify="center">
-            <v-col cols="10">
+            <v-col cols="11">
                 <v-card>
                     <v-card-title>
                         Patients
@@ -65,13 +65,13 @@
                         </v-row>
                     </v-card-subtitle>
                     <v-dialog max-width="400" v-model="patientDetails">
-                        <PatientDetailsComponent :patientData="patientData"></PatientDetailsComponent>
+                        <PatientDetails :patientData="patientData"></PatientDetails>
                     </v-dialog>
                     <v-dialog v-model="historyDialog" max-width="600">
-                        <PatientHistoryComponent v-if="historyDialog" :patientData="patientData"></PatientHistoryComponent>
+                        <PatientHistory v-if="historyDialog" :patientData="patientData"></PatientHistory>
                     </v-dialog>
                     <v-dialog v-model="deleteDialog" max-width="500">
-                        <PatientDeleteComponent @deleteDialogClosed="closeDeleteDialog" @patientDeleteSubmitted="deletePatient" :patientData="patientData"></PatientDeleteComponent>
+                        <PatientDelete @deleteDialogClosed="closeDeleteDialog" @patientDeleteSubmitted="deletePatient" :patientData="patientData"></PatientDelete>
                     </v-dialog>
                     <v-data-table
                         :headers="headers"
@@ -119,15 +119,15 @@
 
 <script>
 import axios from "axios";
-import PatientDetailsComponent from "@/components/DoctorPanel/PatientDetailsComponent";
+import PatientDetails from "@/components/DoctorPanel/MyPatients/PatientDetails";
 import PatientSearchComponent from "@/components/VisitSaving/PatientSearchComponent";
-import PatientHistoryComponent from "@/components/DoctorPanel/PatientHistoryComponent";
-import PatientDeleteComponent from "@/components/DoctorPanel/PatientDeleteComponent";
+import PatientHistory from "@/components/DoctorPanel/MyPatients/PatientHistory/PatientHistory";
+import PatientDelete from "@/components/DoctorPanel/MyPatients/PatientDelete";
 
 
 export default {
     name: "PatientListComponent",
-    components: {PatientDeleteComponent, PatientHistoryComponent, PatientDetailsComponent, PatientSearchComponent},
+    components: {PatientDelete, PatientHistory, PatientDetails, PatientSearchComponent},
     data() {
         return {
             newPatientDialog: false,
