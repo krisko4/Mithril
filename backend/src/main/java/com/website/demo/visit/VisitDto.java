@@ -21,10 +21,8 @@ public class VisitDto {
 
     public LocalDateTime date;
     public String description;
-    private String patientFirstName;
-    private String patientSecondName;
-    private String patientLastName;
     private DoctorDto doctor;
+    private PatientDto patient;
     private String reason;
     private String interview;
     private String research;
@@ -34,9 +32,7 @@ public class VisitDto {
     public static VisitDto from(Visit visit){
         VisitDto visitDto = new VisitDto();
         visitDto.date = visit.getDate();
-        visitDto.patientFirstName = visit.getPatient().getFirstName();
-        visitDto.patientSecondName =  visit.getPatient().getSecondName();
-        visitDto.patientLastName =  visit.getPatient().getLastName();
+        visitDto.patient = PatientDto.from(visit.getPatient());
         visitDto.doctor = DoctorDto.from(visit.getDoctor());
         visitDto.reason = visit.getReason();
         visitDto.interview = visit.getInterview();
