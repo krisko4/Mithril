@@ -22,13 +22,13 @@ export default {
         date() {
             if (this.date) {
                 this.$store.state.date = this.date
+                console.log(this.$store.state.date)
+                this.$emit('dateChanged', this.date)
             }
         }
     },
     methods: {},
-    created() {
-        console.log('zrobiwszy')
-    }
+
 }
 </script>
 

@@ -7,10 +7,11 @@
                     <v-toolbar
                         tabs
                         flat
+
                     >
                         <v-app-bar-nav-icon
                         ></v-app-bar-nav-icon>
-                        <v-toolbar-title>My visits</v-toolbar-title>
+                        <v-toolbar-title >My visits</v-toolbar-title>
                     </v-toolbar>
                     <v-tabs
                         align-with-title
@@ -44,7 +45,7 @@
                         >
                             <v-carousel-item v-for="(item, i) in items" :key="i"
                                              gradient="to top, rgba(0,0,0,.44), rgba(0,0,0,.44)"
-                                             src="https://cdn.vuetifyjs.com/images/cards/forest.jpg">
+                                             :src="imgSrc">
                                 <v-container class="fill-height">
                                     <v-row justify="center">
                                         <strong style="color: white"
@@ -95,6 +96,7 @@ export default {
     components: {DatePicker, VisitTimeline},
     data() {
         return {
+            imgSrc: 'https://cdn.vuetifyjs.com/images/cards/forest.jpg',
             itemIndex: 0,
             tabs: [{title: 'Today'}, {title: 'Tomorrow'}],
             days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
@@ -120,19 +122,31 @@ export default {
     watch: {
 
         itemIndex() {
+            switch (this.itemIndex){
+                case 0:
+                    this.imgSrc = 'https://cdn.vuetifyjs.com/images/cards/forest.jpg'
+                    break
+                case 1:
+                    this.imgSrc = 'https://pix10.agoda.net/hotelImages/291813/-1/6ad23f7ff0b33321bee89ab707fb68e3.jpg?s=1024x768'
+                    break
+                case 2:
+                    this.imgSrc = 'https://cdn.cheapism.com/images/011618_most_beautiful_views_in_the_world_sli.max-784x410_euInqPB.jpg'
+                    break
+                case 3:
+                    this.imgSrc = 'https://www.travelhoundsusa.com/wp-content/uploads/2018/04/These-are-the-Most-Beautiful-Views-in-the-World-You-Should-See-Mauna-Kea-Beach.jpg'
+                    break
+            }
             this.getVisits()
         },
 
         '$store.state.date'(val) {
-            if(val === null){
-                return
+            if(val){
+                this.dialog = false
+                this.items = []
+                this.setDates(true)
+                this.getVisits()
+                this.$store.state.date = null
             }
-            this.dialog = false
-            this.items = []
-            this.setDates(true)
-            this.getVisits()
-            this.$store.state.date = null
-
         }
     },
 
@@ -192,6 +206,7 @@ export default {
             this.tabIndex = this.tabs.indexOf(tab)
             this.setDates()
             if (this.tabIndex === 1) {
+
                 this.itemIndex = 1
             } else {
                 this.itemIndex = 0

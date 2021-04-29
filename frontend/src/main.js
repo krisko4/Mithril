@@ -12,7 +12,11 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 import VueMask from 'v-mask'
 
 
-Vue.use(VueMask);
+Vue.use(VueMask, {
+  placeholders: {
+    'X' : /[1-9]/
+  }
+});
 Vue.use(VueToast)
 Vue.use(vueDebounce)
 Vue.config.productionTip = false

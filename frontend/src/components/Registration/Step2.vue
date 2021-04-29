@@ -161,7 +161,7 @@
                                 required
                                 outlined
                                 rounded
-                                placeholder="79938"
+                                placeholder="Postal code"
                             ></v-text-field>
                         </v-col>
                         <v-col cols="6">
@@ -173,7 +173,7 @@
                                 label="City"
                                 outlined
                                 rounded
-                                placeholder="El Paso"
+                                placeholder="City"
                                 required
                             ></v-text-field>
                         </v-col>

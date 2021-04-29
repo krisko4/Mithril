@@ -45,7 +45,7 @@
                         </v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
-                        <v-list-item-title>{{ patientData.street }} {{patientData.flatNumber}} {{ patientData.postCode }} {{patientData.city}}</v-list-item-title>
+                        <v-list-item-title>{{ patientData.address.street }}/{{patientData.address.flatNumber}}<br><div class="font-weight-light">{{ patientData.address.postCode }} {{patientData.address.city}}</div></v-list-item-title>
                         <v-list-item-subtitle>Address</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>

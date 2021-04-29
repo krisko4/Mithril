@@ -27,10 +27,10 @@
 
     <v-main class="mt-4"
     >
-        <HomePage @cardChosen="cardChosen" v-show="cardIndex === null"></HomePage>
-        <VisitCard @goBack="loadHomeComponent" v-show="cardIndex === 0"></VisitCard>
-        <MyCalendar v-show="cardIndex === 2"></MyCalendar>
-        <PatientTable v-show="cardIndex === 1" @goBack="loadHomeComponent"></PatientTable>
+        <HomePage @cardChosen="cardChosen" v-if="cardIndex === null"></HomePage>
+        <VisitCard @goBack="loadHomeComponent" v-if="cardIndex === 0"></VisitCard>
+        <MySchedule v-if="cardIndex === 2"></MySchedule>
+        <PatientTable v-if="cardIndex === 1" @goBack="loadHomeComponent"></PatientTable>
     </v-main>
     </v-main>
 </v-app>
@@ -40,12 +40,12 @@
 import Navigation from "@/components/DoctorPanel/Navigation";
 import VisitCard from "@/components/DoctorPanel/MyVisits/VisitCard";
 import HomePage from "@/components/DoctorPanel/HomePage";
-import MyCalendar from "@/components/DoctorPanel/MySchedule/MyCalendar";
 import PatientTable from "@/components/DoctorPanel/MyPatients/PatientTable";
+import MySchedule from "@/components/DoctorPanel/MySchedule/MySchedule";
 
 export default {
     name: "DoctorPanel",
-    components: {PatientTable, MyCalendar, HomePage, VisitCard, Navigation},
+    components: {PatientTable, MySchedule, HomePage, VisitCard, Navigation},
     data(){
         return{
             isActive: false,

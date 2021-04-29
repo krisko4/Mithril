@@ -55,7 +55,7 @@ export default {
             this.visits.push(
                 {
                     date: element.date.replace(/T/g, ' '),
-                    patientFullName: element.patientFirstName + ' ' + element.patientSecondName + ' ' + element.patientLastName,
+                    patientFullName: element.patient.firstName + ' ' + element.patient.secondName + ' ' + element.patient.lastName,
                     doctorFullName: element.doctor.firstName + ' ' + element.doctor.secondName + ' ' + element.doctor.lastName,
                     doctorImg: element.doctor.imageName,
                     description: element.description,

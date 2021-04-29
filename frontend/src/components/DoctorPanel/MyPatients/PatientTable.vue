@@ -89,10 +89,10 @@
                                         <td class="text-xs-right">{{ item.birthdate }}</td>
                                         <td class="text-xs-right">{{ item.phone }}</td>
                                         <td class="text-xs-right">{{ item.email }}</td>
-                                        <td class="text-xs-right">{{ item.street }}</td>
-                                        <td class="text-xs-right">{{ item.flatNumber }}</td>
-                                        <td class="text-xs-right">{{ item.postCode }}</td>
-                                        <td class="text-xs-right">{{ item.city }}</td>
+                                        <td class="text-xs-right">{{ item.address.street }}</td>
+                                        <td class="text-xs-right">{{ item.address.flatNumber }}</td>
+                                        <td class="text-xs-right">{{ item.address.postCode }}</td>
+                                        <td class="text-xs-right">{{ item.address.city }}</td>
                                         <td class="text-xs-right">
                                             <v-btn color="primary" x-small  @click.stop="openHistoryDialog(item)">Check</v-btn>
                                         </td>
@@ -148,6 +148,7 @@ export default {
 
         openHistoryDialog(item){
             this.patientData = item
+            console.log(this.patientData)
             this.historyDialog = true
         },
         closeWarningDialog(){
@@ -181,6 +182,7 @@ export default {
                     }
                 }
             ).then((response) => {
+                console.log(response)
                 this.patients.push(
                     {
                         id: response.data.id,
@@ -191,10 +193,7 @@ export default {
                         birthdate: response.data.birthdate,
                         phone: response.data.phone,
                         email: response.data.email,
-                        street: response.data.address.street,
-                        flatNumber: response.data.address.flatNumber,
-                        postCode: response.data.address.postCode,
-                        city: response.data.address.city
+                        address: response.data.address,
 
                     })
             }).finally(() => {
@@ -316,11 +315,7 @@ export default {
                         birthdate: element.birthdate,
                         phone: element.phone,
                         email: element.email,
-                        street: element.address.street,
-                        flatNumber: element.address.flatNumber,
-                        postCode: element.address.postCode,
-                        city: element.address.city
-
+                        address: element.address
                     }
                 )
             })
