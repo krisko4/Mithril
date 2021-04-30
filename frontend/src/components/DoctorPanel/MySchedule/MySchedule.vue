@@ -2,11 +2,11 @@
     <v-container fill-height>
         <v-row justify="center">
             <v-col cols="7">
-                <MyCalendar :events="events"></MyCalendar>
+                <MyCalendar :events="events" :breakDuration="breakDuration" :date="date"></MyCalendar>
             </v-col>
 
         <v-col cols="4">
-            <SchedulePlanner @newEvents="newEvents"></SchedulePlanner>
+            <SchedulePlanner @newEvents="newEvents" @breakDurationEvent="breakDurationEvent"></SchedulePlanner>
         </v-col>
         </v-row>
     </v-container>
@@ -20,13 +20,19 @@ export default {
     components: {MyCalendar, SchedulePlanner},
     data(){
         return{
-            events: null
+            events: null,
+            breakDuration: '',
+            date: ''
         }
     },
     methods: {
         newEvents(events){
             this.events = events
         },
+        breakDurationEvent(breakDuration, date){
+            this.breakDuration = breakDuration
+            this.date = date
+        }
     }
 }
 </script>
