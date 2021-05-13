@@ -2,6 +2,7 @@ package com.website.demo.user;
 
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenService;
+import com.website.demo.schedule.Schedule;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -100,5 +101,12 @@ public class AppUserService implements UserDetailsService {
     public String getNameById(Long id) {
         AppUser appUser = appUserRepository.findById(id).get();
         return appUser.getFirstName() + " " + appUser.getSecondName() + " " + appUser.getLastName();
+    }
+
+    public void setSchedule(Schedule schedule, Long id) {
+        AppUser appUser = appUserRepository.findById(id).get();
+        if(!appUser.getSchedules().contains(schedule)){
+            appUserRepository.setSchedule(schedule.getId(), id);
+        }
     }
 }

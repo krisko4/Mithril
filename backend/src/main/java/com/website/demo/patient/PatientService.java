@@ -41,14 +41,7 @@ public class PatientService {
         return patient.getVisitSet();
     }
 
-    public List<PatientDto> getPatientsByChar(String character) {
-        return patientRepository.findByFirstNameStartsWith(character);
-    }
 
-
-    public List<Patient> getPatientsForDoctor(Long doctor_id) {
-        return patientRepository.findByDoctor(doctor_id);
-    }
 
     public void removeDoctorForPatient(Long doctorID, Long patientID) {
         patientRepository.removeDoctorForPatient(doctorID, patientID);
@@ -57,5 +50,16 @@ public class PatientService {
     public Patient addDoctorForPatient(Long doctorID, Long patientID) {
         patientRepository.addDoctorForPatient(doctorID, patientID);
         return patientRepository.findById(patientID).get();
+    }
+
+    public List<Patient> getPatientsBy(String character, Long doctorID) {
+        if(character != null){
+            return patientRepository.findByFirstNameStartsWith(character);
+        }
+        if(doctorID != null){
+            return patientRepository.findByDoctor(doctorID);
+        }
+        return patientRepository.findAll();
+
     }
 }

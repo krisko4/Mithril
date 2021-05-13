@@ -13,10 +13,10 @@ import java.util.List;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
-    List<PatientDto> findByFirstNameStartsWith(String character);
+    List<Patient> findByFirstNameStartsWith(String character);
 
     @Query(value = "select * from patient where doctor_id=?1", nativeQuery = true)
-    List<Patient> findByDoctor(Long doctor_id);
+    List<Patient> findByDoctor(Long doctorID);
 
     @Transactional
     @Modifying

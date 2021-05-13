@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
@@ -14,4 +15,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             ") and app_user_id = ?2", nativeQuery = true)
     Long findScheduleIDForDoctorByDate(LocalDate date, Long doctor_id);
 
+
+    @Query(value = "select * from schedule where id in(\n" +
+            "    select schedule_id from doctor_schedule where app_user_id=?1\n" +
+            ")", nativeQuery = true)
+    List<Schedule> findAllByDoctorID(Long doctorID);
 }

@@ -27,8 +27,8 @@ public class AppUserController {
         return appUserService.list();
     }
 
-    @GetMapping("doctors/{date}")
-    public List<DoctorDto> getAvailableDoctorsByDate(@PathVariable String date) {
+    @GetMapping("doctors")
+    public List<DoctorDto> getAvailableDoctorsByDate(@RequestParam String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
         LocalDate localDate = LocalDate.parse(date, formatter);
         return appUserService.getAvailableDoctorsByDate(localDate);
@@ -43,6 +43,8 @@ public class AppUserController {
     public String getNameById(@PathVariable Long id){
         return appUserService.getNameById(id);
     }
+
+
 
 
 }

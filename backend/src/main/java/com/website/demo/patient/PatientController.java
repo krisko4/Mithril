@@ -20,64 +20,64 @@ public class PatientController {
     private final PatientService patientService;
 
 
-    @GetMapping
-    public List<PatientDto> getPatients(){
-        return patientService.getPatients().stream()
-                .map(PatientDto::from)
-                .collect(Collectors.toList());
-    }
 
-    @GetMapping("/visit/{id}" )
-    public Set<Visit> getVisitsForOnePatient(@PathVariable Long id){
+
+    @GetMapping("{id}/visits")
+    public Set<Visit> getVisitsForOnePatient(@PathVariable Long id) {
         return patientService.getVisit(id);
     }
 
     @GetMapping("/{id}")
-    public Optional<Patient> getPatients(@PathVariable Long id){
+    public Optional<Patient> getPatients(@PathVariable Long id) {
         return patientService.findPatientById(id);
     }
 
 
-    @GetMapping("/bychar")
-    public List<PatientDto> getPatientsByChar(@RequestParam String character){
-        return patientService.getPatientsByChar(character);
-    }
+    //  @GetMapping
+    //  public List<PatientDto> getPatientsByChar(@RequestParam String character){
+    //      return patientService.getPatientsByChar(character);
+    //   }
+
+    @GetMapping
+    public List<PatientDto> getPatientsBy(@RequestParam(required = false) String character, @RequestParam(required = false) Long doctor_id) {
+
+        return patientService.getPatientsBy(character, doctor_id)
+                .stream().map(PatientDto::from)
+                .collect(Collectors.toList());
 
 
-    @GetMapping("/byDoctor/")
-    public List<PatientDto> getPatientsForDoctor(@RequestParam Long doctor_id){
-        return patientService.getPatientsForDoctor(doctor_id).stream().map(PatientDto::from).collect(Collectors.toList());
     }
+
+//   @GetMapping
+    //   public List<PatientDto> getPatientsForDoctor(@RequestParam Long doctorID){
+    //       return patientService.getPatientsForDoctor(doctorID).stream().map(PatientDto::from).collect(Collectors.toList());
+    //   }
 
     @PatchMapping("removeDoctor")
-    public void removeDoctorForPatient(@RequestBody DoctorPatientIDRequest doctorPatientIDRequest){
+    public void removeDoctorForPatient(@RequestBody DoctorPatientIDRequest doctorPatientIDRequest) {
         patientService.removeDoctorForPatient(doctorPatientIDRequest.getDoctorID(), doctorPatientIDRequest.getPatientID());
     }
 
-    @PatchMapping("addDoctor")
-    public PatientDto addDoctorForPatient(@RequestBody DoctorPatientIDRequest doctorPatientIDRequest){
-        return PatientDto.from(patientService.addDoctorForPatient(doctorPatientIDRequest.getDoctorID(), doctorPatientIDRequest.getPatientID()));
+    @PatchMapping("{id}")
+    public PatientDto addDoctorForPatient(@PathVariable Long id, @RequestParam Long doctor_id) {
+        return PatientDto.from(patientService.addDoctorForPatient(doctor_id, id));
     }
 
     @PostMapping
-    public void addPatientList(){
+    public void addPatientList() {
         patientService.addPatientList();
     }
 
     @PostMapping("/add")
-    public void addPatient(){
+    public void addPatient() {
         patientService.addPatient();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id){
+    public void deleteById(@PathVariable Long id) {
         patientService.deleteById(id);
     }
 
-    @GetMapping("all")
-    public List<Patient> getPatients1(){
-        return patientService.getPatients();
-    }
 
 
 

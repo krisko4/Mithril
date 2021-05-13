@@ -8,8 +8,10 @@ import com.website.demo.schedule.ScheduleService;
 import com.website.demo.user.AppUser;
 import com.website.demo.user.AppUserRepository;
 import lombok.Data;
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -55,9 +57,9 @@ public class VisitService {
     }
 
     public List<LocalTime> getAvailableVisitHoursForDoctorByDate(String date, Long doctor_id){
-        Schedule schedule = scheduleService.findScheduleForDoctorByDate(date, doctor_id);
-        LocalTime startHour = schedule.getStartHour();
-        LocalTime endHour = schedule.getEndHour();
+        Schedule schedule = scheduleService.findSchedulesForDoctorBy(date, doctor_id).get(0);
+        LocalTime startHour = LocalTime.parse(schedule.getStartHour());
+        LocalTime endHour = LocalTime.parse(schedule.getEndHour());
         List<Visit> visitList = visitRepository.findAllVisitsForOneDoctorByDate(date, doctor_id);
         List<LocalTime> visitHourList = new ArrayList<>();
         if(!visitList.isEmpty()) {

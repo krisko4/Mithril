@@ -1,6 +1,7 @@
 package com.website.demo.user;
 
 import com.github.javafaker.App;
+import com.website.demo.schedule.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -37,4 +38,9 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     void setImageName(String imagePath, String email);
 
     List<DoctorDto> findAllBySchedules_Date(LocalDate date);
+
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO doctor_schedule VALUES (?2, ?1)", nativeQuery = true)
+    void setSchedule(Long scheduleID, Long id);
 }
