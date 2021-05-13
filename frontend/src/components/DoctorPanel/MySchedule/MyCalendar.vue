@@ -4,9 +4,10 @@
         <v-card-text>
             <v-toolbar flat class="mt-3">
 
-                <v-btn color="primary" text outlined @click="type = 'day'">Day</v-btn>
-                <v-btn color="primary" text outlined @click="type = 'week'">Week</v-btn>
-                <v-btn color="primary" text outlined @click="type = 'month'">Month</v-btn>
+
+                <v-btn color="primary" text outlined @click="chooseCalendarType('day')">Day</v-btn>
+                <v-btn color="primary" text outlined @click="chooseCalendarType('week')">Week</v-btn>
+                <v-btn color="primary" text outlined @click="chooseCalendarType('month')">Month</v-btn>
                 <v-btn
                     fab
                     text
@@ -32,8 +33,11 @@
                 <v-toolbar-title v-if="$refs.calendar">
                     {{ $refs.calendar.title }}
                 </v-toolbar-title>
-
             </v-toolbar>
+            <v-row justify="end">
+                <v-btn color="primary" :disabled="!isScheduleAlreadyDeclared" class="mr-10">edit</v-btn>
+            </v-row>
+
             <v-sheet height="500">
                 <v-calendar
                     class="mt-5"
@@ -47,7 +51,52 @@
                     :first-interval=5
                     :interval-count=18
                     :events="visits"
+                    :event-color="getEventColor"
+                    @click:event="showEvent"
+
                 ></v-calendar>
+                <v-menu
+                    v-model="selectedOpen"
+                    :close-on-content-click="false"
+                    :activator="selectedElement"
+                    offset-x
+                    max-width="400px"
+                >
+                    <v-card
+
+                        color="grey lighten-4"
+                        flat
+                    >
+                        <v-toolbar
+                            :color="selectedEvent.color"
+                            dark
+                        >
+                            <v-btn icon>
+                                <v-icon>mdi-pencil</v-icon>
+                            </v-btn>
+                            <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-btn icon>
+                                <v-icon>mdi-heart</v-icon>
+                            </v-btn>
+                            <v-btn icon>
+                                <v-icon>mdi-dots-vertical</v-icon>
+                            </v-btn>
+                        </v-toolbar>
+                        <v-card-text>
+                            <span v-html="selectedEvent.details"></span>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn
+                                text
+                                color="secondary"
+                                @click="selectedOpen = false"
+                            >
+                                Cancel
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-menu>
             </v-sheet>
         </v-card-text>
     </v-card>
@@ -63,7 +112,8 @@ export default {
     props: {
         events: Array,
         breakDuration: String,
-        date: String
+        date: String,
+        visitsSubmitted: Boolean
 
     },
 
@@ -74,28 +124,51 @@ export default {
             focus: '',
             temporaryEvents: [],
             temporaryEventsCopy: [],
-            visits: []
+            visits: [],
+            dragEvent: null,
+            dragStart: null,
+            createEvent: null,
+            createStart: null,
+            extendOriginal: null,
+            selectedEvent: {},
+            selectedElement: null,
+            selectedOpen: false,
+            isScheduleAlreadyDeclared: false
+
+
         }
     },
 
 
+    computed: {
+        areVisitsSubmitted() {
+            return this.visitsSubmitted
+        }
+
+    },
+
+
     watch: {
+
         events(events) {
-            // events - array with events i want to add
-            // temporaryEvents - array containing previous events
-            // visits - array with all events displayed in calendar
-            // if temporaryEvents is not empty, replace my temporaryEvents with new events and show them in calendar
-            // otherwise skip replacing part
+            if (this.areVisitsSubmitted) {
+                this.visits = this.visits.concat(events)
+                return
+            }
             if (this.temporaryEvents.length > 0) {
-                this.temporaryEvents.forEach((element) => {
-                    this.visits.splice(this.visits.indexOf(element), 1)
+                this.temporaryEvents.filter((value) => {
+                    this.visits.splice(this.visits.indexOf(value), 1)
                 })
             }
-            events.forEach((event) => {
-                this.visits.push(event)
+            if (!events) {
+                this.temporaryEvents = []
+                return
+            }
+            this.visits = this.visits.concat(events)
+            this.temporaryEvents = events.map((event) => {
+                return event
             })
-            this.copyObjectArray(events, this.temporaryEvents)
-            this.copyObjectArray(this.temporaryEvents, this.temporaryEventsCopy)
+
         },
 
 
@@ -104,89 +177,95 @@ export default {
                 this.type = 'day'
                 this.focus = this.$store.state.date
                 this.$store.state.date = null
+                this.isScheduleAlreadyDeclared = this.checkIfScheduleAlreadyDeclared(this.visits, date)
+                console.log(this.isScheduleAlreadyDeclared)
+                this.$emit('dayChosen', this.isScheduleAlreadyDeclared)
             }
 
         },
-        breakDuration() {
-            // adding breaks between visits - for each temporaryEvent except for the first one, start and end hours are modified
-             this.copyObjectArray(this.temporaryEventsCopy, this.temporaryEvents)
-             let breakDuration = this.breakDuration
-             this.temporaryEvents.forEach((element) => {
-                if (this.temporaryEvents.indexOf(element) === 0) {
-                    return
-                }
-                let index = this.temporaryEvents.indexOf(element)
-                let startDate = new Date(element.start)
-                let endDate = new Date(element.end)
-                let newStartTime
-                let newEndTime
-                newStartTime = this.calculateNewHours(startDate, index, breakDuration)
-                newEndTime = this.calculateNewHours(endDate, index, breakDuration)
-                element.start = this.date + ' ' + newStartTime[0] + ':' + newStartTime[1]
-                element.end = this.date + ' ' + newEndTime[0] + ':' + newEndTime[1]
-            })
-            console.log(this.visits)
-            console.log(this.temporaryEvents)
-            this.temporaryEvents.forEach((element) => {
-                this.visits.splice(this.visits.indexOf(element), 1)
-            })
-            this.temporaryEvents.forEach((element) => {
-                this.visits.push(element)
-            })
 
-
-        }
     },
     mounted() {
         this.$refs.calendar.checkChange()
-        console.log(this.$refs.calendar.title)
+        //  console.log(this.$refs.calendar.title)
     }
     ,
     methods: {
 
-        copyObjectArray(oldArray, destinationArray){
-            for(let i = 0; i < oldArray.length ; i++){
-                const event = {
-                    name: oldArray[i].name,
-                    start: oldArray[i].start,
-                    end: oldArray[i].end
-                }
-                destinationArray[i] = event
+        chooseCalendarType(type){
+            this.type=type
+            if(type !== 'day'){
+                this.isScheduleAlreadyDeclared = false
             }
+
         },
 
-        calculateNewHours(date, index, breakDuration) {
-            let newDate = new Date(date.getTime() + breakDuration * index * 60000)
-            let newHour = newDate.getHours();
-            if (newHour < 10) {
-                newHour = '0' + newHour
+
+
+        showEvent({nativeEvent, event}) {
+            const open = () => {
+                this.selectedEvent = event
+                this.selectedElement = nativeEvent.target
+                setTimeout(() => {
+                    this.selectedOpen = true
+                }, 10)
             }
-            let newMinute = newDate.getMinutes();
-            if (newMinute < 10) {
-                newMinute = '0' + newMinute
+
+            if (this.selectedOpen) {
+                this.selectedOpen = false
+                setTimeout(open, 10)
+            } else {
+                open()
             }
-            return [newHour, newMinute]
+
+            nativeEvent.stopPropagation()
+        },
+
+        getEventColor(event) {
+            const rgb = parseInt(event.color.substring(1), 16)
+            const r = (rgb >> 16) & 0xFF
+            const g = (rgb >> 8) & 0xFF
+            const b = (rgb >> 0) & 0xFF
+
+            return event === this.dragEvent
+                ? `rgba(${r}, ${g}, ${b}, 0.7)`
+                : event === this.createEvent
+                    ? `rgba(${r}, ${g}, ${b}, 0.7)`
+                    : event.color
         },
 
 
         intervalFormat(interval) {
             return interval.time
-        }
-        ,
+        },
+
+
+
+        checkIfScheduleAlreadyDeclared(arr, date) {
+            let myDate = new Date(date)
+            return arr.some(function (event) {
+                let eventDate = new Date(event.start)
+                return eventDate.getDate() === myDate.getDate()
+                    && eventDate.getMonth() === myDate.getMonth()
+                    && eventDate.getFullYear() === myDate.getFullYear()
+            });
+        },
+
 
         viewDay({date}) {
-            this.type = 'day'
-            this.focus = date
-        }
-        ,
+            this.$store.state.date = date
+
+         //   this.type = 'day'
+         //   this.focus = date
+         //   this.isScheduleAlreadyDeclared = this.checkIfScheduleAlreadyDeclared(this.visits, date)
+         //   this.$emit('dayChosen', this.isScheduleAlreadyDeclared)
+        },
         prev() {
             this.$refs.calendar.prev()
-        }
-        ,
+        },
         next() {
             this.$refs.calendar.next()
-        }
-        ,
+        },
     }
 }
 </script>

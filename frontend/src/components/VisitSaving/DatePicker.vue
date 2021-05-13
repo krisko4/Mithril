@@ -25,7 +25,7 @@ export default {
                 console.log(this.$store.state.date)
                 this.$emit('dateChanged', this.date)
             }
-        }
+        },
     },
     methods: {},
 
