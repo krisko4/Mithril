@@ -109,4 +109,8 @@ public class AppUserService implements UserDetailsService {
             appUserRepository.setSchedule(schedule.getId(), id);
         }
     }
+
+    public AppUser findById(Long id){
+        return appUserRepository.findById(id).get();
+    }
 }

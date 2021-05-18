@@ -1,11 +1,13 @@
 package com.website.demo.schedule;
 
+import com.website.demo.user.AppUser;
 import com.website.demo.user.AppUserRepository;
 import com.website.demo.user.AppUserService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@CrossOrigin
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
@@ -60,6 +63,17 @@ public class ScheduleService {
         scheduleRepository.save(schedule);
         appUserService.setSchedule(schedule, doctorID);
 
+
+    }
+
+    public void deleteSchedulesForDoctorBy(String date,
+                                           Long doctorId) {
+        if(date == null){
+            scheduleRepository.deleteById(doctorId);
+            return;
+        }
+        Schedule schedule = findSchedulesForDoctorBy(date, appUserService.findById(doctorId).getId()).get(0);
+        scheduleRepository.deleteByDateAndId(doctorId, schedule.getId());
 
     }
 }

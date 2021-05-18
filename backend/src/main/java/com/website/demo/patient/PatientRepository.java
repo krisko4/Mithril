@@ -16,7 +16,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     List<Patient> findByFirstNameStartsWith(String character);
 
     @Query(value = "select * from patient where doctor_id=?1", nativeQuery = true)
-    List<Patient> findByDoctor(Long doctorID);
+    List<Patient> findByDoctorId(Long doctorID);
 
     @Transactional
     @Modifying

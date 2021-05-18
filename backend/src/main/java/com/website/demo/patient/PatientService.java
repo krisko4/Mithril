@@ -57,7 +57,7 @@ public class PatientService {
             return patientRepository.findByFirstNameStartsWith(character);
         }
         if(doctorID != null){
-            return patientRepository.findByDoctor(doctorID);
+            return patientRepository.findByDoctorId(doctorID);
         }
         return patientRepository.findAll();
 

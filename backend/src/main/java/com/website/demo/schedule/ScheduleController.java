@@ -27,7 +27,7 @@ public class ScheduleController {
     }
 
     @GetMapping("doctors/{id}/schedules")
-    public List<Schedule> findSchedulesForDoctorByDate(@RequestParam(required = false)String date, @PathVariable Long id){
+    public List<Schedule> findSchedulesForDoctorBy(@RequestParam(required = false)String date, @PathVariable Long id){
         return scheduleService.findSchedulesForDoctorBy(date, id);
     }
 
@@ -41,6 +41,11 @@ public class ScheduleController {
                 scheduleRequest.getVisitDuration(),
                 id
                 );
+    }
+
+    @DeleteMapping("doctors/{id}/schedules")
+    public void deleteSchedulesForDoctorBy(@RequestParam String date, @PathVariable Long id){
+        scheduleService.deleteSchedulesForDoctorBy(date, id);
     }
 
 
