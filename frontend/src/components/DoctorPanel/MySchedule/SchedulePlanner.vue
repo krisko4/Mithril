@@ -5,7 +5,11 @@
         <v-divider class="ml-3 mr-3"></v-divider>
         <v-card-text>
             <v-row justify="center">
-                <DatePicker @dateChanged="dateChanged" class="mt-2"></DatePicker>
+                <DatePicker @dateChanged="dateChanged"
+                            :calendarDate="calendarDate"
+                            :isScheduleAlreadyDeclared="isScheduleAlreadyDeclared"
+                            :editionModeEnabled="editionModeEnabled"
+                            class="mt-2"></DatePicker>
             </v-row>
         </v-card-text>
         <v-card-text>
@@ -55,8 +59,12 @@
         </v-card-text>
         <v-card-actions>
             <v-col>
-                <v-row justify="end">
-                    <v-btn :disabled="!valid || !date" color="primary" @click="submitVisits">Submit</v-btn>
+                <v-row justify="end" v-if="!editionModeEnabled">
+                    <v-btn :disabled="!valid || !date" color="primary" :loading="loading" @click="submitVisits">Submit</v-btn>
+                </v-row>
+                <v-row justify="space-between" v-else>
+                    <v-btn  color="error" @click="cancelEdition">Cancel</v-btn>
+                    <v-btn :disabled="!valid || !date" color="primary" :loading="loading" @click="submitVisits">Submit</v-btn>
                 </v-row>
             </v-col>
 
@@ -84,7 +92,9 @@ export function timeMask(value) {
 
 export default {
     props: {
-      isScheduleAlreadyDeclared: Boolean
+        isScheduleAlreadyDeclared: Boolean,
+        calendarDate: String,
+        editionModeEnabled: Boolean,
     },
     name: "SchedulePlanner",
     components: {DatePicker},
@@ -95,6 +105,7 @@ export default {
             visitDuration: '',
             startDate: '',
             endDate: '',
+            loading: false,
             mask: timeMask,
             //  event: null,
             date: '',
@@ -103,18 +114,17 @@ export default {
             breakDuration: '',
             colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
             visitsSubmitted: false,
+            stimulus: false
 
 
         }
     },
 
 
-
     created() {
 
         axios.get('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/schedules')
             .then(response => {
-
                 let allEvents = []
                 this.visitsSubmitted = true
                 response.data.filter((schedule) => {
@@ -127,7 +137,8 @@ export default {
                     )
                     allEvents = allEvents.concat(events)
                 })
-                this.$emit('newEvents', allEvents, this.visitsSubmitted)
+                this.stimulus = !this.stimulus
+                this.$emit('newEvents', allEvents, this.visitsSubmitted, this.date, this.stimulus)
             })
 
 
@@ -135,7 +146,13 @@ export default {
 
     methods: {
 
+
+        cancelEdition(){
+          this.$emit('editionCancelled')
+        },
+
         submitVisits() {
+            this.loading = true
             axios.post('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/schedules', {
                 date: this.date,
                 startHour: this.startHour,
@@ -147,21 +164,17 @@ export default {
                     'Authorization': 'Bearer ' + localStorage.getItem('user')
                 }
             }).then(() => {
-                this.setEvents(false)
+                this.setEvents(true)
             }).finally(() => {
-                setTimeout(() => {
-                    this.$toast.success('Visits submitted successfully')
-                }, 200)
-
+                this.$toast.success('Visits submitted successfully')
+                this.loading = false
             })
         },
 
+
         dateChanged(date) {
             this.date = date
-        //    if (this.isFormValid) {
-            //    this.setEvents()
-        //    }
-
+            this.setEvents(false)
         },
 
 
@@ -180,8 +193,6 @@ export default {
 
         setVisits(date, startHour, endHour, visitDuration, breakDuration) {
             let events = []
-            // this.events = []
-            //  this.$emit('newEvents', this.events)
             if (!date) {
                 this.$toast.warning('You have not specified a date')
                 return
@@ -203,10 +214,9 @@ export default {
                     name: 'Visit',
                     start: date + ' ' + startingHour,
                     end: date + ' ' + hour + ':' + minute,
-                    color: this.rndElement(this.colors),
+                    color: '#2196F3'
 
                 }
-                //  this.events.push(this.event)
                 events.push(event)
                 startingHour = hour + ':' + minute
                 this.startDate = new Date(date + ' ' + startingHour)
@@ -251,33 +261,33 @@ export default {
                     }
 
                 })
-                //   this.$emit('newEvents', eventsCopy, this.visitsSubmitted)
                 return eventsCopy
             }
             return noBreakEvents
-            //  this.$emit('newEvents', this.events, this.visitsSubmitted)
 
-
-            //  this.$emit('breakDurationEvent', this.breakDuration, this.date)
         },
 
         setEvents(visitsSubmitted) {
             this.visitsSubmitted = visitsSubmitted
-            let events = this.setVisits(
-                this.date,
-                this.startHour,
-                this.endHour,
-                this.visitDuration,
-                this.breakDuration
-            )
-            this.$emit('newEvents', events, this.visitsSubmitted)
+            let events = null
+            if (this.isFormValid) {
+                events = this.setVisits(
+                    this.date,
+                    this.startHour,
+                    this.endHour,
+                    this.visitDuration,
+                    this.breakDuration
+                )
+            }
+            this.stimulus = !this.stimulus
+            this.$emit('newEvents', events, this.visitsSubmitted, this.date, this.stimulus)
         }
     },
 
     computed: {
 
         isFormValid() {
-            return !!(this.isStartingHourValid && this.isEndingHourValid && this.isVisitDurationValid && this.date);
+            return !!(this.isStartingHourValid && this.isEndingHourValid && this.isVisitDurationValid);
         },
         isStartingHourValid() {
             return !!(this.startHour.match(/^([0-9]{2})(:[0-9]{2}){1}$/) && this.startHour);
@@ -294,19 +304,19 @@ export default {
 
     watch: {
 
-
+        calendarDate() {
+            this.date = this.calendarDate
+            this.$emit('dateChangedInSchedulePlanner', this.date)
+        },
 
         valid() {
             if (this.isFormValid) {
                 this.setEvents(false)
-                return
             }
-            this.$emit('newEvents')
-
         },
 
         breakDuration() {
-            if (this.isFormValid) {
+            if (this.isFormValid && this.date) {
                 this.setEvents(false)
             }
 

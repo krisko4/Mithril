@@ -3,6 +3,7 @@
             v-model="date"
             elevation="24"
             color="indigo"
+
         >
         </v-date-picker>
 </template>
@@ -12,6 +13,11 @@
 export default {
 
     name: 'DatePicker',
+    props:{
+        isScheduleAlreadyDeclared: Boolean,
+        calendarDate: String,
+        editionModeEnabled: Boolean
+    },
     data() {
         return {
             picker: new Date().toISOString().substr(0, 10),
@@ -20,12 +26,27 @@ export default {
     },
     watch: {
         date() {
+            if(this.editionModeEnabled){
+                this.date = this.calendarDate
+                return
+            }
             if (this.date) {
                 this.$store.state.date = this.date
-                console.log(this.$store.state.date)
                 this.$emit('dateChanged', this.date)
             }
         },
+        calendarDate(date){
+            if(date){
+                this.date = date
+            }
+            else{
+                this.date = ''
+            }
+
+
+        }
+
+
     },
     methods: {},
 

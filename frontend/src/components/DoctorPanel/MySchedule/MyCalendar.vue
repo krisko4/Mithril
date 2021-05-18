@@ -5,15 +5,16 @@
             <v-toolbar flat class="mt-3">
 
 
-                <v-btn color="primary" text outlined @click="chooseCalendarType('day')">Day</v-btn>
-                <v-btn color="primary" text outlined @click="chooseCalendarType('week')">Week</v-btn>
-                <v-btn color="primary" text outlined @click="chooseCalendarType('month')">Month</v-btn>
+                <v-btn color="primary" :disabled="editionModeEnabled" text outlined @click="chooseCalendarType('day')">Day</v-btn>
+                <v-btn color="primary" :disabled="editionModeEnabled" text outlined @click="chooseCalendarType('week')">Week</v-btn>
+                <v-btn color="primary" :disabled="editionModeEnabled" text outlined @click="chooseCalendarType('month')">Month</v-btn>
                 <v-btn
                     fab
                     text
                     small
                     color="grey darken-2"
                     @click="prev"
+                    :disabled="editionModeEnabled"
                 >
                     <v-icon small>
                         mdi-chevron-left
@@ -25,6 +26,7 @@
                     small
                     color="grey darken-2"
                     @click="next"
+                    :disabled="editionModeEnabled"
                 >
                     <v-icon small>
                         mdi-chevron-right
@@ -35,7 +37,16 @@
                 </v-toolbar-title>
             </v-toolbar>
             <v-row justify="end">
-                <v-btn color="primary" :disabled="!isScheduleAlreadyDeclared" class="mr-10">edit</v-btn>
+
+                <v-btn color="primary" :disabled="!isScheduleAlreadyDeclared" @click="editEvents" class="mr-2">edit
+                </v-btn>
+                <v-btn color="error" :disabled="!isScheduleAlreadyDeclared" :loading="deleteLoading" class="mr-10"
+                       @click="deleteEvents">
+                    <v-icon>
+                        mdi-delete
+                    </v-icon>
+                </v-btn>
+
             </v-row>
 
             <v-sheet height="500">
@@ -99,12 +110,17 @@
                 </v-menu>
             </v-sheet>
         </v-card-text>
+
     </v-card>
 
 </template>
 
 <script>
 
+
+
+
+import axios from "axios";
 
 export default {
     name: "MyCalendar",
@@ -113,7 +129,9 @@ export default {
         events: Array,
         breakDuration: String,
         date: String,
-        visitsSubmitted: Boolean
+        visitsSubmitted: Boolean,
+        stimulus: Boolean,
+        editionModeDisabled: Boolean
 
     },
 
@@ -133,7 +151,10 @@ export default {
             selectedEvent: {},
             selectedElement: null,
             selectedOpen: false,
-            isScheduleAlreadyDeclared: false
+            isScheduleAlreadyDeclared: false,
+            isDayZoomed: true,
+            deleteLoading: false,
+            editionModeEnabled: false,
 
 
         }
@@ -150,11 +171,76 @@ export default {
 
     watch: {
 
-        events(events) {
+        stimulus() {
+            this.putEventsIntoCalendar(this.events)
+        },
+
+        editionModeDisabled(){
+            this.editionModeEnabled = false
+            this.$emit('editionModeChanged', this.editionModeEnabled)
+            this.temporaryEvents.filter((value) => {
+                this.visits.splice(this.visits.indexOf(value), 1)
+            })
+            this.temporaryEvents = []
+            this.temporaryEventsCopy.filter((event) => {
+                event.color = '#2196F3'
+            })
+            this.putEventsIntoCalendar(this.temporaryEventsCopy)
+            this.isScheduleAlreadyDeclared = true
+            this.$emit('dayChosen', this.isScheduleAlreadyDeclared, this.date)
+
+
+        },
+
+
+        date() {
+            if (this.isDayZoomed) {
+                this.type = 'day'
+            }
+            this.focus = this.date
+        },
+
+    },
+    mounted() {
+        this.$refs.calendar.checkChange()
+    }
+    ,
+    methods: {
+        putEventsIntoCalendar(events) {
             if (this.areVisitsSubmitted) {
-                this.visits = this.visits.concat(events)
+                if (this.temporaryEvents.length === 0) {
+                    this.visits = this.visits.concat(events)
+                    return
+                }
+                this.type = 'day'
+                this.temporaryEvents.filter((event) => {
+                    event.color = '#2196F3'
+                })
+                this.temporaryEvents = []
+                if(this.editionModeEnabled){
+                    this.editionModeEnabled = false
+                    this.$emit('editionModeChanged', this.editionModeEnabled)
+                }
+            }
+            if (!this.date) {
                 return
             }
+            // if temporaryEvents are present on that date, move on
+            if (this.checkIfScheduleAlreadyDeclared(this.temporaryEvents, this.date)) {
+                this.isScheduleAlreadyDeclared = false
+            }
+
+            // if temporaryEvents aren't present on that date, check if visits are present
+            else {
+                this.isScheduleAlreadyDeclared = this.checkIfScheduleAlreadyDeclared(this.visits, this.date)
+                // if visits are present, block schedule planner
+                if (this.isScheduleAlreadyDeclared) {
+                    this.$emit('dayChosen', this.isScheduleAlreadyDeclared, this.date)
+                    this.isDayZoomed = true
+                    return
+                }
+            }
+            this.$emit('dayChosen', this.isScheduleAlreadyDeclared, this.date)
             if (this.temporaryEvents.length > 0) {
                 this.temporaryEvents.filter((value) => {
                     this.visits.splice(this.visits.indexOf(value), 1)
@@ -166,40 +252,28 @@ export default {
             }
             this.visits = this.visits.concat(events)
             this.temporaryEvents = events.map((event) => {
+                event.color='#3CB371'
                 return event
             })
 
         },
 
-
-        '$store.state.date'(date) {
-            if (date) {
-                this.type = 'day'
-                this.focus = this.$store.state.date
-                this.$store.state.date = null
-                this.isScheduleAlreadyDeclared = this.checkIfScheduleAlreadyDeclared(this.visits, date)
-                console.log(this.isScheduleAlreadyDeclared)
-                this.$emit('dayChosen', this.isScheduleAlreadyDeclared)
-            }
-
-        },
-
-    },
-    mounted() {
-        this.$refs.calendar.checkChange()
-        //  console.log(this.$refs.calendar.title)
-    }
-    ,
-    methods: {
-
-        chooseCalendarType(type){
-            this.type=type
-            if(type !== 'day'){
+        chooseCalendarType(type) {
+            this.type = type
+            let date = null
+            if (type !== 'day') {
                 this.isScheduleAlreadyDeclared = false
+                if (this.temporaryEvents.length > 0) {
+                    date = new Date(this.temporaryEvents[0].start).toISOString().substr(0, 10)
+                }
+                this.isDayZoomed = false
+            }
+            else{
+                date = this.date
             }
 
+            this.$emit('dayChosen', this.isScheduleAlreadyDeclared, date)
         },
-
 
 
         showEvent({nativeEvent, event}) {
@@ -217,7 +291,6 @@ export default {
             } else {
                 open()
             }
-
             nativeEvent.stopPropagation()
         },
 
@@ -241,6 +314,71 @@ export default {
 
 
 
+        deleteEvents() {
+            this.deleteLoading = true
+            if(this.temporaryEvents.length > 0){
+                this.temporaryEvents.filter((element) => {
+                    this.visits.splice(this.visits.indexOf(element), 1)
+                })
+                this.temporaryEvents = []
+            }
+            let chosenEvents = this.findChosenEvents()
+            axios.delete('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/schedules', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('user')
+                },
+                params: {
+                    date: this.date
+                }
+            }).then(() => {
+                chosenEvents.filter((element) => {
+                    this.visits.splice(this.visits.indexOf(element), 1)
+                })
+            }).finally(() => {
+                this.isScheduleAlreadyDeclared = false
+                this.deleteLoading = false
+                this.$emit('dayChosen', this.isScheduleAlreadyDeclared, this.date)
+                this.$toast.success('Visits deleted successfully')
+            })
+
+        },
+
+        findChosenEvents() {
+           return this.visits.filter((event) => {
+                let myDate = new Date(this.date)
+                let eventDate = new Date(event.start)
+                if (eventDate.getDate() === myDate.getDate()
+                    && eventDate.getMonth() === myDate.getMonth()
+                    && eventDate.getFullYear() === myDate.getFullYear()) {
+                    return event
+                }
+            })
+        },
+
+
+
+        editEvents() {
+            if(this.temporaryEvents.length > 0){
+                this.temporaryEvents.filter((element) => {
+                    this.visits.splice(this.visits.indexOf(element), 1)
+                })
+                this.temporaryEvents = []
+            }
+            this.temporaryEvents = this.findChosenEvents()
+            this.temporaryEvents.filter((event) => {
+                event.color = '#3CB371'
+            })
+            this.temporaryEventsCopy = this.temporaryEvents.map((event) => {
+                return Object.assign({}, event)
+            })
+            this.isScheduleAlreadyDeclared = false
+            this.$emit('dayChosen', this.isScheduleAlreadyDeclared, this.date)
+            this.editionModeEnabled = true
+            this.$emit('editionModeChanged', this.editionModeEnabled)
+
+        },
+
+
         checkIfScheduleAlreadyDeclared(arr, date) {
             let myDate = new Date(date)
             return arr.some(function (event) {
@@ -253,12 +391,15 @@ export default {
 
 
         viewDay({date}) {
-            this.$store.state.date = date
+            this.type = 'day'
+            this.focus = date
+            if (this.checkIfScheduleAlreadyDeclared(this.temporaryEvents, date)) {
+                this.isScheduleAlreadyDeclared = false
+            } else if (this.checkIfScheduleAlreadyDeclared(this.visits, date)) {
+                this.isScheduleAlreadyDeclared = true
+            }
+            this.$emit('dayChosen', this.isScheduleAlreadyDeclared, date)
 
-         //   this.type = 'day'
-         //   this.focus = date
-         //   this.isScheduleAlreadyDeclared = this.checkIfScheduleAlreadyDeclared(this.visits, date)
-         //   this.$emit('dayChosen', this.isScheduleAlreadyDeclared)
         },
         prev() {
             this.$refs.calendar.prev()

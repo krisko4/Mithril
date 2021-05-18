@@ -5,14 +5,28 @@
                 <MyCalendar @dayChosen="dayChosen"
                             :events="events"
                             :breakDuration="breakDuration"
+                            :visitsSubmitted="visitsSubmitted"
                             :date="date"
-                            :visitsSubmitted="visitsSubmitted">
+                            :stimulus="stimulus"
+                            @editionModeChanged="changeEditionMode"
+                            :editionModeDisabled="editionModeDisabled"
+                >
+
 
                 </MyCalendar>
             </v-col>
 
         <v-col cols="4">
-            <SchedulePlanner :isScheduleAlreadyDeclared="isScheduleAlreadyDeclared" @newEvents="newEvents" @visitsSubmitted="setVisitsSubmitted" @breakDurationEvent="breakDurationEvent"></SchedulePlanner>
+            <SchedulePlanner
+                :calendarDate="calendarDate"
+                :isScheduleAlreadyDeclared="isScheduleAlreadyDeclared"
+                :editionModeEnabled="editionModeEnabled"
+                @newEvents="newEvents"
+                @visitsSubmitted="setVisitsSubmitted"
+                @breakDurationEvent="breakDurationEvent"
+                @dateChangedInSchedulePlanner="changeDate"
+                @editionCancelled="cancelEdition"
+            ></SchedulePlanner>
         </v-col>
         </v-row>
     </v-container>
@@ -31,14 +45,21 @@ export default {
             date: '',
             isScheduleAlreadyDeclared: false,
             visitsSubmitted : false,
-            test: 0
+            test: 0,
+            calendarDate: '',
+            stimulus: false,
+            editionModeEnabled: false,
+            editionModeDisabled: true
 
         }
     },
     methods: {
-        newEvents(events, visitsSubmitted){
+        newEvents(events, visitsSubmitted, date, stimulus){
             this.events = events
             this.visitsSubmitted = visitsSubmitted
+            this.date = date
+            this.stimulus = stimulus
+
         },
         breakDurationEvent(breakDuration, date){
             this.breakDuration = breakDuration
@@ -47,8 +68,19 @@ export default {
         setVisitsSubmitted(visitsSubmitted){
             this.visitsSubmitted = visitsSubmitted
         },
-        dayChosen(isScheduleAlreadyDeclared){
+        dayChosen(isScheduleAlreadyDeclared, calendarDate){
             this.isScheduleAlreadyDeclared = isScheduleAlreadyDeclared
+            this.calendarDate = calendarDate
+        },
+        changeDate(date){
+            this.date = date
+        },
+        changeEditionMode(val){
+            this.editionModeEnabled = val
+        },
+        cancelEdition(){
+            this.editionModeDisabled = !this.editionModeDisabled
+            this.visitsSubmitted = true
         }
     }
 

@@ -296,7 +296,7 @@ export default {
     },
 
     created() {
-        axios.get('http://localhost:8080/patients/byDoctor/', {
+        axios.get('http://localhost:8080/patients/', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('user')
             },
@@ -304,6 +304,7 @@ export default {
                 doctor_id: localStorage.getItem('id')
             }
         }).then((response) => {
+            console.log(response.data)
             response.data.forEach((element) => {
                 this.patients.push(
                     {
