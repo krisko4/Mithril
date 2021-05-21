@@ -74,7 +74,6 @@ export default {
             valid: true,
             userData: {},
             image: null,
-
         }
     },
 

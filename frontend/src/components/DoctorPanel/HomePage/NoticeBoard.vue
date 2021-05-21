@@ -7,25 +7,34 @@
 
 
         <v-divider class="mx-4"></v-divider>
-        <v-card-text>
-
-                    <v-timeline class="mb-2">
+        <v-card-text v-if="!noticesEmpty">
+                    <v-timeline  class="mb-2">
                         <v-timeline-item
                             v-for="(notice, i) in notices"
                             :key="i"
-                            large
-                        >
 
+                        >
                             <template v-slot:opposite>
                                 <span>{{notice.date}}</span>
                             </template>
+
                             <v-card class="elevation-2">
-                                <v-card-title class="headline">
-                                    {{ notice.title}}
-                                </v-card-title>
-                                <v-card-subtitle>
-                                    {{ notice.doctorName }}
-                                </v-card-subtitle>
+                                <v-list-item three-line>
+                                    <v-list-item-content>
+                                        <div class="overline mb-4">
+                                            {{notice.date}}
+                                        </div>
+                                        <v-list-item-title class="headline mb-1">
+                                            {{ notice.title }}
+                                        </v-list-item-title>
+                                        <v-list-item-subtitle> {{ notice.doctorName }}</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                    <v-list-item-avatar
+                                        size="80"
+                                    >
+                                        <v-img :src="notice.img"></v-img>
+                                    </v-list-item-avatar>
+                                </v-list-item>
                                 <div v-if="notice.content.length > 100">
                                     <v-card-text>
                                         {{notice.content.substring(0,100)}}...</v-card-text>
@@ -36,24 +45,17 @@
                                 <v-card-text v-else>
                                     {{notice.content}}
                                 </v-card-text>
-
                             </v-card>
                         </v-timeline-item>
                     </v-timeline>
-            <v-row justify="space-between">
-                <v-btn :disabled="!olderTimeline" @click="loadNewerTimeline" text>
-                    <v-icon>
-                        mdi-arrow-left
-                    </v-icon>
-                </v-btn>
-                <v-btn text class="mt-2 mr-2" @click="loadOlderTimeline">
-                    <v-icon>
-                        mdi-arrow-right
-                    </v-icon>
-                    </v-btn>
-            </v-row>
+
 
         </v-card-text>
+
+        <v-card-text v-else>
+            No notices available.
+        </v-card-text>
+
     </v-card>
 </template>
 
@@ -65,11 +67,17 @@ export default {
     data(){
       return{
           notices: [],
-          olderTimeline: false
+          olderTimeline: false,
+          noticesEmpty: true,
       }
     },
     created(){
         axios.get('http://localhost:8080/notices').then((response) => {
+            if(response.data.length === 0){
+                this.noticesEmpty = true
+                return
+            }
+            this.noticesEmpty = false
             this.addNotices(response)
             console.log(this.notices)
         })
@@ -81,6 +89,7 @@ export default {
                     date: this.notices[this.notices.length - 1].date
                 }
             }).then((response) => {
+                this.noticesEmpty = false
                 this.notices = []
                 this.addNotices(response)
                 this.olderTimeline = true

@@ -258,13 +258,17 @@ export default {
 
         },
 
+        convertDate(date){
+            return (new Date(date - (date).getTimezoneOffset() * 60000)).toISOString().substr(0,10)
+        },
+
         chooseCalendarType(type) {
             this.type = type
             let date = null
             if (type !== 'day') {
                 this.isScheduleAlreadyDeclared = false
                 if (this.temporaryEvents.length > 0) {
-                    date = new Date(this.temporaryEvents[0].start).toISOString().substr(0, 10)
+                    date = this.convertDate(new Date(this.temporaryEvents[0].start))
                 }
                 this.isDayZoomed = false
             }

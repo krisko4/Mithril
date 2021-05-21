@@ -75,11 +75,7 @@ export default {
             this.visitDetailsDialog = true
         },
         getAllVisitsForPatient() {
-            axios.get('http://localhost:8080/visits/forPatient', {
-                params: {
-                    patientID: this.patientData.id
-                }
-            })
+            axios.get('http://localhost:8080/patients/' + this.patientData.id + '/visits')
                 .then((response) => {
                     response.data.forEach((element) => {
                       this.addVisit(element)
@@ -87,10 +83,9 @@ export default {
                 })
         },
         getAllVisitsForPatientAndDoctor() {
-            axios.get('http://localhost:8080/visits/forPatientAndDoctor', {
+            axios.get('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/visits', {
                 params: {
-                    patientID: this.patientData.id,
-                    doctorID: localStorage.getItem('id')
+                    patient_id: this.patientData.id
                 }
             }).then((response) => {
                 response.data.forEach((element) => {

@@ -13,7 +13,7 @@ export const store = new Vuex.Store({
         doctors: [],
         doctorsAchieved: false,
         patientSelected: false,
-        cardIndex: null
+        cardIndex: null,
 
     },
     mutations: {
@@ -28,9 +28,8 @@ export const store = new Vuex.Store({
 
 
 
-    },
-    actions :{
 
-    }
+    },
+
 
 });

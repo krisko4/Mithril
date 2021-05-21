@@ -6,6 +6,9 @@
         </v-img>
         <v-card-title>{{patientData.firstName}} {{patientData.secondName}} {{patientData.lastName}}</v-card-title>
         <v-card-subtitle>Patient</v-card-subtitle>
+        <v-card-text class="text-center" v-if="visitChosen">
+            <v-btn color="primary" @click="openConfirmDialog">Begin visit</v-btn>
+        </v-card-text>
         <v-tabs>
             <v-row justify="center">
             <v-tab @click="openPatientDetails">Patient details</v-tab>
@@ -13,9 +16,30 @@
             <v-tab @click="openMyVisits">My visits</v-tab>
             </v-row>
         </v-tabs>
+
+
         <PatientDetailsV2 :patientData="patientData" v-if="tabIndex === 0"></PatientDetailsV2>
         <VisitTable :patientData="patientData" :tabIndex="tabIndex" v-if="tabIndex === 1 || tabIndex === 2"></VisitTable>
-
+        <v-dialog v-model="confirmDialogOpen" max-width="400">
+            <v-card>
+                <v-card-title>
+                    Visit begin confirmation
+                </v-card-title>
+                <v-card-text>
+                    Are you sure you want to begin your visit with <b>{{patientData.firstName}} {{patientData.secondName}} {{patientData.lastName}}</b>?
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="closeDeleteDialog">
+                        Cancel
+                    </v-btn>
+                    <v-btn color="blue darken-1" text @click="beginVisit">Yes,
+                        I'm sure
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-card>
 </template>
 
@@ -26,11 +50,13 @@ export default {
     name: "PatientHistory",
     components: {VisitTable, PatientDetailsV2},
     props:{
-        patientData: Object
+        patientData: Object,
+        visitChosen: Boolean,
     },
     data(){
         return{
-            tabIndex: 0
+            tabIndex: 0,
+            confirmDialogOpen: false
         }
     },
     methods:{
@@ -42,7 +68,21 @@ export default {
         },
         openMyVisits(){
             this.tabIndex = 2
+        },
+        openConfirmDialog(){
+            this.confirmDialogOpen = true
+        },
+        closeDeleteDialog(){
+            this.confirmDialogOpen = false
+        },
+        beginVisit(){
+            this.confirmDialogOpen = false
+
+                this.$emit('visitStarted')
+
+
         }
+
     }
 }
 </script>

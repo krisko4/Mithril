@@ -33,10 +33,15 @@
 
     <v-main class="mt-4"
     >
-        <HomePage @cardChosen="cardChosen" v-if="cardIndex === null"></HomePage>
+        <transition name="fade">
+        <HomePage  @cardChosen="cardChosen" @visitStarted="beginVisit" v-if="cardIndex === null" ></HomePage>
+        </transition>
         <VisitCard @goBack="loadHomeComponent" v-if="cardIndex === 0"></VisitCard>
+        <transition name="fade">
         <MySchedule v-if="cardIndex === 2"></MySchedule>
+        </transition>
         <PatientTable v-if="cardIndex === 1" @goBack="loadHomeComponent"></PatientTable>
+        <Visit :patientData="patientData" v-if="cardIndex === 3"></Visit>
     </v-main>
     </v-main>
     <v-footer class="mt-4"
@@ -82,13 +87,15 @@ import VisitCard from "@/components/DoctorPanel/MyVisits/VisitCard";
 import HomePage from "@/components/DoctorPanel/HomePage/HomePage";
 import PatientTable from "@/components/DoctorPanel/MyPatients/PatientTable";
 import MySchedule from "@/components/DoctorPanel/MySchedule/MySchedule";
+import Visit from "@/components/DoctorPanel/Visit/Visit";
 
 export default {
     name: "DoctorPanel",
-    components: {PatientTable, MySchedule, HomePage, VisitCard, Navigation},
+    components: {PatientTable, MySchedule, HomePage, VisitCard, Navigation, Visit},
     data(){
         return{
             isActive: false,
+            patientData: '',
             cardIndex: null,
             navigationOpened: false,
             name: localStorage.getItem('firstName'),
@@ -108,6 +115,7 @@ export default {
         cardChosen(index){
             this.cardIndex = index
         },
+
         logout() {
             localStorage.removeItem('user')
             localStorage.removeItem('id')
@@ -124,6 +132,10 @@ export default {
         loadHomeComponent(){
             this.cardIndex = null
         },
+        beginVisit(patientData){
+            this.cardIndex = 3
+            this.patientData = patientData
+        }
 
     },
 
@@ -131,5 +143,15 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
 
 </style>

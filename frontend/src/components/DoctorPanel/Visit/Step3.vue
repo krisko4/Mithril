@@ -1,0 +1,274 @@
+<template>
+    <div>
+        <div class="text-center">
+            <h1 class="display-1 font-weight-thin mb-3">
+                <b>Step 3</b>
+            </h1>
+            <h2 class="display-1 font-weight-thin mb-3">
+                <i>Referrals</i>
+                <v-card-text>Manage your referrals</v-card-text>
+            </h2>
+        </div>
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="addNewReferral">New referral</v-btn>
+            <v-btn color="error" :disabled="!firstReferralStarted" @click="cancelReferral">
+                <v-icon>
+                    mdi-delete
+                </v-icon>
+            </v-btn>
+        </v-card-actions>
+        <v-tabs  v-model="referralIndex">
+            <v-tab :disabled="!firstReferralStarted"
+                v-for="(referral, i) in referrals"
+                :key="i"
+                @click="openReferral(referral)"
+            >
+                Referral {{ i + 1 }}
+            </v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="referralIndex">
+            <v-tab-item :disabled="!firstReferralStarted" v-for="(referral, i) in referrals" :key="i">
+                <v-card :disabled="!firstReferralStarted">
+                    <v-card-title>Referral</v-card-title>
+                    <v-card-subtitle>Date: {{convertDate(new Date())}}</v-card-subtitle>
+                    <v-divider></v-divider>
+
+                    <v-card-text>
+                        <v-row justify="space-around">
+                            <v-col cols="3" class="font-weight-bold text-button">
+                                Patient:<br>
+                                Doctor:<br>
+                            </v-col>
+                            <v-col cols="9" align="end" class="font-weight-light text-button">
+                                {{ patientData.firstName }} {{ patientData.secondName }} {{ patientData.lastName }}<br>
+                                Edede<br>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                        <v-row justify="space-around">
+                            <v-col cols="3" class="font-weight-bold text-button">
+                                Code:<br>
+                                Dispensary:<br>
+                                Priority:<br>
+                                Speciality:<br>
+                            </v-col>
+                            <v-col cols="9" align="end" class="font-weight-light text-button">
+                                30812<br>
+                                {{ referral.dispensary }}<br>
+                                {{ referral.priority }}<br>
+                                {{ referral.speciality }}<br>
+                            </v-col>
+                        </v-row>
+                        <span class="font-weight-bold text-button">Reason:</span> <span
+                        class="font-weight-light text-button">{{ referral.reason }}</span>
+                    </v-card-text>
+
+                </v-card>
+            </v-tab-item>
+        </v-tabs-items>
+        <v-card-text>
+            <v-select
+                :disabled="!firstReferralStarted"
+                v-model="dispensarySelect"
+                :items="selectableDispensaries"
+                label="Dispensary"
+                persistent-hint
+                return-object
+                single-line
+            >
+
+            </v-select>
+            <v-select
+                :disabled="!firstReferralStarted"
+                v-model="specialitySelect"
+                :items="selectableSpecialities"
+                label="Speciality"
+                persistent-hint
+                return-object
+                single-line
+            >
+            </v-select>
+            <v-row justify="space-between">
+                <v-col cols="3">
+                    <v-checkbox
+                        :disabled="!firstReferralStarted"
+                        class="ml-2"
+                        v-model="urgent"
+                        label="Urgent">
+                    </v-checkbox>
+                </v-col>
+                <v-col cols="7">
+                    <v-textarea
+                        :disabled="!firstReferralStarted"
+                        v-model="reason"
+                        solo
+                        label="Reason">
+                    </v-textarea>
+                </v-col>
+            </v-row>
+        </v-card-text>
+        <v-card-actions>
+            <v-btn color="primary" text @click="goBack">Return</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text>Save</v-btn>
+        </v-card-actions>
+
+        </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+    name: "Step3",
+    props: {
+        patientData: Object
+    },
+    data() {
+        return {
+            referralIndex: 0,
+            dispensarySelect: '-',
+            selectableDispensaries: [],
+            dispensaries: [],
+            dispensaryChosen: false,
+            specialitySelect: '-',
+            selectableSpecialities: [],
+            specialities: [],
+            urgent: false,
+            reason: '',
+            dispensary: '',
+            speciality: '',
+            referrals: [{dispensary: '', speciality: '', reason: '', priority: 'Normal'}],
+            priority: '',
+            firstReferralStarted: false,
+            isFirstReferral: true
+
+        }
+    },
+
+    created() {
+        axios.get('http://localhost:8080/dispensaries')
+            .then((response) => {
+                this.dispensaries = response.data
+                console.log(this.dispensaries)
+                this.selectableDispensaries = response.data.map((dispensary) => {
+                    return dispensary.name
+                })
+            })
+
+    },
+
+
+    computed: {
+        isDispensarySelected() {
+            return this.dispensarySelect
+        },
+        isSpecialitySelected() {
+            return this.specialitySelect
+        },
+        isReasonFilled() {
+            return this.reason
+        },
+        isPrescriptionFilled() {
+            return this.isDispensarySelected && this.isSpecialitySelected && this.isReasonFilled
+        }
+
+    },
+
+    methods: {
+        goBack() {
+            this.$emit('goBack')
+        },
+        openReferral(referral) {
+            this.dispensary = referral.dispensary
+            this.priority = referral.priority
+            this.speciality = referral.speciality
+            this.reason = referral.reason
+
+        },
+        convertDate(date){
+            return (new Date(date - (date).getTimezoneOffset() * 60000)).toISOString().substr(0,10)
+        },
+        addNewReferral(){
+            if(!this.firstReferralStarted){
+                this.firstReferralStarted = true
+                return
+            }
+            let referral = {dispensary: '', speciality: '', reason: '', priority: 'Normal'}
+            this.referrals.push(referral)
+            this.referralIndex = this.referrals.indexOf(referral)
+            this.dispensarySelect = ''
+            this.specialitySelect = ''
+            this.reason = ''
+            this.priority = ''
+            this.urgent = false
+        },
+        cancelReferral(){
+            if(this.referrals.length === 1){
+                this.firstReferralStarted = false
+                return
+            }
+            this.referrals.splice(this.referrals[this.referralIndex], 1)
+
+        }
+    },
+
+    watch: {
+
+        referralIndex(){
+            let referral = this.referrals[this.referralIndex]
+            if(referral.priority === 'Urgent'){
+                this.urgent = true
+            }
+            else{
+                this.urgent = false
+            }
+            this.dispensarySelect = referral.dispensary
+            this.specialitySelect = referral.speciality
+        },
+
+        specialitySelect(val){
+            this.referrals[this.referralIndex].speciality = val
+        },
+
+        reason(val){
+            this.referrals[this.referralIndex].reason = val
+        },
+
+        urgent(val) {
+            if (val) {
+                this.referrals[this.referralIndex].priority = 'Urgent'
+                return
+            }
+            this.referrals[this.referralIndex].priority = 'Normal'
+        },
+        dispensarySelect(selectedItem) {
+            this.referrals[this.referralIndex].dispensary = selectedItem
+            if (selectedItem) {
+                let dispensary = this.dispensaries.find((dispensary) => {
+                    if (dispensary.name === selectedItem) {
+                        return dispensary
+                    }
+                })
+                axios.get('http://localhost:8080/dispensaries/' + dispensary.id + '/specialities')
+                    .then((response) => {
+                        this.dispensaryChosen = true
+                        this.specialities = response.data
+                        console.log(response.data)
+                        this.selectableSpecialities = response.data.map((speciality) => {
+                            return speciality.name
+                        })
+                    })
+            }
+        }
+    }
+
+}
+</script>
+
+<style scoped>
+
+</style>
