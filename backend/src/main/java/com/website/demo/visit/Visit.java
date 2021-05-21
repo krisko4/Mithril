@@ -22,10 +22,11 @@ import java.util.Date;
 public class Visit {
 
 
-    public Visit(Patient patient, AppUser doctor, LocalDateTime date) {
+    public Visit(Patient patient, AppUser doctor, LocalDateTime date, int duration) {
         this.patient = patient;
         this.doctor = doctor;
         this.date = date;
+        this.duration = duration;
     }
 
 
@@ -37,8 +38,6 @@ public class Visit {
     private String reason;
     private String interview;
     private String research;
-    private String referrals;
-    private String medicine;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "app_user_id")
@@ -47,6 +46,8 @@ public class Visit {
     @JsonBackReference
     @JoinColumn(name = "patient_id")
     private Patient patient;
+    private int duration;
+    private int finished;
 
 
 }

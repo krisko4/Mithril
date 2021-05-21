@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @CrossOrigin
 @RestController
 @Data
-@RequestMapping("visits")
 public class VisitController {
 
     private final VisitService visitService;
@@ -26,9 +25,14 @@ public class VisitController {
     }
 
 
-    @GetMapping
-    public List<Visit> getAllVisits() {
-        return visitService.getAllVisits();
+    @GetMapping("doctors/{id}/visits")
+    public List<VisitDto> getVisitsForDoctorBy(@PathVariable Long id, @RequestParam(required = false) String date, @RequestParam(required = false) Long patient_id) {
+        return visitService.getVisitsForDoctorBy(id, date, patient_id).stream().map(VisitDto::from).collect(Collectors.toList());
+    }
+
+    @GetMapping("patients/{id}/visits")
+    public List<VisitDto> getAllVisitsForPatient(@PathVariable Long id){
+        return visitService.getAllVisitsForPatient(id).stream().map(VisitDto::from).collect(Collectors.toList());
     }
 
 
@@ -39,13 +43,9 @@ public class VisitController {
 
     @GetMapping("/get/all")
     public List<VisitDto> getAllVisitsForDoctorByDate(@RequestParam String date, @RequestParam Long doctor_id){
-        return visitService.getAllVisitsForDoctorByDate(date, doctor_id);
+        return visitService.getAllVisitsForDoctorByDate(date, doctor_id).stream().map(VisitDto::from).collect(Collectors.toList());
     }
 
-    @GetMapping("forPatient")
-    public List<VisitDto> getAllVisitsForPatient(@RequestParam Long patientID){
-        return visitService.getAllVisitsForPatient(patientID).stream().map(VisitDto::from).collect(Collectors.toList());
-    }
 
     @GetMapping("forPatientAndDoctor")
     public List<VisitDto> getAllVisitsForPatient(@RequestParam Long patientID, @RequestParam Long doctorID){
@@ -54,9 +54,6 @@ public class VisitController {
 
 
 
-//    @GetMapping("/bydate")
-//    public List<Visit> getVisitsBy(VisitRequest visitRequest){
-    //       return visitService.getVisitsBy(visitRequest);
-    //   }
+
 
 }

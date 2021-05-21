@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RestController
 @Data
 @RequiredArgsConstructor
-@RequestMapping("/patients")
+@RequestMapping("patients")
 public class PatientController {
 
     private final PatientService patientService;
@@ -22,12 +22,7 @@ public class PatientController {
 
 
 
-    @GetMapping("{id}/visits")
-    public Set<Visit> getVisitsForOnePatient(@PathVariable Long id) {
-        return patientService.getVisit(id);
-    }
-
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public Optional<Patient> getPatients(@PathVariable Long id) {
         return patientService.findPatientById(id);
     }

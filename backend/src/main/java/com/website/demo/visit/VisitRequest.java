@@ -15,5 +15,6 @@ public class VisitRequest {
     private Long patient_id;
     private Long doctor_id;
     private String date;
+    private int duration;
 
 }

@@ -12,10 +12,14 @@ import static org.hibernate.loader.Loader.SELECT;
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
 
-    @Query(value = "select * from visit where cast(date as DATE) = ?1 and app_user_id = ?2", nativeQuery = true)
-    List<Visit> findAllVisitsForOneDoctorByDate(String date, Long id);
+    @Query(value = "select * from visit where FORMAT(date, 'yyyy-MM-dd') = ?1 and app_user_id = ?2", nativeQuery = true)
+    List<Visit> findAllVisitsForOneDoctorByDate(LocalDate date, Long id);
 
     List<Visit> findByPatient_id(Long patientID);
 
     List<Visit> findByPatient_idAndDoctor_id(Long patientID, Long doctorID);
+
+
+    @Query(value = "select * from visit where doctor_id = ?1", nativeQuery = true)
+    List<Visit> findAllByDoctorId(Long id);
 }

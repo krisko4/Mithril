@@ -26,8 +26,8 @@ public class VisitDto {
     private String reason;
     private String interview;
     private String research;
-    private String referrals;
-    private String medicine;
+    private int duration;
+    private int finished;
 
     public static VisitDto from(Visit visit){
         VisitDto visitDto = new VisitDto();
@@ -37,8 +37,8 @@ public class VisitDto {
         visitDto.reason = visit.getReason();
         visitDto.interview = visit.getInterview();
         visitDto.research = visit.getResearch();
-        visitDto.referrals = visit.getReferrals();
-        visitDto.medicine = visit.getMedicine();
+        visitDto.duration = visit.getDuration();
+        visitDto.finished = visit.getFinished();
         return visitDto;
     }
 
