@@ -41,15 +41,13 @@
         <MySchedule v-if="cardIndex === 2"></MySchedule>
         </transition>
         <PatientTable v-if="cardIndex === 1" @goBack="loadHomeComponent"></PatientTable>
-        <Visit :patientData="patientData" v-if="cardIndex === 3"></Visit>
+        <Visit :selectedVisitDate="selectedVisitDate" @visitFinished="loadHomeComponent" :selectedVisitDuration="selectedVisitDuration" :patientData="patientData" v-if="cardIndex === 3"></Visit>
     </v-main>
     </v-main>
     <v-footer class="mt-4"
         padless
     >
         <v-row justify="center">
-
-
         <v-card
             width="100%"
             flat
@@ -98,6 +96,8 @@ export default {
             patientData: '',
             cardIndex: null,
             navigationOpened: false,
+            selectedVisitDate: '',
+            selectedVisitDuration: 0,
             name: localStorage.getItem('firstName'),
             icons: [
                 'mdi-facebook',
@@ -132,10 +132,13 @@ export default {
         loadHomeComponent(){
             this.cardIndex = null
         },
-        beginVisit(patientData){
+        beginVisit(patientData, selectedVisitDate, selectedVisitDuration){
             this.cardIndex = 3
             this.patientData = patientData
-        }
+            this.selectedVisitDate = selectedVisitDate
+            this.selectedVisitDuration = selectedVisitDuration
+        },
+
 
     },
 

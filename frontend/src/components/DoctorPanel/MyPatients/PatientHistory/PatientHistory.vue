@@ -77,10 +77,7 @@ export default {
         },
         beginVisit(){
             this.confirmDialogOpen = false
-
-                this.$emit('visitStarted')
-
-
+            this.$emit('visitStarted')
         }
 
     }

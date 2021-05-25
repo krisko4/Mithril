@@ -224,7 +224,6 @@ export default {
             const dateStringArray = fullDate.toDateString().split(' ');
             this.dayString = this.days.filter(element => element.startsWith(dateStringArray[0]))[0]
             this.month = this.months.filter(element => element.startsWith(dateStringArray[1]))[0]
-            console.log(this.dayString)
 
         },
 

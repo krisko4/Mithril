@@ -3,7 +3,7 @@
         <v-row justify="center">
             <v-col cols="10">
                 <v-dialog v-model="visitDetailsDialog" max-width="500">
-                    <VisitDetails :visitData="visitData"></VisitDetails>
+                    <VisitDetails :patientData="patientData" :visitData="visitData"></VisitDetails>
                 </v-dialog>
                 <v-data-table
                     :headers="headers"
@@ -72,6 +72,8 @@ export default {
 
         openVisitDetailsDialog(item) {
             this.visitData = item
+            this.visitData = Object.assign(this.visitData, {patient: this.patientData})
+            console.log(this.visitData)
             this.visitDetailsDialog = true
         },
         getAllVisitsForPatient() {

@@ -42,7 +42,7 @@
         </v-card-text>
         <v-card-text>
             <v-textarea
-                v-model="text"
+                v-model="research"
                 solo
                 placeholder=" What kind of examination have you provided your patient with? What are the results?"
             ></v-textarea>
@@ -67,6 +67,9 @@
         <v-dialog max-width="500px" v-model="weightAndHeight">
             <WeightAndHeight @weightAndHeightSaved="saveWeightAndHeight"></WeightAndHeight>
         </v-dialog>
+        <v-dialog max-width="500px" v-model="pulseCheck">
+            <PulseCheck @pulseSaved="savePulse"></PulseCheck>
+        </v-dialog>
     </div>
 
 </template>
@@ -75,17 +78,19 @@
 import BloodPressureTest from "@/components/DoctorPanel/Visit/BloodPressureTest";
 import Auscultation from "@/components/DoctorPanel/Visit/Auscultation";
 import WeightAndHeight from "@/components/DoctorPanel/Visit/WeightAndHeight";
+import PulseCheck from "@/components/DoctorPanel/Visit/PulseCheck";
 
 export default {
     name: "Step2",
-    components: {WeightAndHeight, Auscultation, BloodPressureTest},
+    components: {PulseCheck, WeightAndHeight, Auscultation, BloodPressureTest},
     data() {
         return {
             auscultation: false,
             weightAndHeight: false,
             bloodPressureTest: false,
+            pulseCheck: false,
             model: 0,
-            text: '',
+            research: '',
             cards: [
                 {
                     title: 'Blood pressure test',
@@ -105,17 +110,26 @@ export default {
                     flex: 6,
                     index: 2
                 },
-                {title: 'Interact', src: 'http://localhost:8080/images/static/forum.png', flex: 6, index: 3},
+                {title: 'Pulse check', src: 'https://image.freepik.com/free-photo/doctor-checking-pulse-by-hand_38810-7841.jpg', flex: 6, index: 3},
             ],
 
         }
     },
     methods: {
         goBack() {
-            this.$emit('goBack', 1)
+            this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
+            setTimeout(() => {
+                this.$emit('goBack')
+            }, 300)
+
         },
         goToStep3() {
-            this.$emit('secondStepComplete')
+            this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
+            setTimeout(() => {
+                this.$emit('secondStepComplete', this.research)
+            }, 300)
+
+
         },
         redirect(cardIndex) {
             if (cardIndex === 0) {
@@ -127,17 +141,25 @@ export default {
             if (cardIndex === 2) {
                 this.weightAndHeight = true
             }
+            if(cardIndex === 3){
+                this.pulseCheck = true
+            }
+        },
+
+        savePulse(text){
+          this.research += text
+          this.pulseCheck = false
         },
         saveBloodPressure(text){
-            this.text += text
+            this.research += text
             this.bloodPressureTest = false
         },
         saveWeightAndHeight(text){
-            this.text += text
+            this.research += text
             this.weightAndHeight = false
         },
         saveAusculation(text){
-            this.text += text
+            this.research += text
             this.auscultation = false
         }
     }

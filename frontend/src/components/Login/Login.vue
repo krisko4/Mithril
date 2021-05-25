@@ -107,8 +107,10 @@ export default {
             }).then((response) => {
                 console.log(response.data)
                 localStorage.setItem('email', this.email)
-                localStorage.setItem('user', response.data.token);
-                localStorage.setItem('firstName', response.data.firstName);
+                localStorage.setItem('user', response.data.token)
+                localStorage.setItem('firstName', response.data.firstName)
+                localStorage.setItem('secondName', response.data.secondName)
+                localStorage.setItem('lastName', response.data.lastName)
                 localStorage.setItem('id', response.data.id)
                 if(response.data.imageName != null) {
                     localStorage.setItem('imageName', response.data.imageName)

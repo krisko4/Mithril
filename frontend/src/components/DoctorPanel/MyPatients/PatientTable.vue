@@ -68,7 +68,7 @@
                         <PatientDetails :patientData="patientData"></PatientDetails>
                     </v-dialog>
                     <v-dialog v-model="historyDialog" max-width="600">
-                        <PatientHistory :patientData="patientData"></PatientHistory>
+                        <PatientHistory v-if="historyDialog" :patientData="patientData"></PatientHistory>
                     </v-dialog>
                     <v-dialog v-model="deleteDialog" max-width="500">
                         <PatientDelete @deleteDialogClosed="closeDeleteDialog" @patientDeleteSubmitted="deletePatient" :patientData="patientData"></PatientDelete>

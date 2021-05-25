@@ -41,8 +41,8 @@ export default {
         cardChosen(index){
             this.$emit('cardChosen', index)
         },
-        beginVisit(patientData){
-            this.$emit('visitStarted', patientData)
+        beginVisit(patientData, selectedVisitDate, selectedVisitDuration){
+            this.$emit('visitStarted', patientData, selectedVisitDate, selectedVisitDuration)
         }
     }
 

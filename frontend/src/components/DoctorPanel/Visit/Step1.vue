@@ -39,14 +39,15 @@
         </v-card-text>
         <v-card-text>
             <v-textarea
-                v-model="text"
+                v-model="interview"
                 solo
                 placeholder="Insert the information you have received from your patient"
             ></v-textarea>
         </v-card-text>
         <v-card-actions>
             <v-row justify="end">
-            <v-btn text color="primary" @click="goToStep2">
+            <v-btn text color="primary"  @click="goToStep2"
+                >
                 Save
             </v-btn>
             </v-row>
@@ -61,7 +62,7 @@ export default {
     name: "Step1",
     data(){
         return{
-            text: '',
+            interview: '',
             model: 0,
             tips: [
                 {
@@ -89,15 +90,21 @@ export default {
                     src: 'https://walrus-assets.s3.amazonaws.com/img/AdamsNeilson_NarrativeMedicine_735.jpg'
                 },
 
-            ]
+            ],
+
 
         }
     },
     methods:{
         goToStep2(){
-            this.$emit('firstStepComplete')
+            this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
+            setTimeout(() => {
+                this.$emit('firstStepComplete', this.interview)
+            }, 300)
+
         }
-    }
+    },
+
 }
 </script>
 

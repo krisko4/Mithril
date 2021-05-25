@@ -15,12 +15,11 @@
                     color="primary"
                     @click:event="showVisitDetails"
                 >
-
                 </v-calendar>
             </v-sheet>
         </v-card-text>
         <v-dialog transition="scale-transition" v-model="historyDialog" max-width="600">
-            <PatientHistory @visitStarted="beginVisit" :visitChosen="visitChosen"  :patientData="patientData"></PatientHistory>
+            <PatientHistory @visitStarted="beginVisit" :visitChosen="visitChosen" :selectedVisitDate="selectedVisitDate"  :patientData="patientData"></PatientHistory>
         </v-dialog>
     </v-card>
 </template>
@@ -41,6 +40,8 @@ export default {
             visits: [],
             visitDetails: [],
             visitChosen: false,
+            selectedVisitDate: '',
+            selectedVisitDuration: 0
         }
     },
     beforeDestroy() {
@@ -64,10 +65,10 @@ export default {
 
         axios.get('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/visits', {
             params: {
-                date: this.convertDate(this.date)
+                date: this.convertDate(this.date),
+                finished: 0
             }
         }).then((response) => {
-            console.log(response.data)
             response.data.filter((visit) => {
                 let startDate = new Date(visit.date)
                 let dateString = this.convertDate(startDate)
@@ -112,11 +113,13 @@ export default {
             this.patientData = foundEvent.patient
             this.historyDialog = true
             this.visitChosen = true
+            this.selectedVisitDate = foundEvent.date.substring(0, 10) + ' ' + foundEvent.date.substring(11, 16)
+            this.selectedVisitDuration = foundEvent.duration
 
         },
         beginVisit(){
             this.historyDialog = false
-            this.$emit('visitStarted', this.patientData)
+            this.$emit('visitStarted', this.patientData, this.selectedVisitDate, this.selectedVisitDuration)
         }
 
     }

@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state:{
+
         token: '' | localStorage.getItem('token'),
         date: '',
         patient: '',
@@ -14,6 +15,12 @@ export const store = new Vuex.Store({
         doctorsAchieved: false,
         patientSelected: false,
         cardIndex: null,
+
+        scrollDuration: 300,
+        scrollOffset: 0,
+        scrollEasing: 'easeInOutCubic',
+        target: 600,
+        options: {duration: 300, offset: 0, easing: 'easeInOutCubic'}
 
     },
     mutations: {

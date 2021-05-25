@@ -18,11 +18,11 @@
                 </v-icon>
             </v-btn>
         </v-card-actions>
-        <v-tabs  v-model="referralIndex">
+        <v-tabs v-model="referralIndex">
             <v-tab :disabled="!firstReferralStarted"
-                v-for="(referral, i) in referrals"
-                :key="i"
-                @click="openReferral(referral)"
+                   v-for="(referral, i) in referrals"
+                   :key="i"
+                   @click="openReferral(referral)"
             >
                 Referral {{ i + 1 }}
             </v-tab>
@@ -31,7 +31,7 @@
             <v-tab-item :disabled="!firstReferralStarted" v-for="(referral, i) in referrals" :key="i">
                 <v-card :disabled="!firstReferralStarted">
                     <v-card-title>Referral</v-card-title>
-                    <v-card-subtitle>Date: {{convertDate(new Date())}}</v-card-subtitle>
+                    <v-card-subtitle>Date: {{ convertDate(new Date()) }}</v-card-subtitle>
                     <v-divider></v-divider>
 
                     <v-card-text>
@@ -42,7 +42,7 @@
                             </v-col>
                             <v-col cols="9" align="end" class="font-weight-light text-button">
                                 {{ patientData.firstName }} {{ patientData.secondName }} {{ patientData.lastName }}<br>
-                                Edede<br>
+                                {{ doctorFullName }}<br>
                             </v-col>
                         </v-row>
                     </v-card-text>
@@ -65,7 +65,6 @@
                         <span class="font-weight-bold text-button">Reason:</span> <span
                         class="font-weight-light text-button">{{ referral.reason }}</span>
                     </v-card-text>
-
                 </v-card>
             </v-tab-item>
         </v-tabs-items>
@@ -113,10 +112,10 @@
         <v-card-actions>
             <v-btn color="primary" text @click="goBack">Return</v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text>Save</v-btn>
+            <v-btn color="primary"  @click="goToStep4" text>Save</v-btn>
         </v-card-actions>
 
-        </div>
+    </div>
 </template>
 
 <script>
@@ -125,16 +124,16 @@ import axios from "axios";
 export default {
     name: "Step3",
     props: {
-        patientData: Object
+        patientData: Object,
+        doctorFullName: String
     },
     data() {
         return {
             referralIndex: 0,
-            dispensarySelect: '-',
+            dispensarySelect: null,
             selectableDispensaries: [],
             dispensaries: [],
-            dispensaryChosen: false,
-            specialitySelect: '-',
+            specialitySelect: null,
             selectableSpecialities: [],
             specialities: [],
             urgent: false,
@@ -144,16 +143,18 @@ export default {
             referrals: [{dispensary: '', speciality: '', reason: '', priority: 'Normal'}],
             priority: '',
             firstReferralStarted: false,
-            isFirstReferral: true
+            isFirstReferral: true,
 
         }
     },
 
+
+
     created() {
         axios.get('http://localhost:8080/dispensaries')
             .then((response) => {
+                console.log(response.data)
                 this.dispensaries = response.data
-                console.log(this.dispensaries)
                 this.selectableDispensaries = response.data.map((dispensary) => {
                     return dispensary.name
                 })
@@ -162,25 +163,30 @@ export default {
     },
 
 
-    computed: {
-        isDispensarySelected() {
-            return this.dispensarySelect
-        },
-        isSpecialitySelected() {
-            return this.specialitySelect
-        },
-        isReasonFilled() {
-            return this.reason
-        },
-        isPrescriptionFilled() {
-            return this.isDispensarySelected && this.isSpecialitySelected && this.isReasonFilled
-        }
-
-    },
-
     methods: {
+        goToStep4() {
+            let isBadReferral = this.referrals.some((referral) => {
+                return !referral.dispensary || !referral.speciality|| !referral.reason
+            })
+            if(isBadReferral && this.firstReferralStarted){
+                this.$toast.error('Some referrals are missing required information')
+                return
+            }
+            this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
+            setTimeout(() => {
+                let referrals = []
+                if (this.firstReferralStarted) {
+                    referrals = this.referrals
+                }
+                this.$emit('thirdStepComplete', referrals)
+            }, 300)
+
+        },
         goBack() {
-            this.$emit('goBack')
+            this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
+            setTimeout(() => {
+                this.$emit('goBack')
+            }, 300)
         },
         openReferral(referral) {
             this.dispensary = referral.dispensary
@@ -189,11 +195,11 @@ export default {
             this.reason = referral.reason
 
         },
-        convertDate(date){
-            return (new Date(date - (date).getTimezoneOffset() * 60000)).toISOString().substr(0,10)
+        convertDate(date) {
+            return (new Date(date - (date).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
         },
-        addNewReferral(){
-            if(!this.firstReferralStarted){
+        addNewReferral() {
+            if (!this.firstReferralStarted) {
                 this.firstReferralStarted = true
                 return
             }
@@ -206,35 +212,32 @@ export default {
             this.priority = ''
             this.urgent = false
         },
-        cancelReferral(){
-            if(this.referrals.length === 1){
+        cancelReferral() {
+            if (this.referrals.length === 1) {
                 this.firstReferralStarted = false
                 return
             }
-            this.referrals.splice(this.referrals[this.referralIndex], 1)
+            this.referrals.splice(this.referralIndex, 1)
 
         }
     },
 
     watch: {
 
-        referralIndex(){
+
+
+        referralIndex() {
             let referral = this.referrals[this.referralIndex]
-            if(referral.priority === 'Urgent'){
-                this.urgent = true
-            }
-            else{
-                this.urgent = false
-            }
+            this.urgent = referral.priority === 'Urgent';
             this.dispensarySelect = referral.dispensary
             this.specialitySelect = referral.speciality
         },
 
-        specialitySelect(val){
+        specialitySelect(val) {
             this.referrals[this.referralIndex].speciality = val
         },
 
-        reason(val){
+        reason(val) {
             this.referrals[this.referralIndex].reason = val
         },
 
@@ -253,11 +256,9 @@ export default {
                         return dispensary
                     }
                 })
-                axios.get('http://localhost:8080/dispensaries/' + dispensary.id + '/specialities')
+                axios.get('http://localhost:8080/dispensaries/' + dispensary.id + '/specializations')
                     .then((response) => {
-                        this.dispensaryChosen = true
                         this.specialities = response.data
-                        console.log(response.data)
                         this.selectableSpecialities = response.data.map((speciality) => {
                             return speciality.name
                         })

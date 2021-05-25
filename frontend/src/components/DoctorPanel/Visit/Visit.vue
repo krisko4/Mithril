@@ -38,23 +38,34 @@
                 <Step1
                     v-show="step === 1"
                     @firstStepComplete="firstStepComplete"
-                    @goBack="goBack"
+                    @goBack="step--"
                 >
                 </Step1>
+                <transition name="fade">
                 <Step2
                     v-show="step === 2"
                     @secondStepComplete="secondStepComplete"
-                    @goBack="goBack"
+                    @goBack="step--"
                 >
                 </Step2>
+                </transition>
+
                 <Step3
                     v-show="step === 3"
                     @thirdStepComplete="thirdStepComplete"
-                    @goBack="goBack"
+                    @goBack="step--"
                     :patientData="patientData"
+                    :doctorFullName="visitData.doctorFullName"
                 >
                 </Step3>
 
+                <Step4
+                    @visitFinished="closeVisitCard"
+                    :visitData="visitData"
+                    v-show="step === 4"
+                    @fourthStepComplete="fourthStepComplete"
+                    @goBack="step--"
+                ></Step4>
             </v-card-text>
         </v-card>
 
@@ -71,38 +82,56 @@ import PatientHistory from "@/components/DoctorPanel/MyPatients/PatientHistory/P
 import Step1 from "@/components/DoctorPanel/Visit/Step1";
 import Step2 from "@/components/DoctorPanel/Visit/Step2";
 import Step3 from "@/components/DoctorPanel/Visit/Step3";
+import Step4 from "@/components/DoctorPanel/Visit/Step4";
 
 export default {
     name: "Visit",
-    components: {PatientHistory, Step1, Step2, Step3},
+    components: {Step4, PatientHistory, Step1, Step2, Step3},
     props: {
-        patientData: Object
+        patientData: Object,
+        selectedVisitDate: String,
+        selectedVisitDuration: Number
     },
     data(){
         return {
-            step: 1
+            step: 1,
+            visitData: {
+                date: this.selectedVisitDate,
+                duration: this.selectedVisitDuration,
+                doctorImg: localStorage.getItem('imageName'),
+                interview: '',
+                research: '',
+                referrals: [],
+                medications: [],
+                patient: this.patientData,
+                doctorFullName: localStorage.getItem('firstName') + ' ' +  localStorage.getItem('secondName') + ' ' +  localStorage.getItem('lastName'),
+            }
         }
     },
     methods: {
-        firstStepComplete() {
+        convertDate(date){
+            return (new Date(date - (date).getTimezoneOffset() * 60000)).toISOString().substr(0,10)
+        },
+        firstStepComplete(interview) {
             this.step = 2
+            this.visitData.interview = interview
 
         },
 
-        secondStepComplete() {
+        secondStepComplete(research) {
             this.step = 3
-
+            this.visitData.research = research
         },
-        thirdStepComplete() {
+        thirdStepComplete(referrals) {
             this.step = 4
-
+            this.visitData.referrals = referrals
         },
         fourthStepComplete() {
             this.step = 5
         },
-        goBack() {
-            this.step--
-        },
+        closeVisitCard(){
+            this.$emit('visitFinished')
+        }
     }
 }
 </script>
