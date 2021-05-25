@@ -35,9 +35,6 @@ public class Visit {
     private Long id;
     @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     private LocalDateTime date;
-    private String reason;
-    private String interview;
-    private String research;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "app_user_id")
@@ -47,7 +44,7 @@ public class Visit {
     @JoinColumn(name = "patient_id")
     private Patient patient;
     private int duration;
-    private int finished;
+    private Boolean finished;
 
 
 }

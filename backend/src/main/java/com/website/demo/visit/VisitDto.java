@@ -27,16 +27,13 @@ public class VisitDto {
     private String interview;
     private String research;
     private int duration;
-    private int finished;
+    private Boolean finished;
 
     public static VisitDto from(Visit visit){
         VisitDto visitDto = new VisitDto();
         visitDto.date = visit.getDate();
         visitDto.patient = PatientDto.from(visit.getPatient());
         visitDto.doctor = DoctorDto.from(visit.getDoctor());
-        visitDto.reason = visit.getReason();
-        visitDto.interview = visit.getInterview();
-        visitDto.research = visit.getResearch();
         visitDto.duration = visit.getDuration();
         visitDto.finished = visit.getFinished();
         return visitDto;

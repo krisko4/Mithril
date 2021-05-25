@@ -27,5 +27,6 @@ public class Medication {
     @ManyToMany(mappedBy = "medications")
     @JsonBackReference
     private Set<Prescription> prescriptions;
+    private String imageName;
 
 }

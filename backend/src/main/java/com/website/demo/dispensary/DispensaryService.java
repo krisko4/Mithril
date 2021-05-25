@@ -12,9 +12,9 @@ public class DispensaryService {
 
     private final DispensaryRepository dispensaryRepository;
 
-
-
     public List<Dispensary> getDispensaries() {
         return dispensaryRepository.findAll();
     }
+
+
 }

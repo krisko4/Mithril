@@ -11,6 +11,8 @@ import java.util.List;
 @Data
 @CrossOrigin
 public class DispensaryController {
+
+
     private final DispensaryService dispensaryService;
 
     @GetMapping("dispensaries")

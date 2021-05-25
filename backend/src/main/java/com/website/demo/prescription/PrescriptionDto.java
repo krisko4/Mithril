@@ -19,9 +19,6 @@ public class PrescriptionDto {
 
         dto.id = prescription.getId();
         dto.code = prescription.getCode();
-        dto.expirationDate = prescription.getExpirationDate();
-        dto.content = prescription.getDescription();
-
         return dto;
     }
 }

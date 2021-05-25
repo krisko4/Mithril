@@ -44,6 +44,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     public String findFirstNameByEmail(String email){
+
         return appUserRepository.findByEmail(email).get().getFirstName();
     }
 

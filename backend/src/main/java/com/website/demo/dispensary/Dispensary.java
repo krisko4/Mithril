@@ -1,25 +1,28 @@
 package com.website.demo.dispensary;
 
+import com.website.demo.specialization.Specialization;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity(name = "dispensary")
+@Entity
+@Table(name="dispensary")
 public class Dispensary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @ManyToMany
+    @JoinTable(name = "dispensary_specialization", joinColumns = {@JoinColumn(name = "dispensary_id")}, inverseJoinColumns = {@JoinColumn(name = "specialization_id")})
+    private Set<Specialization> specialization;
 
 }
