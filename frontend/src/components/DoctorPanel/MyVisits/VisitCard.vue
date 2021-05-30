@@ -1,8 +1,8 @@
 <template>
     <v-container fluid class="mb-5">
         <v-row justify="center">
-            <v-col cols="4" align="center">
-                <v-card
+            <v-col cols="5" align="center">
+                <v-card min-height="1000px"
                 >
                     <v-toolbar
                         tabs

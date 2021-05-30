@@ -30,7 +30,7 @@
 <script>
 
 
-import NoticeBoard from "@/components/DoctorPanel/HomePage/NoticeBoard";
+import NoticeBoard from "@/components/DoctorPanel/HomePage/NoticeBoard/NoticeBoard";
 import Activities from "@/components/DoctorPanel/HomePage/Activities";
 import TodayVisits from "@/components/DoctorPanel/HomePage/TodayVisits";
 export default {

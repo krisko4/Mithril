@@ -7,9 +7,9 @@
             <v-card-subtitle class="mt-1">In this card you can go through the entire process of your visit</v-card-subtitle>
             <v-divider></v-divider>
             <v-card-text>
-            <v-stepper
+            <v-stepper class="elevation-0"
                 v-model="step">
-                <v-stepper-header>
+                <v-stepper-header class="elevation-5">
                     <v-stepper-step step="1" :complete="step > 1"
                     >
                         Interview
@@ -32,45 +32,45 @@
                         Medicine
                     </v-stepper-step>
                 </v-stepper-header>
+                <v-stepper-items>
+                    <v-stepper-content step="1">
+                        <Step1
+                            @firstStepComplete="firstStepComplete"
+                            @goBack="step--"
+                        >
+                        </Step1>
+                    </v-stepper-content>
+                    <v-stepper-content step="2">
+                        <Step2
+                            @secondStepComplete="secondStepComplete"
+                            @goBack="step--"
+                        >
+                        </Step2>
+                    </v-stepper-content>
+                    <v-stepper-content step="3">
+                        <Step3
+                            @thirdStepComplete="thirdStepComplete"
+                            @goBack="step--"
+                            :patientData="patientData"
+                            :doctorFullName="visitData.doctorFullName"
+                        >
+                        </Step3>
+                    </v-stepper-content>
+                    <v-stepper-content step="4">
+                        <Step4
+                            @visitFinished="closeVisitCard"
+                            :visitData="visitData"
+                            @fourthStepComplete="fourthStepComplete"
+                            @goBack="step--"
+                        ></Step4>
+                    </v-stepper-content>
+                </v-stepper-items>
             </v-stepper>
-            </v-card-text>
-            <v-card-text>
-                <Step1
-                    v-show="step === 1"
-                    @firstStepComplete="firstStepComplete"
-                    @goBack="step--"
-                >
-                </Step1>
-                <transition name="fade">
-                <Step2
-                    v-show="step === 2"
-                    @secondStepComplete="secondStepComplete"
-                    @goBack="step--"
-                >
-                </Step2>
-                </transition>
-
-                <Step3
-                    v-show="step === 3"
-                    @thirdStepComplete="thirdStepComplete"
-                    @goBack="step--"
-                    :patientData="patientData"
-                    :doctorFullName="visitData.doctorFullName"
-                >
-                </Step3>
-
-                <Step4
-                    @visitFinished="closeVisitCard"
-                    :visitData="visitData"
-                    v-show="step === 4"
-                    @fourthStepComplete="fourthStepComplete"
-                    @goBack="step--"
-                ></Step4>
             </v-card-text>
         </v-card>
 
     </v-col>
-<v-col cols="4">
+<v-col cols="5">
     <PatientHistory :patientData="patientData"></PatientHistory>
 </v-col>
     </v-row>

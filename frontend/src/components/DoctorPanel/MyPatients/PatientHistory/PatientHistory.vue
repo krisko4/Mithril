@@ -9,17 +9,28 @@
         <v-card-text class="text-center" v-if="visitChosen">
             <v-btn color="primary" @click="openConfirmDialog">Begin visit</v-btn>
         </v-card-text>
-        <v-tabs>
+        <v-tabs v-model="tabIndex">
             <v-row justify="center">
             <v-tab @click="openPatientDetails">Patient details</v-tab>
             <v-tab @click="openAllVisitsTable">All visits</v-tab>
             <v-tab @click="openMyVisits">My visits</v-tab>
             </v-row>
         </v-tabs>
+        <v-tabs-items v-model="tabIndex">
+            <v-tab-item>
+                <PatientDetailsV2 :patientData="patientData"></PatientDetailsV2>
+            </v-tab-item>
+            <v-tab-item>
+                <VisitTable :patientData="patientData" :tabIndex="tabIndex"></VisitTable>
+            </v-tab-item>
+            <v-tab-item>
+                <VisitTable :patientData="patientData" :tabIndex="tabIndex"></VisitTable>
+            </v-tab-item>
+        </v-tabs-items>
 
 
-        <PatientDetailsV2 :patientData="patientData" v-if="tabIndex === 0"></PatientDetailsV2>
-        <VisitTable :patientData="patientData" :tabIndex="tabIndex" v-if="tabIndex === 1 || tabIndex === 2"></VisitTable>
+
+
         <v-dialog v-model="confirmDialogOpen" max-width="400">
             <v-card>
                 <v-card-title>

@@ -43,14 +43,14 @@ export default {
             name: localStorage.getItem('firstName') || '',
             cardIndex: null,
             cards: [
-                {title: 'My visits', src: 'http://localhost:8080/images/static/visit.jpg', flex: 6, index: 0},
+                {title: 'My visits', src: 'http://localhost:8080/images/static/visit.jpg', flex: 6, index: 2},
                 {
                     title: 'My patients',
                     src: 'http://localhost:8080/images/static/doctor-patient.jpg',
                     flex: 6,
-                    index: 1
+                    index: 4
                 },
-                {title: 'My schedule', src: 'http://localhost:8080/images/static/schedule.jpg', flex: 6, index: 2},
+                {title: 'My schedule', src: 'http://localhost:8080/images/static/schedule.jpg', flex: 6, index: 3},
                 {title: 'Interact', src: 'http://localhost:8080/images/static/forum.png', flex: 6, index: 3},
             ],
         }

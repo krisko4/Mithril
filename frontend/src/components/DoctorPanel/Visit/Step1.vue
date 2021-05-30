@@ -100,7 +100,7 @@ export default {
             this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
             setTimeout(() => {
                 this.$emit('firstStepComplete', this.interview)
-            }, 300)
+            }, 200)
 
         }
     },

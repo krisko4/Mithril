@@ -3,7 +3,7 @@
         <v-row justify="center">
             <v-col cols="10">
                 <v-dialog v-model="visitDetailsDialog" max-width="500">
-                    <VisitDetails :patientData="patientData" :visitData="visitData"></VisitDetails>
+                    <VisitDetails :visitData="visitData"></VisitDetails>
                 </v-dialog>
                 <v-data-table
                     :headers="headers"
@@ -15,7 +15,7 @@
                     <template v-slot:item="{ item }">
                         <tr>
                             <td class="text-xs-right">{{ item.date }}</td>
-                            <td class="text-xs-right">{{ item.patientFullName }}</td>
+                            <td class="text-xs-right">{{patientData.firstName}} {{patientData.secondName}} {{patientData.lastName}}</td>
                             <td class="text-xs-right">{{ item.doctorFullName }}</td>
                             <td>
                                 <v-btn @click.stop="openVisitDetailsDialog(item)" x-small color="primary">Details
@@ -52,21 +52,25 @@ export default {
     methods: {
 
         addVisit(element){
-            this.visits.push(
-                {
-                    date: element.date.replace(/T/g, ' '),
-                    patientFullName: element.patient.firstName + ' ' + element.patient.secondName + ' ' + element.patient.lastName,
-                    doctorFullName: element.doctor.firstName + ' ' + element.doctor.secondName + ' ' + element.doctor.lastName,
-                    doctorImg: element.doctor.imageName,
-                    description: element.description,
-                    interview: element.interview,
-                    medicine: element.medicine,
-                    reason: element.reason,
-                    research: element.research,
-                    referrals: element.referrals
+            let visitDetails = {
+                date: element.visit.date.replace(/T/g, ' '),
+                doctorFullName: element.visit.doctor.firstName + ' ' + element.visit.doctor.secondName + ' ' + element.visit.doctor.lastName,
+                doctorImg: element.visit.doctor.imageName,
+                referrals: element.referrals,
+                patient: element.visit.patient,
+                medications: [],
+                research: '',
+                interview: ''
+            }
+            if(element.prescription){
+                visitDetails.medications = element.prescription.medicationList
+            }
+            if(element.examination){
+                visitDetails.interview = element.examination.interview
+                visitDetails.research = element.examination.research
+            }
+            this.visits.push(visitDetails)
 
-                }
-            )
         },
 
 
@@ -79,8 +83,9 @@ export default {
         getAllVisitsForPatient() {
             axios.get('http://localhost:8080/patients/' + this.patientData.id + '/visits')
                 .then((response) => {
+                    console.log(response.data)
                     response.data.forEach((element) => {
-                      this.addVisit(element)
+                        this.addVisit(element)
                     })
                 })
         },

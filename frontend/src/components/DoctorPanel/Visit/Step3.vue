@@ -59,7 +59,7 @@
                                 30812<br>
                                 {{ referral.dispensary }}<br>
                                 {{ referral.priority }}<br>
-                                {{ referral.speciality }}<br>
+                                {{ referral.specialization }}<br>
                             </v-col>
                         </v-row>
                         <span class="font-weight-bold text-button">Reason:</span> <span
@@ -82,8 +82,8 @@
             </v-select>
             <v-select
                 :disabled="!firstReferralStarted"
-                v-model="specialitySelect"
-                :items="selectableSpecialities"
+                v-model="specializationSelect"
+                :items="selectableSpecializations"
                 label="Speciality"
                 persistent-hint
                 return-object
@@ -133,14 +133,14 @@ export default {
             dispensarySelect: null,
             selectableDispensaries: [],
             dispensaries: [],
-            specialitySelect: null,
-            selectableSpecialities: [],
-            specialities: [],
+            specializationSelect: null,
+            selectableSpecializations: [],
+            specializations: [],
             urgent: false,
             reason: '',
             dispensary: '',
-            speciality: '',
-            referrals: [{dispensary: '', speciality: '', reason: '', priority: 'Normal'}],
+            specialization: '',
+            referrals: [{dispensary: '', specialization: '', reason: '', priority: 'Normal'}],
             priority: '',
             firstReferralStarted: false,
             isFirstReferral: true,
@@ -166,7 +166,7 @@ export default {
     methods: {
         goToStep4() {
             let isBadReferral = this.referrals.some((referral) => {
-                return !referral.dispensary || !referral.speciality|| !referral.reason
+                return !referral.dispensary || !referral.specialization|| !referral.reason
             })
             if(isBadReferral && this.firstReferralStarted){
                 this.$toast.error('Some referrals are missing required information')
@@ -179,19 +179,19 @@ export default {
                     referrals = this.referrals
                 }
                 this.$emit('thirdStepComplete', referrals)
-            }, 300)
+            }, 200)
 
         },
         goBack() {
             this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
             setTimeout(() => {
                 this.$emit('goBack')
-            }, 300)
+            }, 200)
         },
         openReferral(referral) {
             this.dispensary = referral.dispensary
             this.priority = referral.priority
-            this.speciality = referral.speciality
+            this.specialization = referral.specialization
             this.reason = referral.reason
 
         },
@@ -203,11 +203,11 @@ export default {
                 this.firstReferralStarted = true
                 return
             }
-            let referral = {dispensary: '', speciality: '', reason: '', priority: 'Normal'}
+            let referral = {dispensary: '', specialization: '', reason: '', priority: 'Normal'}
             this.referrals.push(referral)
             this.referralIndex = this.referrals.indexOf(referral)
             this.dispensarySelect = ''
-            this.specialitySelect = ''
+            this.specializationSelect = ''
             this.reason = ''
             this.priority = ''
             this.urgent = false
@@ -230,11 +230,11 @@ export default {
             let referral = this.referrals[this.referralIndex]
             this.urgent = referral.priority === 'Urgent';
             this.dispensarySelect = referral.dispensary
-            this.specialitySelect = referral.speciality
+            this.specializationSelect = referral.specialization
         },
 
-        specialitySelect(val) {
-            this.referrals[this.referralIndex].speciality = val
+        specializationSelect(val) {
+            this.referrals[this.referralIndex].specialization = val
         },
 
         reason(val) {
@@ -258,9 +258,9 @@ export default {
                 })
                 axios.get('http://localhost:8080/dispensaries/' + dispensary.id + '/specializations')
                     .then((response) => {
-                        this.specialities = response.data
-                        this.selectableSpecialities = response.data.map((speciality) => {
-                            return speciality.name
+                        this.specializations = response.data
+                        this.selectableSpecializations = response.data.map((specialization) => {
+                            return specialization.name
                         })
                     })
             }

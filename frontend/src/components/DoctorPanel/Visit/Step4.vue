@@ -152,13 +152,13 @@ export default {
             this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
             setTimeout(() => {
                 this.$emit('goBack')
-            }, 300)
+            }, 200)
         },
         findMedicationDebounced(val) {
             clearTimeout(this._searchTimerId)
             this._searchTimerId = setTimeout(() => {
                 this.findMedication(val)
-            }, 300)
+            }, 200)
 
         },
 
@@ -171,13 +171,17 @@ export default {
                 this.$toast.error('No quantity was specified in one of the medicaments')
                 return
             }
-            this.visitDetailsDialog = true
-            let medications = []
-            if(!this.firstMedicationSearchStarted){
-                this.visitData.medications = medications
-                return
-            }
-            this.visitData.medications = this.medications
+            this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
+            setTimeout(() => {
+                this.visitDetailsDialog = true
+                let medications = []
+                if(!this.firstMedicationSearchStarted){
+                    this.visitData.medications = medications
+                    return
+                }
+                this.visitData.medications = this.medications
+            }, 300)
+
 
         },
 

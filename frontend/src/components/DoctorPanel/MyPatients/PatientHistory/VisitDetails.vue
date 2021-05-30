@@ -83,7 +83,7 @@
                                                 30812<br>
                                                 {{ referral.dispensary }}<br>
                                                 {{ referral.priority }}<br>
-                                                {{ referral.speciality }}<br>
+                                                {{ referral.specialization }}<br>
                                             </v-col>
                                         </v-row>
                                         <span class="font-weight-bold text-button">Reason:</span> <span

@@ -1,11 +1,12 @@
 <template>
-    <v-card height="765">
-        <v-card-title class="text-h2 text-sm-h2 text-md-h2 text-lg-h2">Your schedule for today</v-card-title>
-        <v-card-subtitle>{{date.toISOString().substr(0, 10)}}</v-card-subtitle>
+    <v-card min-height="903">
+        <v-card-title class="text-h2 text-sm-h2 text-md-h2 text-lg-h2">Schedule</v-card-title>
+        <v-card-subtitle>Your planned visits for today</v-card-subtitle>
         <v-divider class="mx-4"></v-divider>
-        <v-card-subtitle class="text-h2 text-center text-sm-h2 text-md-h2 text-lg-h2">{{time}}</v-card-subtitle>
+        <v-card-subtitle class="text-center">
+            <span class="text-h2 text-sm-h2 text-md-h2 text-lg-h2">{{time}}</span><br>{{date.toISOString().substr(0, 10)}}<span></span></v-card-subtitle>
         <v-card-text>
-            <v-sheet height="500" class="mt-2">
+            <v-sheet height="600" class="mt-2">
                 <v-calendar
                     type="day"
                     :events="visits"
@@ -66,9 +67,10 @@ export default {
         axios.get('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/visits', {
             params: {
                 date: this.convertDate(this.date),
-                finished: 0
+                finished: false
             }
         }).then((response) => {
+            console.log(response.data)
             response.data.filter((visit) => {
                 let startDate = new Date(visit.date)
                 let dateString = this.convertDate(startDate)

@@ -120,14 +120,14 @@ export default {
             this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
             setTimeout(() => {
                 this.$emit('goBack')
-            }, 300)
+            }, 200)
 
         },
         goToStep3() {
             this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
             setTimeout(() => {
                 this.$emit('secondStepComplete', this.research)
-            }, 300)
+            }, 200)
 
 
         },

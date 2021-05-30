@@ -4,7 +4,6 @@
         absolute
         temporary
         v-model="drawer"
-
     >
         <v-list
             nav
@@ -22,38 +21,18 @@
             <v-divider></v-divider>
             <v-list-item-group
                 active-class="deep-purple--text text--accent-4"
+                v-model="selectedItem"
             >
-                <v-list-item @click="cardIndex = null; redirect(cardIndex)">
+                <v-list-item
+                    v-for="(item, i) in items"
+                    :key="i"
+                    @click="redirect(i)"
+                    >
                     <v-list-item-icon>
-                        <v-icon>mdi-home</v-icon>
+                        <v-icon>{{item.icon}}</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>Home</v-list-item-title>
+                    <v-list-item-title>{{item.title}}</v-list-item-title>
                 </v-list-item>
-                <v-list-item>
-                    <v-list-item-icon>
-                        <v-icon>mdi-account</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>Account</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="cardIndex = 0; redirect(cardIndex)">
-                    <v-list-item-icon>
-                        <v-icon>mdi-calendar</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>My visits</v-list-item-title>
-                </v-list-item>
-                <v-list-item>
-                    <v-list-item-icon>
-                        <v-icon>mdi-calendar-heart</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title @click="cardIndex = 2; redirect(cardIndex)">My schedule</v-list-item-title>
-                </v-list-item>
-                <v-list-item>
-                    <v-list-item-icon>
-                        <v-icon>mdi-account-heart</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title @click="cardIndex = 1; redirect(cardIndex)">My patients</v-list-item-title>
-                </v-list-item>
-
             </v-list-item-group>
         </v-list>
     </v-navigation-drawer>
@@ -70,7 +49,15 @@ export default {
             imgSrc: 'http://localhost:8080/images/doctors/' + localStorage.getItem('imageName'),
             cardIndex: null,
             name: localStorage.getItem('firstName'),
-            drawer: this.navigationOpened
+            drawer: this.navigationOpened,
+            selectedItem: null,
+            items: [
+                {icon: 'mdi-home', title: 'Home'},
+                {icon: 'mdi-account', title: 'My account'},
+                {icon: 'mdi-calendar', title: 'My visits'},
+                {icon: 'mdi-calendar-heart', title: 'My schedule'},
+                {icon: 'mdi-account-heart', title: 'My patients'},
+            ]
 
         }
     },
@@ -88,9 +75,11 @@ export default {
 
 
     methods: {
-        redirect() {
+        redirect(index) {
             this.drawer = false
-            this.$emit('navigationChosen', this.cardIndex)
+            this.$emit('navigationChosen', index)
+
+
         }
     },
 
@@ -99,5 +88,7 @@ export default {
 </script>
 
 <style scoped>
-
+.v-navigation-drawer {
+    will-change: initial;
+}
 </style>
