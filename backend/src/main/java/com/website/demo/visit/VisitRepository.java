@@ -20,11 +20,12 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     List<Visit> findByPatient_id(Long patientID);
 
-    List<Visit> findByPatient_idAndDoctor_idAndFinished(Long patientID, Long doctorID, Boolean finished);
-    List<Visit> findByPatient_idAndDoctor_id(Long patientID, Long doctorID);
+    List<Visit> findByPatient_idAndDoctor_IdAndFinished(Long patientID, Long doctorID, Boolean finished);
 
-    @Query(value = "select * from visit where doctor_id = ?1", nativeQuery = true)
-    List<Visit> findAllByDoctorId(Long id);
+    List<Visit> findByPatient_idAndDoctor_Id(Long patientID, Long doctorID);
+
+
+    List<Visit> findByDoctor_Id(Long doctorId);
 
     List<Visit> findByPatient_idAndFinished(Long patientID, Boolean finished);
 }

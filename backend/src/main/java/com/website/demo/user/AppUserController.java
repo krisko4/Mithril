@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -28,21 +29,24 @@ public class AppUserController {
     }
 
     @GetMapping("doctors")
-    public List<DoctorDto> getAvailableDoctorsByDate(@RequestParam String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
-        LocalDate localDate = LocalDate.parse(date, formatter);
-        return appUserService.getAvailableDoctorsByDate(localDate);
+    public List<DoctorDto> getDoctorsBy(@RequestParam(required = false) String date) {
+        return appUserService.getDoctorsBy(date).stream().map(DoctorDto::from).collect(Collectors.toList());
     }
 
-    @GetMapping("nameByMail")
-    public String findFirstNameByEmail(@RequestParam String email){
-        return appUserService.findFirstNameByEmail(email);
+    @GetMapping("doctors/except-for/{id}")
+    public List<DoctorDto> getDoctorsBy(@PathVariable Long id) {
+        return appUserService.getDoctorsExceptForOne(id);
     }
+//
+//    @GetMapping("nameByMail")
+//    public String findFirstNameByEmail(@RequestParam String email){
+//        return appUserService.findFirstNameByEmail(email);
+//    }
 
-    @GetMapping("{id}/getName")
-    public String getNameById(@PathVariable Long id){
-        return appUserService.getNameById(id);
-    }
+//    @GetMapping("{id}/getName")
+//    public String getNameById(@PathVariable Long id){
+//        return appUserService.getNameById(id);
+//    }
 
 
 

@@ -34,21 +34,34 @@ public class VisitController {
     }
 
 
+//    @GetMapping("doctors/{id}/visits")
+//    public List<VisitDto> getVisitsForDoctorBy(@PathVariable Long id,
+//                                               @RequestParam(required = false) String date,
+//                                               @RequestParam(required = false) Long patient_id,
+//                                               @RequestParam(required = false) Boolean finished) {
+//        return visitService.getVisitsForDoctorBy(id, date, patient_id, finished).stream().map(VisitDto::from).collect(Collectors.toList());
+//    }
+//
+//    @GetMapping("patients/{id}/visits")
+//    public List<VisitDto> getAllVisitsForPatient(@PathVariable Long id, @RequestParam(required = false) Boolean finished){
+//        return visitService.getAllVisitsForPatient(id, finished).stream().map(VisitDto::from).collect(Collectors.toList());
+//    }
+
+
+
     @GetMapping("doctors/{id}/visits")
-    public List<VisitDto> getVisitsForDoctorBy(@PathVariable Long id,
+    @ResponseBody
+    public List<VisitResponse> getVisitsForDoctorBy(@PathVariable Long id,
                                                @RequestParam(required = false) String date,
                                                @RequestParam(required = false) Long patient_id,
                                                @RequestParam(required = false) Boolean finished) {
-        return visitService.getVisitsForDoctorBy(id, date, patient_id, finished).stream().map(VisitDto::from).collect(Collectors.toList());
+        return visitService.getFullVisitDataForDoctorBy(id, date, patient_id, finished);
     }
 
     @GetMapping("patients/{id}/visits")
-    public List<VisitDto> getAllVisitsForPatient(@PathVariable Long id, @RequestParam(required = false) Boolean finished){
-        return visitService.getAllVisitsForPatient(id, finished).stream().map(VisitDto::from).collect(Collectors.toList());
+    public List<VisitResponse> getAllVisitsForPatient(@PathVariable Long id, @RequestParam(required = false) Boolean finished){
+        return visitService.getFullVisitDataForPatient(id, finished);
     }
-
-
-
 
 
 

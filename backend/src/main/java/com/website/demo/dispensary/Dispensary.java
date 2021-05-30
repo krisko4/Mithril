@@ -23,6 +23,6 @@ public class Dispensary {
     private String name;
     @ManyToMany
     @JoinTable(name = "dispensary_specialization", joinColumns = {@JoinColumn(name = "dispensary_id")}, inverseJoinColumns = {@JoinColumn(name = "specialization_id")})
-    private Set<Specialization> specialization;
+    private Set<Specialization> specializations;
 
 }

@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 
@@ -94,8 +96,17 @@ public class AppUserService implements UserDetailsService {
     }
 
 
-    public List<DoctorDto> getAvailableDoctorsByDate(LocalDate date){
+    public List<AppUser> getDoctorsBy(String date){
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
+       // LocalDate localDate = LocalDate.parse(date, formatter);
+        if(date == null){
+            return appUserRepository.findAll();
+        }
         return appUserRepository.findAllBySchedules_Date(date);
+    }
+
+    public List<DoctorDto> getDoctorsExceptForOne(Long id){
+        return appUserRepository.findAllExceptFor(id);
     }
 
 

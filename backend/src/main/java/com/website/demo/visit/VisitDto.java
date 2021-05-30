@@ -17,15 +17,11 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VisitDto {
+public class VisitDto extends VisitResponse {
 
     public LocalDateTime date;
-    public String description;
     private DoctorDto doctor;
     private PatientDto patient;
-    private String reason;
-    private String interview;
-    private String research;
     private int duration;
     private Boolean finished;
 

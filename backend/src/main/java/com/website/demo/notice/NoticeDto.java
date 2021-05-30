@@ -10,14 +10,14 @@ public class NoticeDto {
 
     private String title;
     private String content;
-    private DoctorDto doctorDto;
+    private DoctorDto doctor;
     private LocalDateTime date;
 
     public static NoticeDto from(Notice notice){
         NoticeDto noticeDto = new NoticeDto();
         noticeDto.title = notice.getTitle();
         noticeDto.content = notice.getContent();
-        noticeDto.doctorDto = DoctorDto.from(notice.getAppUser());
+        noticeDto.doctor = DoctorDto.from(notice.getAppUser());
         noticeDto.date = notice.getDate();
         return noticeDto;
     }

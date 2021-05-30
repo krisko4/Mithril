@@ -37,7 +37,10 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             "SET a.imageName = ?1 WHERE a.email = ?2")
     void setImageName(String imagePath, String email);
 
-    List<DoctorDto> findAllBySchedules_Date(LocalDate date);
+    List<AppUser> findAllBySchedules_Date(String date);
+
+    @Query("select new com.website.demo.user.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName) from AppUser a where a.id <> ?1")
+    List<DoctorDto> findAllExceptFor(Long id);
 
     @Transactional
     @Modifying

@@ -16,5 +16,10 @@ public interface SpecializationRepository extends JpaRepository<Specialization, 
             ")", nativeQuery = true)
     List<Specialization> findSpecializationsForDispensary(Long id);
 
-
+    @Query(value = "select * from specialization where name = ?1 and id in (\n" +
+            "    select specialization_id from dispensary_specialization where dispensary_id in  (\n" +
+            "        select id from dispensary where name = ?2\n" +
+            "    ) \n" +
+            ")", nativeQuery = true)
+    Specialization findByNameAndDispensaryName(String name, String dispensaryName);
 }

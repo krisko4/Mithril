@@ -1,5 +1,6 @@
 package com.website.demo.specialization;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.website.demo.dispensary.Dispensary;
 import lombok.Data;
 
@@ -15,5 +16,7 @@ public class Specialization {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-   
+    @ManyToMany(mappedBy = "specializations")
+    @JsonBackReference
+    private Set<Dispensary> dispensaries;
 }

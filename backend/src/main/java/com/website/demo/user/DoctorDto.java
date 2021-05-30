@@ -2,10 +2,12 @@ package com.website.demo.user;
 
 import com.github.javafaker.App;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class DoctorDto {
 
     private Long id;
@@ -17,6 +19,14 @@ public class DoctorDto {
     private String imageName;
 //    private Set<VisitDto> visitSet;
  //   private Set<ScheduleDto> schedules;
+
+
+    public DoctorDto(String firstName, String secondName, String lastName, String imageName) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.imageName = imageName;
+    }
 
     public static DoctorDto from(AppUser appUser) {
         DoctorDto dto = new DoctorDto();
