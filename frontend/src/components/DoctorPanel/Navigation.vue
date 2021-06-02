@@ -6,8 +6,7 @@
         v-model="drawer"
     >
         <v-list
-            nav
-            dense
+
         >
             <v-list-item>
                 <v-list-item-avatar>
@@ -17,8 +16,9 @@
                     <v-list-item-title>{{ name }}</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-
-            <v-divider></v-divider>
+        </v-list>
+        <v-divider></v-divider>
+        <v-list  rounded>
             <v-list-item-group
                 active-class="deep-purple--text text--accent-4"
                 v-model="selectedItem"
@@ -29,7 +29,7 @@
                     @click="redirect(i)"
                     >
                     <v-list-item-icon>
-                        <v-icon>{{item.icon}}</v-icon>
+                        <v-icon color="primary">{{item.icon}}</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>{{item.title}}</v-list-item-title>
                 </v-list-item>

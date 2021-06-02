@@ -1,20 +1,18 @@
 <template>
     <v-container fluid class="mb-5">
         <v-row justify="center">
-            <v-col cols="5" align="center">
-                <v-card min-height="1000px"
+            <v-col cols="5">
+                <v-card
                 >
-                    <v-toolbar
-                        tabs
-                        flat
+                    <v-card-title class="display-2">My visits</v-card-title>
+                    <v-card-subtitle>Manage your scheduled visits</v-card-subtitle>
+                    <v-card-text>
+                        <v-divider></v-divider>
+                    </v-card-text>
 
-                    >
-                        <v-app-bar-nav-icon
-                        ></v-app-bar-nav-icon>
-                        <v-toolbar-title >My visits</v-toolbar-title>
-                    </v-toolbar>
                     <v-tabs
-                        align-with-title
+                        centered
+                        grow
                     >
                         <v-tab v-for="tab in tabs" :key="tab.title" @click="openTab(tab)">
                             {{ tab.title }}
@@ -38,7 +36,7 @@
                     </v-tabs>
                     <v-divider></v-divider>
                     <v-container ma-0 pa-0 v-show="tabIndex !== 2">
-                        <v-carousel height="300px"
+                        <v-carousel height="350px"
                                     hide-delimiter-background
                                     v-model="itemIndex"
 
@@ -64,16 +62,19 @@
 
                             </v-carousel-item>
                         </v-carousel>
+                        <transition appear name="fade">
                         <v-container class="fill-height">
-                            <v-card-text>
-                                <VisitTimeline :visits="visits"
-                                                        v-if="isVisitListNotEmpty"></VisitTimeline>
-                                <strong v-else>You don't have any visits on {{ items[itemIndex].dayString }}.</strong>
+                            <v-card-text v-if="isVisitListNotEmpty">
+                                <VisitTimeline :visits="visits"></VisitTimeline>
+                            </v-card-text>
+                            <v-card-text v-else class="text-center">
+                                    You don't have any visits on {{ items[itemIndex].dayString }}.
                             </v-card-text>
                             <v-card-actions>
                                 <v-btn text color="primary" @click="goBack">Return</v-btn>
                             </v-card-actions>
                         </v-container>
+                        </transition>
                     </v-container>
                     <v-row justify="center">
                     </v-row>
@@ -87,7 +88,7 @@
 <script>
 
 import VisitTimeline from "@/components/DoctorPanel/MyVisits/VisitTimeline";
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 import DatePicker from "@/components/VisitSaving/DatePicker";
 
 
@@ -120,9 +121,8 @@ export default {
         this.setDates()
     },
     watch: {
-
         itemIndex() {
-            switch (this.itemIndex){
+            switch (this.itemIndex) {
                 case 0:
                     this.imgSrc = 'https://cdn.vuetifyjs.com/images/cards/forest.jpg'
                     break
@@ -140,7 +140,7 @@ export default {
         },
 
         '$store.state.date'(val) {
-            if(val){
+            if (val) {
                 this.dialog = false
                 this.items = []
                 this.setDates(true)
@@ -151,7 +151,6 @@ export default {
     },
 
     methods: {
-
         setDates(isCalendarUsed) {
             this.items = []
             for (let i = 0; i < 4; i++) {
@@ -166,6 +165,7 @@ export default {
                 this.insertNewItem()
             }
             this.itemIndex = 0
+            this.getVisits()
         },
 
 
@@ -191,12 +191,13 @@ export default {
         },
 
         getVisits() {
-            axios.get('http://localhost:8080/visits/get/all', {
+            tokenAxios.get('doctors/' + localStorage.getItem('id') + '/visits', {
                 params: {
-                    doctor_id: localStorage.getItem('id'),
-                    date: this.items[this.itemIndex].date
+                    date: this.items[this.itemIndex].date,
+                    finished: false
                 }
             }).then((response) => {
+                console.log(response.data)
                 this.visits = response.data
                 this.isVisitListNotEmpty = response.data.length !== 0;
             })
@@ -206,7 +207,6 @@ export default {
             this.tabIndex = this.tabs.indexOf(tab)
             this.setDates()
             if (this.tabIndex === 1) {
-
                 this.itemIndex = 1
             } else {
                 this.itemIndex = 0
@@ -233,4 +233,13 @@ export default {
 
 <style scoped>
 
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
 </style>

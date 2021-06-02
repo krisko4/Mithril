@@ -110,7 +110,7 @@
 </template>
 
 <script>
- import axios from 'axios'
+ import axios from '@/axios'
 export default {
 
     data() {
@@ -150,7 +150,7 @@ export default {
         },
         addVisit() {
             const localDateTime = this.date + ' ' + this.hours[this.hourIndex];
-               axios.post("http://localhost:8080/visits/add",{
+               axios.post("visits/add",{
                    patient_id: this.patient.id,
                    doctor_id : this.doctor.id,
                    date: localDateTime

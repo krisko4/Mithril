@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card min-height="850px">
         <v-card-title>Patient medical history</v-card-title>
         <v-card-subtitle class="mt-1">In this card you can browse through medical history and previous visits of your patient</v-card-subtitle>
         <v-img src="https://anmj.org.au/wp-content/uploads/2020/03/Older-patient-specialling-in-acute-MAIN-WEB.jpg" height="300px">
@@ -7,14 +7,12 @@
         <v-card-title>{{patientData.firstName}} {{patientData.secondName}} {{patientData.lastName}}</v-card-title>
         <v-card-subtitle>Patient</v-card-subtitle>
         <v-card-text class="text-center" v-if="visitChosen">
-            <v-btn color="primary" @click="openConfirmDialog">Begin visit</v-btn>
+            <v-btn color="primary" large  @click="confirmDialogOpen = true">Begin visit</v-btn>
         </v-card-text>
-        <v-tabs v-model="tabIndex">
-            <v-row justify="center">
-            <v-tab @click="openPatientDetails">Patient details</v-tab>
-            <v-tab @click="openAllVisitsTable">All visits</v-tab>
-            <v-tab @click="openMyVisits">My visits</v-tab>
-            </v-row>
+        <v-tabs centered v-model="tabIndex">
+            <v-tab @click="tabIndex = 0">Patient details</v-tab>
+            <v-tab @click="tabIndex = 1">All visits</v-tab>
+            <v-tab @click="tabIndex = 2">My visits</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabIndex">
             <v-tab-item>
@@ -41,7 +39,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closeDeleteDialog">
+                    <v-btn color="blue darken-1" text @click="confirmDialogOpen = false">
                         Cancel
                     </v-btn>
                     <v-btn color="blue darken-1" text @click="beginVisit">Yes,
@@ -71,21 +69,6 @@ export default {
         }
     },
     methods:{
-        openPatientDetails(){
-            this.tabIndex = 0
-        },
-        openAllVisitsTable(){
-            this.tabIndex = 1
-        },
-        openMyVisits(){
-            this.tabIndex = 2
-        },
-        openConfirmDialog(){
-            this.confirmDialogOpen = true
-        },
-        closeDeleteDialog(){
-            this.confirmDialogOpen = false
-        },
         beginVisit(){
             this.confirmDialogOpen = false
             this.$emit('visitStarted')

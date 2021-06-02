@@ -8,7 +8,7 @@
 
 <script>
 
-import axios from 'axios'
+import axios from '@/axios'
 import Success from "@/components/Registration/Confirmation/Success";
 import MailAlreadyConfirmed from "@/components/Registration/Confirmation/MailAlreadyConfirmed";
 import TokenExpired from "@/components/Registration/Confirmation/TokenExpired";
@@ -28,7 +28,7 @@ export default {
 
     },
     created(){
-        axios.get('http://localhost:8080/doctor/registration/confirm?token=' + this.$route.params.token)
+        axios.get('doctor/registration/confirm?token=' + this.$route.params.token)
             .then((response)=>{
                 console.log(response)
                 this.confirmationSucceeded = true

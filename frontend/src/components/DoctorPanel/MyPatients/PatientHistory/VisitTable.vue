@@ -2,7 +2,7 @@
     <v-card-text>
         <v-row justify="center">
             <v-col cols="10">
-                <v-dialog v-model="visitDetailsDialog" max-width="500">
+                <v-dialog v-model="visitDetailsDialog" max-width="600">
                     <VisitDetails :visitData="visitData"></VisitDetails>
                 </v-dialog>
                 <v-data-table
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 import VisitDetails from "@/components/DoctorPanel/MyPatients/PatientHistory/VisitDetails";
 
 export default {
@@ -81,7 +81,7 @@ export default {
             this.visitDetailsDialog = true
         },
         getAllVisitsForPatient() {
-            axios.get('http://localhost:8080/patients/' + this.patientData.id + '/visits')
+            tokenAxios().get('patients/' + this.patientData.id + '/visits')
                 .then((response) => {
                     console.log(response.data)
                     response.data.forEach((element) => {
@@ -90,7 +90,7 @@ export default {
                 })
         },
         getAllVisitsForPatientAndDoctor() {
-            axios.get('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/visits', {
+            tokenAxios().get('doctors/' + localStorage.getItem('id') + '/visits', {
                 params: {
                     patient_id: this.patientData.id
                 }

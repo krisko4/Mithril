@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 
 export default {
     name: "Step3",
@@ -151,7 +151,7 @@ export default {
 
 
     created() {
-        axios.get('http://localhost:8080/dispensaries')
+        tokenAxios.get('dispensaries')
             .then((response) => {
                 console.log(response.data)
                 this.dispensaries = response.data
@@ -256,7 +256,7 @@ export default {
                         return dispensary
                     }
                 })
-                axios.get('http://localhost:8080/dispensaries/' + dispensary.id + '/specializations')
+                tokenAxios.get('dispensaries/' + dispensary.id + '/specializations')
                     .then((response) => {
                         this.specializations = response.data
                         this.selectableSpecializations = response.data.map((specialization) => {

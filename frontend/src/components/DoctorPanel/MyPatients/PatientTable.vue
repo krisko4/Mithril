@@ -3,9 +3,12 @@
         <v-row justify="center">
             <v-col cols="11">
                 <v-card>
-                    <v-card-title>
-                        Patients
+                    <v-card-title class="display-2">
+                        Patient table
                     </v-card-title>
+                    <v-card-subtitle>
+                        Manage your patients
+                    </v-card-subtitle>
                     <v-card-subtitle>
                         <v-row justify="space-between">
                             <v-col cols="5">
@@ -64,10 +67,10 @@
                             </v-col>
                         </v-row>
                     </v-card-subtitle>
-                    <v-dialog max-width="400" v-model="patientDetails">
+                    <v-dialog max-width="500" v-model="patientDetails">
                         <PatientDetails :patientData="patientData"></PatientDetails>
                     </v-dialog>
-                    <v-dialog v-model="historyDialog" max-width="600">
+                    <v-dialog v-model="historyDialog" max-width="700">
                         <PatientHistory v-if="historyDialog" :patientData="patientData"></PatientHistory>
                     </v-dialog>
                     <v-dialog v-model="deleteDialog" max-width="500">
@@ -118,7 +121,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 import PatientDetails from "@/components/DoctorPanel/MyPatients/PatientDetails";
 import PatientSearchComponent from "@/components/VisitSaving/PatientSearchComponent";
 import PatientHistory from "@/components/DoctorPanel/MyPatients/PatientHistory/PatientHistory";
@@ -173,15 +176,10 @@ export default {
         },
 
         submitNewPatient(){
-            axios.patch('http://localhost:8080/patients/addDoctor', {
+            tokenAxios.patch('patients/addDoctor', {
                     'doctorID': localStorage.getItem('id'),
                     'patientID': this.$store.state.patient.id
-                }, {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('user')
-                    }
-                }
-            ).then((response) => {
+                }).then((response) => {
                 console.log(response)
                 this.patients.push(
                     {
@@ -205,11 +203,7 @@ export default {
 
         addNewPatient() {
             if(this.$store.state.patient.doctorID){
-                axios.get('http://localhost:8080/users/' + this.$store.state.patient.doctorID + '/getName', {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('user')
-                    }
-                })
+                tokenAxios.get('users/' + this.$store.state.patient.doctorID + '/getName')
                 .then((response) => {
                     this.doctorName = response.data
 
@@ -226,17 +220,11 @@ export default {
 
         },
         deletePatient() {
-            axios.patch('http://localhost:8080/patients/removeDoctor', {
-
+            tokenAxios.patch('patients/removeDoctor', {
                     'doctorID': localStorage.getItem('id'),
                     'patientID': this.patientData.id
 
-                }, {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('user')
-                    },
-                }
-            ).then(() => {
+                }).then(() => {
                 this.patients.splice(this.patients.indexOf(this.patientData), 1)
             }).finally(() => {
                 this.deleteDialog = false
@@ -296,10 +284,8 @@ export default {
     },
 
     created() {
-        axios.get('http://localhost:8080/patients/', {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('user')
-            },
+        tokenAxios.get('patients/', {
+
             params: {
                 doctor_id: localStorage.getItem('id')
             }

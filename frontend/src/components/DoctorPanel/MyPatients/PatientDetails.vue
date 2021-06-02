@@ -1,12 +1,13 @@
 <template>
-
         <v-card>
             <v-img src="https://www.satoeurope.com/images/markets/patient-positive-identification-4.jpg" height="300px">
-
             </v-img>
             <v-card-title>{{patientData.firstName}} {{patientData.secondName}} {{patientData.lastName}}</v-card-title>
             <v-card-subtitle>Patient</v-card-subtitle>
-            <v-divider></v-divider>
+            <v-card-text>
+                <v-divider></v-divider>
+            </v-card-text>
+
             <v-card-text>
                 <v-list>
                     <v-list-item>

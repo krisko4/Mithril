@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from '@/axios'
 
 export default {
     data() {
@@ -44,7 +44,7 @@ export default {
                 this.$store.state.patientSelected = false
                 return
             }
-            axios.get("http://localhost:8080/patients/bychar", {
+            axios.get("patients/bychar", {
                 params: {
                     character: val
                 }

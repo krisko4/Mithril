@@ -120,7 +120,7 @@
 
 
 
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 
 export default {
     name: "MyCalendar",
@@ -327,10 +327,7 @@ export default {
                 this.temporaryEvents = []
             }
             let chosenEvents = this.findChosenEvents()
-            axios.delete('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/schedules', {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('user')
-                },
+            tokenAxios.delete('doctors/' + localStorage.getItem('id') + '/schedules', {
                 params: {
                     date: this.date
                 }

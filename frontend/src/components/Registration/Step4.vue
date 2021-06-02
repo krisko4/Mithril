@@ -1,20 +1,17 @@
 <template>
-    <v-container>
+    <v-card-text>
         <v-row class="text-center">
             <v-col class="mb-4">
-                <h1 class="display-2 font-weight-bold mb-3">
-                    Registration panel
-                </h1>
-                <h2 class="display-1 font-weight-thin mb-3">
+                <h2 class="display-1 font-weight-bold mb-3">
                     Step 4
                 </h2>
-                <h3 class="display-1 font-weight-thin mb-3">
-                    <i>Specialization</i>
+                <h3 class="headline mb-3">
+                    <i>Specialization selection</i>
                 </h3>
             </v-col>
         </v-row>
         <v-row justify="center">
-            <v-col cols="4">
+            <v-col cols="7">
                 <v-card>
                     <v-card-title>Please choose your specialization</v-card-title>
                     <v-card-text>
@@ -31,43 +28,27 @@
                         >
                         </v-select>
                     </v-card-text>
-                    <v-card-actions>
-                        <v-col>
-                            <v-row justify="space-between">
 
-
-                                <v-btn
-                                    color="primary"
-                                    text
-                                    @click="goBack"
-                                >
-                                    <v-icon
-                                        dark
-                                        left
-                                    >
-                                        mdi-arrow-left
-                                    </v-icon>
-                                    Return
-                                </v-btn>
-                                <v-btn
-                                    color="primary"
-                                    v-if="buttonVisible"
-                                    text
-                                    :loading="registerLoading"
-                                    @click="registerDoctor"
-                                >Submit
-                                </v-btn>
-                            </v-row>
-                        </v-col>
-                    </v-card-actions>
                 </v-card>
+                <v-col cols="12">
+                        <v-row justify="center" class="mt-3">
+                            <v-btn
+                                color="primary"
+                                :loading="registerLoading"
+                                @click="registerDoctor"
+                                block
+                                :disabled="value.length === 0"
+                            >Submit
+                            </v-btn>
+                        </v-row>
+                </v-col>
             </v-col>
         </v-row>
-    </v-container>
+    </v-card-text>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from '@/axios'
 
 export default {
     name: "Step4",
@@ -85,7 +66,7 @@ export default {
         }
     },
     created() {
-        axios.get("http://localhost:8080/specializations").then((response) => {
+        axios.get("specializations").then((response) => {
             response.data.forEach((element) => {
                 this.items.push(element.name)
             })
@@ -93,9 +74,6 @@ export default {
     },
 
     methods: {
-        goBack() {
-            this.$emit('goBack', 3)
-        },
         registerDoctor() {
             this.registerLoading = true
             console.log(this.userData)
@@ -103,7 +81,7 @@ export default {
             for (const element in this.userData) {
                 formData.append(element.toString(), this.userData[element])
             }
-            axios.post("http://localhost:8080/doctor/registration", formData, {
+            axios.post("doctor/registration", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
@@ -122,10 +100,9 @@ export default {
 
         }
     },
-
-    computed: {
-        buttonVisible() {
-            return !!this.value;
+    watch: {
+        value(){
+            console.log(this.value)
         }
     }
 }

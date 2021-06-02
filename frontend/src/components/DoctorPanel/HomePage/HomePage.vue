@@ -1,10 +1,10 @@
 <template>
     <v-container fluid>
         <v-row justify="center">
-            <v-col cols="6">
+            <v-col cols="8" lg="6">
                 <TodayVisits @visitStarted="beginVisit"></TodayVisits>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="8" lg="6">
                <NoticeBoard></NoticeBoard>
             </v-col>
         </v-row>
@@ -16,11 +16,8 @@
             transition="fade-transition"
         >
         <v-row justify="center">
-            <v-col cols="6">
+            <v-col cols="8" lg="6">
                 <Activities @cardChosen="cardChosen"></Activities>
-            </v-col>
-            <v-col cols="6">
-                <NoticeBoard></NoticeBoard>
             </v-col>
         </v-row>
         </v-lazy>

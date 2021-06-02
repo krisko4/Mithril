@@ -1,64 +1,72 @@
 <template>
-    <v-main style="background-color: whitesmoke">
+    <v-main>
     <v-container fill-height>
         <MailConfirmComponent v-if="!isAccountActive" :email="email"></MailConfirmComponent>
 <v-container v-else>
-    <v-row class="text-center">
-        <v-col class="mb-4">
-            <h1 class="display-2 font-weight-bold mb-3">
-                Login panel
-            </h1>
-            <h2 class="display-1 font-weight-thin mb-3">
-                Please fill your login credentials to sign in
-            </h2>
-            <transition name="fade">
-                <p style="color:red;" v-if="errorPopped">{{ error }}</p>
-            </transition>
-        </v-col>
-    </v-row>
     <v-row justify="center">
-    <v-col cols="6">
-    <v-form v-model="valid" class="login">
-            <v-row justify="center" >
-                <v-col cols="6">
-                    <v-text-field
-                        type="email"
-                        :rules="emailRules"
-                        outlined
-                        clearable
-                        rounded
-                        label="E-mail"
-                        error-count="1"
-                        required
-                        v-model="email">
+        <v-col cols="3" md="4" sm="5">
+            <v-card elevation="10">
+                <v-card-title class="display-2">
+                    <v-spacer></v-spacer>
+                    Welcome
+                    <v-spacer></v-spacer>
+                </v-card-title>
+                <v-card-subtitle class="text-center">
+                    Sign in to your doctor panel
+                </v-card-subtitle>
+                    <transition name="fade">
+                        <p style="color:red;" class="text-center" v-if="errorPopped">{{ error }}</p>
+                    </transition>
+                <v-card-text class="text-center">
+                    <v-row justify="center">
+                        <v-col cols="10">
+                            <v-form v-model="valid" class="login">
+                                <v-text-field
+                                    type="email"
+                                    :rules="emailRules"
+                                    clearable
+                                    label="E-mail"
+                                    error-count="1"
+                                    required
+                                    prepend-inner-icon="mdi-account-outline"
+                                    v-model="email">
 
-                    </v-text-field>
-                    <v-text-field
-                        type="password"
-                        :rules="passwordRules"
-                        outlined
-                        clearable
-                        rounded
-                        label="Password"
-                        error-count="5"
-                        required
-                        v-model="password"
-                    >
-                    </v-text-field>
-
-
-                </v-col>
-            </v-row>
-    </v-form>
-    </v-col>
-    </v-row>
-    <v-row justify="center" class="mt-2">
-
-        <transition name="fade">
-            <v-btn large class="my-1 mx-sm-1 w-full w-sm-auto" color="primary" @click="login" :disabled="!buttonEnabled" >Sign in
-            </v-btn>
-        </transition>
-
+                                </v-text-field>
+                                <v-text-field
+                                    type="password"
+                                    :rules="passwordRules"
+                                    clearable
+                                    label="Password"
+                                    error-count="5"
+                                    required
+                                    prepend-inner-icon="mdi-lock-outline"
+                                    v-model="password"
+                                >
+                                </v-text-field>
+                            </v-form>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <transition name="fade">
+                        <v-col cols="10">
+                            <v-btn
+                                color="primary"
+                                class="mb-4"
+                                @click="login"
+                                :disabled="!buttonEnabled"
+                                block
+                                large
+                            >
+                                Sign in
+                            </v-btn>
+                        </v-col>
+                    </transition>
+                    <v-spacer></v-spacer>
+                </v-card-actions>
+            </v-card>
+        </v-col>
     </v-row>
 </v-container>
     </v-container>
@@ -66,7 +74,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 import MailConfirmComponent from "@/components/Registration/Confirmation/MailConfirmation";
 export default {
     name: "Login",
@@ -98,14 +106,14 @@ export default {
 
         }
     },
+
+
     methods : {
         login(){
-            console.log(this.email)
             axios.post('http://localhost:8080/login', {
                 email: this.email,
                 password: this.password
             }).then((response) => {
-                console.log(response.data)
                 localStorage.setItem('email', this.email)
                 localStorage.setItem('user', response.data.token)
                 localStorage.setItem('firstName', response.data.firstName)
@@ -123,7 +131,6 @@ export default {
                     return
                 }
                 this.error = error.response.data.message
-                console.log(error)
             })
         },
         showButton() {
@@ -132,7 +139,6 @@ export default {
     },
     watch: {
         valid() {
-            console.log(this.valid)
             setTimeout(this.showButton, 200);
             this.$emit('validCheck', this.valid)
         }

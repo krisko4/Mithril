@@ -22,7 +22,7 @@
             </v-list-item-avatar>
         </v-list-item>
         <v-card-text>
-            <v-tabs v-model="tabIndex">
+            <v-tabs grow v-model="tabIndex">
                 <v-tab>Interview</v-tab>
                 <v-tab>Research</v-tab>
                 <v-tab>Referrals</v-tab>
@@ -176,7 +176,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 
 export default {
     name: "VisitDetailsComponent",
@@ -212,7 +212,7 @@ export default {
                medicationIds.push(medication.id)
             })
             console.log(medicationIds)
-            axios.post('http://localhost:8080/visits', {
+            tokenAxios.post('visits', {
                 date: this.visitData.date,
                 duration: this.visitData.duration,
                 doctorId: localStorage.getItem('id'),
@@ -221,10 +221,6 @@ export default {
                 interview: this.visitData.interview,
                 medicationIds: medicationIds,
                 referrals: this.visitData.referrals
-            }, {
-                headers: {
-                    'Authorization' : 'Bearer ' + localStorage.getItem('user')
-                }
             }).then((response) => {
                 console.log(response.data)
 

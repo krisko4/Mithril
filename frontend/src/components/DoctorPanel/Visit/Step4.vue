@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 import VisitDetails from "@/components/DoctorPanel/MyPatients/PatientHistory/VisitDetails";
 
 
@@ -219,7 +219,7 @@ export default {
                 this.loading = false
                 return
             }
-           axios.get('http://localhost:8080/medications', {
+            tokenAxios.get('medications', {
                params: {
                    name: val
                }

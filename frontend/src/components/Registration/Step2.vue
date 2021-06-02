@@ -1,15 +1,11 @@
 <template>
-    <v-container>
-
+    <v-card-text>
         <v-row class="text-center">
             <v-col class="mb-4">
-                <h1 class="display-2 font-weight-bold mb-3">
-                    Registration panel
-                </h1>
-                <h2 class="display-1 font-weight-thin mb-3">
+                <h2 class="display-1 font-weight-bold mb-3">
                     Step 2
                 </h2>
-                <h3 class="display-1 font-weight-thin mb-3">
+                <h3 class="headline font-weight-thin mb-3">
                     <i>Personal data</i>
                 </h3>
                 <transition name="fade">
@@ -18,10 +14,8 @@
             </v-col>
         </v-row>
         <v-row justify="center">
-            <v-col cols="5" align="center">
-
+            <v-col cols="10" align="center">
                 <v-form ref="form" v-model="valid" class="login">
-
                     <v-row justify="center">
                         <v-col cols="6">
 
@@ -29,8 +23,6 @@
                                 @keypress="isLetter($event)"
                                 label="First name"
                                 :rules="[v => !!v || 'Please enter your first name.']"
-                                outlined
-                                rounded
                                 required
                                 v-model="firstName"
                                 type="text"
@@ -41,8 +33,6 @@
                                 @keypress="isLetter($event)"
                                 label="Last name"
                                 :rules="[v => !!v || 'Please enter your last name.']"
-                                outlined
-                                rounded
                                 required
                                 v-model="lastName"
                             ></v-text-field>
@@ -53,8 +43,6 @@
                             <v-text-field
                                 @keypress="isLetter($event)"
                                 label="Second name (optional)"
-                                outlined
-                                rounded
                                 v-model="secondName"
                             ></v-text-field>
                         </v-col>
@@ -63,8 +51,6 @@
                                 @keypress="isNumber($event)"
                                 label="Phone"
                                 :rules="[v => !!v || 'Please enter your phone number.']"
-                                rounded
-                                outlined
                                 required
                                 v-model="phone"
                             ></v-text-field>
@@ -84,8 +70,6 @@
                                     label="Birthdate"
                                     prepend-icon="mdi-calendar"
                                     readonly
-                                    outlined
-                                    rounded
                                     v-bind="attrs"
                                     v-on="on"
                                 ></v-text-field>
@@ -129,8 +113,6 @@
                                 label="Address Line"
                                 placeholder="Address"
                                 counter="25"
-                                outlined
-                                rounded
                                 required
                             ></v-text-field>
                         </v-col>
@@ -146,8 +128,6 @@
                                 label="Address Line No.2 (house number)"
                                 placeholder="Address"
                                 counter="5"
-                                outlined
-                                rounded
                                 required
                             ></v-text-field>
                         </v-col>
@@ -159,8 +139,6 @@
                                 :rules="[() => !!postCode || 'This field is required']"
                                 label="ZIP / Postal Code"
                                 required
-                                outlined
-                                rounded
                                 placeholder="Postal code"
                             ></v-text-field>
                         </v-col>
@@ -171,8 +149,6 @@
                                 v-model="city"
                                 :rules="[() => !!city || 'This field is required']"
                                 label="City"
-                                outlined
-                                rounded
                                 placeholder="City"
                                 required
                             ></v-text-field>
@@ -184,8 +160,6 @@
                                 :rules="[() => !!country || 'This field is required']"
                                 :items="countries"
                                 label="Country"
-                                outlined
-                                rounded
                                 placeholder="Select..."
                                 required
                             ></v-autocomplete>
@@ -193,28 +167,22 @@
                     </v-row>
                 </v-form>
                 <v-row justify="center">
-                    <v-col cols="3" align="center">
-                        <v-btn color="primary" @click="goBack">
-                            <v-icon
-                                dark
-                                left
-                            >
-                                mdi-arrow-left
-                            </v-icon>
-                            Return
-                        </v-btn>
-                    </v-col>
-                    <v-col cols="3" align="center">
-                        <v-btn color="primary" @click="validateForm" :disabled="!buttonEnabled" medium>Submit
-                            <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+                    <v-col cols="12" align="center">
+                        <v-btn
+                            color="primary"
+                            @click="validateForm"
+                            :disabled="!buttonEnabled"
+                            large
+                            block
+                        >Submit
                         </v-btn>
                     </v-col>
                 </v-row>
             </v-col>
         </v-row>
+    </v-card-text>
 
 
-    </v-container>
 </template>
 
 <script>
@@ -270,9 +238,7 @@ export default {
         showButton() {
             this.buttonEnabled = this.valid
         },
-        goBack() {
-            this.$emit('goBack', 1)
-        }
+
     },
     watch: {
         valid() {

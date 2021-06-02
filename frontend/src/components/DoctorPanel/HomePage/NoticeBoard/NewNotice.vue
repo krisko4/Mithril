@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 import {format} from "date-fns"
 
 export default {
@@ -64,7 +64,7 @@ export default {
                 doctorId: localStorage.getItem('id'),
                 date: format(new Date(), 'yyyy-MM-dd HH:mm:ss')
             }
-            axios.post('http://localhost:8080/notices', requestNotice)
+            tokenAxios.post('notices', requestNotice)
                 .then(() => {
                     this.$emit('newNoticeSaved')
                     // let notice = {

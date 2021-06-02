@@ -6,10 +6,10 @@
             </v-spacer>
             <v-btn color="primary" @click="newNoticeDialog = true">New notice</v-btn>
         </v-card-title>
+        <v-card-subtitle>The most recent news from your colleagues</v-card-subtitle>
         <v-dialog max-width="600px" v-model="newNoticeDialog">
             <NewNotice @newNoticeSaved="newNoticeDialog = false"></NewNotice>
         </v-dialog>
-        <v-card-subtitle>The most recent news from your colleagues</v-card-subtitle>
         <v-divider class="mx-4"></v-divider>
         <v-card-text v-if="!noticesEmpty">
             <div class="text-center">
@@ -23,11 +23,15 @@
                 <v-timeline-item
                     v-for="(notice, i) in notices"
                     :key="i"
+                    icon="mdi-star"
                 >
                     <template v-slot:opposite>
                         <span><b>{{ notice.date }}</b></span>
                     </template>
-                    <v-card min-height="180px" :class="notice.animation" @animationend="notice.animation=false">
+                    <v-hover
+                        v-slot="{ hover }"
+                    >
+                    <v-card min-height="180px" :elevation="hover ? 16 : 2" :class="notice.animation" @animationend="notice.animation=false">
                         <v-list-item three-line>
                             <v-list-item-content>
                                 <div class="overline mb-4">
@@ -49,6 +53,7 @@
                             </v-btn>
                         </v-card-actions>
                     </v-card>
+                    </v-hover>
                 </v-timeline-item>
             </v-timeline>
             <div class="text-center">
@@ -90,7 +95,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 import NewNotice from "@/components/DoctorPanel/HomePage/NoticeBoard/NewNotice";
 
 export default {
@@ -116,7 +121,7 @@ export default {
         }
     },
     created() {
-        axios.get('http://localhost:8080/notices').then((response) => {
+        tokenAxios.get('http://localhost:8080/notices').then((response) => {
             if (response.data.length === 0) {
                 this.noticesEmpty = true
                 return
@@ -220,7 +225,7 @@ export default {
                 this.noticeGroupIndex += 3
                 // load notices from database everytime we don't have 3 events from next page loaded yet
                 if (this.allLoadedNotices.length < this.noticeGroupIndex + 5) {
-                    axios.get('http://localhost:8080/notices/before', {
+                   tokenAxios.get('notices/before', {
                         params: {
                             date: this.notices[2].date
                         }

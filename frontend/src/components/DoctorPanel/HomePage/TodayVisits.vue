@@ -1,5 +1,5 @@
 <template>
-    <v-card min-height="903">
+    <v-card min-height="880">
         <v-card-title class="text-h2 text-sm-h2 text-md-h2 text-lg-h2">Schedule</v-card-title>
         <v-card-subtitle>Your planned visits for today</v-card-subtitle>
         <v-divider class="mx-4"></v-divider>
@@ -19,14 +19,14 @@
                 </v-calendar>
             </v-sheet>
         </v-card-text>
-        <v-dialog transition="scale-transition" v-model="historyDialog" max-width="600">
+        <v-dialog transition="scale-transition" v-model="historyDialog" max-width="700">
             <PatientHistory @visitStarted="beginVisit" :visitChosen="visitChosen" :selectedVisitDate="selectedVisitDate"  :patientData="patientData"></PatientHistory>
         </v-dialog>
     </v-card>
 </template>
 
 <script>
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 import PatientHistory from "@/components/DoctorPanel/MyPatients/PatientHistory/PatientHistory";
 export default {
     name: "TodayVisits",
@@ -64,7 +64,7 @@ export default {
             }).format()
         }, 1000)
 
-        axios.get('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/visits', {
+        tokenAxios.get('doctors/' + localStorage.getItem('id') + '/visits', {
             params: {
                 date: this.convertDate(this.date),
                 finished: false

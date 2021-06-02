@@ -76,7 +76,7 @@
 
 <script>
 import DatePicker from "@/components/VisitSaving/DatePicker";
-import axios from "axios";
+import {tokenAxios} from "@/axios";
 
 export function timeMask(value) {
     const hours = [
@@ -123,7 +123,7 @@ export default {
 
     created() {
 
-        axios.get('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/schedules')
+        tokenAxios.get('doctors/' + localStorage.getItem('id') + '/schedules')
             .then(response => {
                 let allEvents = []
                 this.visitsSubmitted = true
@@ -153,7 +153,7 @@ export default {
 
         submitVisits() {
             this.loading = true
-            axios.post('http://localhost:8080/doctors/' + localStorage.getItem('id') + '/schedules', {
+            tokenAxios.post('doctors/' + localStorage.getItem('id') + '/schedules', {
                 date: this.date,
                 startHour: this.startHour,
                 endHour: this.endHour,

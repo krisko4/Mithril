@@ -17,7 +17,6 @@
                             :elevation="hover ? 16 : 2"
                             @click="redirect(card.index)"
                         >
-
                             <v-card-title v-text="card.title"></v-card-title>
                             <v-img
                                 :src="card.src"
@@ -25,7 +24,6 @@
                                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                                 height="244px"
                             >
-
                             </v-img>
                         </v-card>
                     </v-hover>
@@ -51,13 +49,12 @@ export default {
                     index: 4
                 },
                 {title: 'My schedule', src: 'http://localhost:8080/images/static/schedule.jpg', flex: 6, index: 3},
-                {title: 'Interact', src: 'http://localhost:8080/images/static/forum.png', flex: 6, index: 3},
+                {title: 'Interact', src: 'http://localhost:8080/images/static/forum.png', flex: 6, index: 6},
             ],
         }
     },
     methods: {
         redirect(index) {
-            console.log(index)
             this.cardIndex = index
             this.$emit('cardChosen', index)
 

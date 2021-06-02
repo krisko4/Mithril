@@ -1,7 +1,6 @@
 <template>
     <v-timeline
-        dense
-        align-top
+
     >
         <v-timeline-item
             v-for="item in myVisitArray"
@@ -9,20 +8,22 @@
             color="primary"
             small
         >
-            <v-row class="pt-1">
-                <v-col cols="3">
-                    <strong>{{ item.hour }}</strong>
-                </v-col>
-                <v-col>
-                    <strong>{{ item.patientName }}</strong>
-                    <div class="caption">
-                        {{ item.reason }}
-                    </div>
-                </v-col>
-                <v-col>
-                    <v-btn small color="primary" @click.stop="showPatientDetails(item)">Details</v-btn>
-                </v-col>
-            </v-row>
+            <span slot="opposite" class="body-1">{{ item.hour }}</span>
+            <v-card>
+                <v-card-title>
+                    {{ item.patientName }}
+                </v-card-title>
+                <v-card-subtitle v-if="item.reason">
+                   {{item.reason}}
+                </v-card-subtitle>
+                <v-card-subtitle v-else>
+                    No reason specified
+                </v-card-subtitle>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click.stop="showPatientDetails(item)">Details</v-btn>
+                </v-card-actions>
+            </v-card>
         </v-timeline-item>
         <v-dialog max-width="600" v-model="patientDetails">
             <PatientHistory :patientData="patientData"></PatientHistory>
@@ -57,8 +58,7 @@ export default {
         }
     },
     created() {
-        console.log(this.visits)
-        this.visits.forEach((element) => {
+        this.visits.filter((element) => {
             const date = new Date(element.date)
             const hour = date.toTimeString().split(' ')[0]
             this.myVisitArray.push({

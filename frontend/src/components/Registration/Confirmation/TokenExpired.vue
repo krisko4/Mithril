@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
     name: "TokenExpired",
@@ -38,7 +38,7 @@ export default {
             this.$router.push({name:'home'})
         },
         refresh(){
-            axios.post('http://localhost:8080/doctor/registration/resendEmailToken', {
+            axios.post('doctor/registration/resendEmailToken', {
                 token: this.token
             })
                 .then((response) => {

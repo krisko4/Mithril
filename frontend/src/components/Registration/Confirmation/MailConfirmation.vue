@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
     name: "MailConfirmation",
@@ -39,7 +39,7 @@ export default {
     methods: {
         resendEmail(){
             this.resendButtonLoading = true
-            axios.post('http://localhost:8080/doctor/registration/resendEmail', {
+            axios.post('doctor/registration/resendEmail', {
                 email: this.email,
                 firstName: this.firstName
             }).then((response) => {
@@ -52,7 +52,7 @@ export default {
     },
     created(){
         console.log(this.email)
-        axios.get('http://localhost:8080/users/nameByMail',{
+        axios.get('users/nameByMail',{
             params: {
                 email: this.email
             }

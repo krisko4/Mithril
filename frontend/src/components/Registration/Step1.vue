@@ -1,15 +1,11 @@
 <template>
-    <v-container>
-
+    <v-card-text>
         <v-row class="text-center">
             <v-col class="mb-4">
-                <h1 class="display-2 font-weight-bold mb-3">
-                    Registration panel
-                </h1>
-                <h2 class="display-1 font-weight-thin mb-3">
+                <h2 class="display-1 font-weight-bold mb-3">
                     Step 1
                 </h2>
-                <h3  class="display-1 font-weight-thin mb-3">
+                <h3  class="headline font-weight-thin mb-3">
                     <i>Login credentials </i>
                 </h3>
                 <transition name="fade">
@@ -18,16 +14,12 @@
             </v-col>
         </v-row>
         <v-form ref="form" v-model="valid" class="login">
-
-
             <v-row justify="center">
-                <v-col cols="3" sm="5" xs="8" xl="3" lg="4">
+                <v-col cols="7">
                         <v-text-field
                             type="email"
                             :rules="emailRules"
-                            outlined
                             clearable
-                            rounded
                             label="E-mail"
                             error-count="1"
                             required
@@ -36,9 +28,7 @@
                         <v-text-field
                             type="email"
                             :rules="emailRules"
-                            outlined
                             clearable
-                            rounded
                             label="Confirm e-mail"
                             error-count="1"
                             required
@@ -47,9 +37,7 @@
                         <v-text-field
                             type="password"
                             :rules="passwordRules"
-                            outlined
                             clearable
-                            rounded
                             label="Password"
                             error-count="5"
                             required
@@ -57,10 +45,7 @@
                         ></v-text-field>
                         <v-text-field
                             type="password"
-
-                            outlined
                             clearable
-                            rounded
                             label="Confirm password"
                             :rules="[
             v => !!v || 'Please confirm your password.',
@@ -70,25 +55,23 @@
                             required
                             v-model="confirmPassword"
                         ></v-text-field>
-                        <v-row justify="center" class="mt-2">
-                            <transition name="fade">
-                                <v-btn color="primary" @click="validateAndContinue" :disabled="!buttonEnabled" medium>Submit
-                                    <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
-                                </v-btn>
-                            </transition>
-                        </v-row>
+                </v-col>
+            </v-row>
+            <v-row justify="center">
+                <v-col cols="7">
+                    <transition name="fade">
+                        <v-btn color="primary" large @click="validateAndContinue" block :disabled="!buttonEnabled" medium>Submit
+                        </v-btn>
+                    </transition>
                 </v-col>
             </v-row>
         </v-form>
 
-    </v-container>
-
-
+    </v-card-text>
 </template>
 
 <script>
-//import axios from 'axios'
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
     name: "Step1",
@@ -150,7 +133,7 @@ export default {
                 this.errorPopped = true;
                 return
             }
-            axios.get("http://localhost:8080/users/email", {
+            axios.get("users/email", {
                 params: {
                     "email": this.email
                 }
