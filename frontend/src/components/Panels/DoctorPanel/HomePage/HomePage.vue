@@ -27,9 +27,9 @@
 <script>
 
 
-import NoticeBoard from "@/components/DoctorPanel/HomePage/NoticeBoard/NoticeBoard";
-import Activities from "@/components/DoctorPanel/HomePage/Activities";
-import TodayVisits from "@/components/DoctorPanel/HomePage/TodayVisits";
+import NoticeBoard from "@/components/Panels/DoctorPanel/HomePage/NoticeBoard/NoticeBoard";
+import Activities from "@/components/Panels/DoctorPanel/HomePage/Activities";
+import TodayVisits from "@/components/Panels/DoctorPanel/HomePage/TodayVisits";
 export default {
     name: "HomePage",
     components: {TodayVisits, Activities, NoticeBoard},
