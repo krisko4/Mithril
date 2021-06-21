@@ -26,6 +26,8 @@ public class ScheduleController {
                 .collect(Collectors.toList());
     }
 
+
+
     @GetMapping("doctors/{id}/schedules")
     public List<Schedule> findSchedulesForDoctorBy(@RequestParam(required = false)String date, @PathVariable Long id){
         return scheduleService.findSchedulesForDoctorBy(date, id);

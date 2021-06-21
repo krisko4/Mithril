@@ -1,13 +1,20 @@
 package com.website.demo.message;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.socket.TextMessage;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -16,31 +23,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @CrossOrigin
 public class MessageController {
 
-    private final MessageService messageService;
-    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
-    @MessageMapping("hello")
-    @SendTo("topic/greetings")
-    public TextMessage greeting(String message) throws Exception {
-        return new TextMessage("hello");
-    }
+    private final MessageService messageService;
+
+
 
 
     @PostMapping("new-message")
     public void sendMessage(@RequestBody MessageRequest messageRequest){
-        Message message = messageService.sendMessage(
+         messageService.sendMessage(
                 messageRequest.getContent(),
                 messageRequest.getDate(),
                 messageRequest.getReceiverId(),
                 messageRequest.getSenderId()
         );
-        for(SseEmitter emitter : emitters){
-            try {
-                emitter.send(SseEmitter.event().name("spring").data(message));
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        }
+
     }
 
 

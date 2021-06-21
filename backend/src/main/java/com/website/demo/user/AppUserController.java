@@ -28,20 +28,12 @@ public class AppUserController {
         return appUserService.list();
     }
 
-    @GetMapping("doctors")
-    public List<DoctorDto> getDoctorsBy(@RequestParam(required = false) String date) {
-        return appUserService.getDoctorsBy(date).stream().map(DoctorDto::from).collect(Collectors.toList());
-    }
 
-    @GetMapping("doctors/except-for/{id}")
-    public List<DoctorDto> getDoctorsBy(@PathVariable Long id) {
-        return appUserService.getDoctorsExceptForOne(id);
+
+    @GetMapping("first-name")
+    public String findFirstNameByEmail(@RequestParam String email){
+        return appUserService.findFirstNameByEmail(email);
     }
-//
-//    @GetMapping("nameByMail")
-//    public String findFirstNameByEmail(@RequestParam String email){
-//        return appUserService.findFirstNameByEmail(email);
-//    }
 
 //    @GetMapping("{id}/getName")
 //    public String getNameById(@PathVariable Long id){

@@ -1,28 +1,27 @@
 package com.website.demo.address;
 
+import lombok.Data;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Data
 public class AddressService {
+
+
     private final AddressRepository addressRepository;
 
-    public AddressService(AddressRepository addressRepository) {
-        this.addressRepository = addressRepository;
-    }
 
-    public Address save(Address requestAddress){
 
-        Address address;
-        boolean addressExists = addressRepository.exists(Example.of(requestAddress));
+    public Address getAddressAndSaveIfNotExists(String country, String city, String street, Integer flatNumber, String postCode){
+        Address address = new Address(country, city, street, flatNumber, postCode);
+        boolean addressExists = addressRepository.exists(Example.of(address));
         if (addressExists) {
-            address = addressRepository.findOne(Example.of(requestAddress)).get();
-        } else {
-            address = requestAddress;
-            addressRepository.save(address);
+            return addressRepository.findOne(Example.of(address)).orElseThrow(IllegalStateException::new);
         }
+        addressRepository.save(address);
         return address;
     }
 

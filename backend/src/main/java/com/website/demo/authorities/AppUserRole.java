@@ -20,7 +20,7 @@ public enum AppUserRole {
             VISIT_WRITE,
             PRESCRIPTION_READ,
             PRESCRIPTION_WRITE)),
-    WORKER(Sets.newHashSet()),
+    RECEPTION_WORKER(Sets.newHashSet()),
     PATIENT(Sets.newHashSet());
 
     private final Set<AppUserPermission> permissions;

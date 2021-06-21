@@ -2,18 +2,14 @@
 
 package com.website.demo.visit;
 
-import com.website.demo.patient.Patient;
 import com.website.demo.patient.PatientDto;
-import com.website.demo.user.AppUser;
-import com.website.demo.user.DoctorDto;
+import com.website.demo.user.doctor.DoctorDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

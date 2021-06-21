@@ -23,7 +23,7 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate date;
+    private String date;
     private String startHour;
     private String endHour;
     @ManyToMany(mappedBy = "schedules")
@@ -33,7 +33,7 @@ public class Schedule {
     private int visitDuration;
 
 
-    public Schedule(LocalDate date, String startHour, String endHour, int breakDuration, int visitDuration) {
+    public Schedule(String date, String startHour, String endHour, int breakDuration, int visitDuration) {
         this.date = date;
         this.startHour = startHour;
         this.endHour = endHour;

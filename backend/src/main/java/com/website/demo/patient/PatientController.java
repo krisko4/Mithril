@@ -23,7 +23,7 @@ public class PatientController {
 
 
     @GetMapping("{id}")
-    public Optional<Patient> getPatients(@PathVariable Long id) {
+    public Optional<Patient> getPatient(@PathVariable Long id) {
         return patientService.findPatientById(id);
     }
 
@@ -34,9 +34,9 @@ public class PatientController {
     //   }
 
     @GetMapping
-    public List<PatientDto> getPatientsBy(@RequestParam(required = false) String character, @RequestParam(required = false) Long doctor_id) {
+    public List<PatientDto> getPatientsBy(@RequestParam(required = false) String name, @RequestParam(required = false) Long doctor_id) {
 
-        return patientService.getPatientsBy(character, doctor_id)
+        return patientService.getPatientsBy(name, doctor_id)
                 .stream().map(PatientDto::from)
                 .collect(Collectors.toList());
 

@@ -47,15 +47,15 @@ public class ScheduleService {
     }
 
     public void setSchedule(String date, String startHour, String endHour, int breakDuration, int visitDuration, Long doctorID) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
-        LocalDate localDate = LocalDate.parse(date, formatter);
+       // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
+        //LocalDate localDate = LocalDate.parse(date, formatter);
         Schedule schedule;
         if (!findSchedulesForDoctorBy(date, doctorID).isEmpty()) {
             schedule = findSchedulesForDoctorBy(date, doctorID).get(0);
         } else {
             schedule = new Schedule();
         }
-        schedule.setDate(localDate);
+        schedule.setDate(date);
         schedule.setStartHour(startHour);
         schedule.setEndHour(endHour);
         schedule.setBreakDuration(breakDuration);

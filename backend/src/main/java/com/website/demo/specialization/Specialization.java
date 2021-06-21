@@ -2,7 +2,9 @@ package com.website.demo.specialization;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.website.demo.dispensary.Dispensary;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -10,6 +12,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name="specialization")
+@NoArgsConstructor
 public class Specialization {
 
     @Id
@@ -19,4 +22,9 @@ public class Specialization {
     @ManyToMany(mappedBy = "specializations")
     @JsonBackReference
     private Set<Dispensary> dispensaries;
+
+    public Specialization(String name){
+        this.name = name;
+    }
+
 }

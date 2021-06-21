@@ -20,22 +20,26 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final AppUserRepository appUserRepository;
 
-    public Message sendMessage(String content,
+    public void sendMessage(String content,
                             String date,
                             Long receiverId,
                             Long senderId) {
+        // we don't want empty messages in our db
+        if (content.length() == 0) {
+            return;
+        }
         AppUser sender = appUserRepository.findById(senderId).orElseThrow(IllegalStateException::new);
         AppUser receiver = appUserRepository.findById(receiverId).orElseThrow(IllegalStateException::new);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ENGLISH);
         LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
-        return new Message(
+        Message message = new Message(
                 content,
                 localDateTime,
                 sender,
                 receiver
-
         );
-       // messageRepository.save(message);
+        messageRepository.save(message);
+
     }
 
 

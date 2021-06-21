@@ -1,7 +1,8 @@
 package com.website.demo.registration;
 
-import com.website.demo.address.Address;
+
 import com.website.demo.authorities.AppUserRole;
+import com.website.demo.specialization.SpecializationNames;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -40,6 +42,8 @@ public class RegistrationRequest {
     private final String postCode;
     @Pattern(regexp = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")
     private final String birthdate;
+    private final String registrationType;
+    private final String specializationNames;
     private final MultipartFile image;
     private AppUserRole role;
 

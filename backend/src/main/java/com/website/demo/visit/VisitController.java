@@ -33,21 +33,11 @@ public class VisitController {
                 );
     }
 
-
-//    @GetMapping("doctors/{id}/visits")
-//    public List<VisitDto> getVisitsForDoctorBy(@PathVariable Long id,
-//                                               @RequestParam(required = false) String date,
-//                                               @RequestParam(required = false) Long patient_id,
-//                                               @RequestParam(required = false) Boolean finished) {
-//        return visitService.getVisitsForDoctorBy(id, date, patient_id, finished).stream().map(VisitDto::from).collect(Collectors.toList());
-//    }
-//
-//    @GetMapping("patients/{id}/visits")
-//    public List<VisitDto> getAllVisitsForPatient(@PathVariable Long id, @RequestParam(required = false) Boolean finished){
-//        return visitService.getAllVisitsForPatient(id, finished).stream().map(VisitDto::from).collect(Collectors.toList());
-//    }
-
-
+    @GetMapping("doctors/{id}/visit-hours")
+    public List<LocalTime> getAvailableVisitHoursByDate(@PathVariable Long id,
+                                                        @RequestParam String date){
+        return visitService.getAvailableVisitHoursForDoctorByDate(date, id);
+    }
 
     @GetMapping("doctors/{id}/visits")
     @ResponseBody
@@ -59,7 +49,8 @@ public class VisitController {
     }
 
     @GetMapping("patients/{id}/visits")
-    public List<VisitResponse> getAllVisitsForPatient(@PathVariable Long id, @RequestParam(required = false) Boolean finished){
+    public List<VisitResponse> getAllVisitsForPatient(@PathVariable Long id,
+                                                      @RequestParam(required = false) Boolean finished){
         return visitService.getFullVisitDataForPatient(id, finished);
     }
 

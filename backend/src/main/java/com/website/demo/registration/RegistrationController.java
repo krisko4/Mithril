@@ -1,45 +1,40 @@
 package com.website.demo.registration;
 
-import antlr.Token;
-import com.github.javafaker.App;
 import com.website.demo.address.Address;
 import com.website.demo.address.AddressService;
 import com.website.demo.authorities.AppUserRole;
-import com.website.demo.registration.token.ConfirmationToken;
-import com.website.demo.registration.token.ConfirmationTokenRepository;
+import com.website.demo.registration.ConfirmationRequest;
+import com.website.demo.registration.RegistrationRequest;
+import com.website.demo.registration.RegistrationService;
+import com.website.demo.registration.TokenRequest;
 import com.website.demo.registration.token.ConfirmationTokenService;
+import com.website.demo.specialization.SpecializationService;
 import com.website.demo.user.AppUser;
-import com.website.demo.user.AppUserRepository;
-import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
-import java.util.List;
-import java.util.Optional;
 
-@CrossOrigin
 @RestController
-@RequestMapping(path = "doctor/registration")
-@AllArgsConstructor
-public class RegistrationDoctorController {
+@Data
+@CrossOrigin
+@RequestMapping("registration")
+public class RegistrationController {
 
     private final RegistrationService registrationService;
-    private final ConfirmationTokenService confirmationTokenService;
     private final AddressService addressService;
-
-
-    @PostMapping("test")
-    public String test(@RequestBody @Valid RegistrationRequest request){
-        AppUser appUser = new AppUser(request.getFirstName(), request.getSecondName());
-        return "abc";
-    }
-
+    private final ConfirmationTokenService confirmationTokenService;
+    private final SpecializationService specializationService;
 
     @PostMapping
-    public String register(@ModelAttribute @Valid RegistrationRequest request){
-        request.setRole(AppUserRole.DOCTOR);
+    public void register(@ModelAttribute @Valid RegistrationRequest request){
+        AppUserRole role;
+        if(request.getRegistrationType().equals("doctorType")){
+            role = AppUserRole.DOCTOR;
+        }
+        else{
+            role = AppUserRole.RECEPTION_WORKER;
+        }
         Address requestAddress = new Address(
                 request.getCountry(),
                 request.getCity(),
@@ -47,45 +42,46 @@ public class RegistrationDoctorController {
                 request.getFlatNumber(),
                 request.getPostCode()
         );
-        AppUser appUser =   new AppUser(
+        AppUser appUser =  new AppUser(
                 request.getFirstName(),
                 request.getSecondName(),
                 request.getLastName(),
                 request.getEmail(),
                 request.getPassword(),
                 request.getPhone(),
-                addressService.save(requestAddress),
+                addressService.getAddressAndSaveIfNotExists(requestAddress.getCountry(),
+                        requestAddress.getCity(),
+                        requestAddress.getStreet(),
+                        requestAddress.getFlatNumber(),
+                        requestAddress.getPostCode()),
                 registrationService.birthdayToLocalDate(request.getBirthdate()),
-                request.getRole()
+                role
         );
-        return registrationService.register(appUser, request.getImage());
+        registrationService.register(appUser, request.getImage());
+        if(role == AppUserRole.DOCTOR){
+            specializationService.setSpecializationsForDoctor(appUser, request.getSpecializationNames());
+        }
     }
 
 
-    @GetMapping(path = "confirm")
+    @GetMapping("confirm")
     public String confirm(@RequestParam("token") String token){
         return registrationService.confirmToken(token);
     }
 
 
 
-
-    @PostMapping("resendEmail")
+    @PostMapping("resend-email")
     public void resendEmail(@RequestBody ConfirmationRequest confirmationRequest){
         registrationService.resendEmail(confirmationRequest.getEmail(), confirmationRequest.getFirstName());
     }
 
 
-    @PostMapping("resendEmailToken")
+    @PostMapping("resend-token")
     public void resendEmailToken(@RequestBody TokenRequest tokenRequest){
         AppUser appUser = confirmationTokenService.getUserByToken(tokenRequest.getToken());
         registrationService.resendEmail(appUser.getEmail(), appUser.getFirstName());
     }
-
-
-
-
-
 
 
 

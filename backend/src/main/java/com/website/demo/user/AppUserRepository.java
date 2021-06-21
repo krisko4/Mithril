@@ -1,14 +1,12 @@
 package com.website.demo.user;
 
-import com.github.javafaker.App;
-import com.website.demo.schedule.Schedule;
+import com.website.demo.user.doctor.DoctorDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +15,17 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     Optional<AppUser> findByEmail(String email);
 
-    Optional<AppUser> findByPassword(String password);
+    @Query("select u.firstName from AppUser u where u.email = ?1")
+    Optional<String> findFirstNameByEmail(String email);
+
 
     boolean existsByEmail(String email);
 
+    @Query("select a from AppUser a")
+    List<AppUser> findAllDoctors();
 
+//    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName,  a.email, a.phone, a.id) from AppUser a")
+//    List<DoctorDto> findAllDoctors();
 
     Optional<AppUser> findByEmailAndPassword(String email, String password);
 
@@ -29,7 +33,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Modifying
     @Query("UPDATE AppUser a " +
             "SET a.enabled = true WHERE a.email = ?1")
-    int enableAppUser(String email);
+    void enableAppUser(String email);
 
     @Transactional
     @Modifying
@@ -37,9 +41,11 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             "SET a.imageName = ?1 WHERE a.email = ?2")
     void setImageName(String imagePath, String email);
 
-    List<AppUser> findAllBySchedules_Date(String date);
+    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName,  a.email, a.phone, a.id) from AppUser a join a.schedules schedule where schedule.date = ?1")
+    List<DoctorDto> findAllByScheduleDate(String date);
 
-    @Query("select new com.website.demo.user.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName) from AppUser a where a.id <> ?1")
+
+    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName, a.id) from AppUser a where a.id <> ?1")
     List<DoctorDto> findAllExceptFor(Long id);
 
     @Transactional

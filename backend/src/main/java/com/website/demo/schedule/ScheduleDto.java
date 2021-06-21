@@ -12,7 +12,7 @@ import java.util.Date;
 @Setter
 public class ScheduleDto {
     private Long id;
-    private LocalDate date;
+    private String date;
     private String startHour;
     private String endHour;
 

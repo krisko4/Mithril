@@ -31,7 +31,15 @@ public class LoginService {
         AppUser appUser = (AppUser) appUserService.loadUserByUsername(email);
         String token =  jwtUtil.generateToken(appUser);
         return new LoginResponse(
-                token, email, appUser.getFirstName(), appUser.getSecondName(), appUser.getLastName(), appUser.getId(), appUser.getImageName());
+                token,
+                email,
+                appUser.getFirstName(),
+                appUser.getSecondName(),
+                appUser.getLastName(),
+                appUser.getId(),
+                appUser.getImageName(),
+                appUser.getRole()
+                );
 
 
     }

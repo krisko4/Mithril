@@ -27,12 +27,11 @@ public class NoticeService {
     }
 
     public Notice addNotice(String title, String content, Long doctorId, String date) {
-        AppUser appUser = appUserRepository.findById(doctorId).get();
+        AppUser appUser = appUserRepository.findById(doctorId).orElseThrow(IllegalStateException::new);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
         Notice notice = new Notice(title, content, localDateTime,  appUser);
-        noticeRepository.save(notice);
-        return notice;
+        return noticeRepository.save(notice);
     }
 
     public List<Notice> findNoticesBefore(String date) {
@@ -41,5 +40,9 @@ public class NoticeService {
 
     public List<Notice> findNoticesAfter(String date) {
         return noticeRepository.findAfterDate(date);
+    }
+
+    public String sayHello(String name) {
+        return "Heyy " + name;
     }
 }

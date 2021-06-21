@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -31,8 +32,8 @@ public class AppUserService implements UserDetailsService {
 
 
 
-    private final static String USER_NOT_FOUND_MSG = "user with email %s not found";
-    private final static String EMAIL_TAKEN_MSG = "email %s is taken";
+    private final static String USER_NOT_FOUND_MSG = "User with email %s not found";
+    private final static String EMAIL_TAKEN_MSG = "E-mail %s is already in use";
     private final AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
@@ -46,8 +47,10 @@ public class AppUserService implements UserDetailsService {
     }
 
     public String findFirstNameByEmail(String email){
-
-        return appUserRepository.findByEmail(email).get().getFirstName();
+        return appUserRepository.findFirstNameByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+//        return appUserRepository.findByEmail(email)
+//                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)))
+//                .getFirstName();
     }
 
 
@@ -58,12 +61,9 @@ public class AppUserService implements UserDetailsService {
         if (userExists) {
             throw new IllegalStateException(String.format(EMAIL_TAKEN_MSG, appUser.getEmail()));
         }
-
         String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPassword);
-
         AppUser save = appUserRepository.save(appUser);
-
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
@@ -71,17 +71,13 @@ public class AppUserService implements UserDetailsService {
                 LocalDateTime.now().plusMinutes(10),
                 save
         );
-
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-
         return token;
     }
 
-    public int enableAppUser(String email) {
-        return appUserRepository.enableAppUser(email);
+    public void enableAppUser(String email) {
+         appUserRepository.enableAppUser(email);
     }
-
 
     public void checkEmailAvailability(String email) {
         if (appUserRepository.existsByEmail(email)) throw new IllegalStateException("E-mail already exists");
@@ -96,33 +92,20 @@ public class AppUserService implements UserDetailsService {
     }
 
 
-    public List<AppUser> getDoctorsBy(String date){
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
-       // LocalDate localDate = LocalDate.parse(date, formatter);
-        if(date == null){
-            return appUserRepository.findAll();
-        }
-        return appUserRepository.findAllBySchedules_Date(date);
-    }
-
-    public List<DoctorDto> getDoctorsExceptForOne(Long id){
-        return appUserRepository.findAllExceptFor(id);
-    }
-
-
     public String getNameById(Long id) {
-        AppUser appUser = appUserRepository.findById(id).get();
+        AppUser appUser = findById(id);
         return appUser.getFirstName() + " " + appUser.getSecondName() + " " + appUser.getLastName();
     }
 
     public void setSchedule(Schedule schedule, Long id) {
-        AppUser appUser = appUserRepository.findById(id).get();
+        AppUser appUser = findById(id);
         if(!appUser.getSchedules().contains(schedule)){
             appUserRepository.setSchedule(schedule.getId(), id);
         }
     }
 
     public AppUser findById(Long id){
-        return appUserRepository.findById(id).get();
+        return appUserRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id: " + id + "not found"));
+
     }
 }

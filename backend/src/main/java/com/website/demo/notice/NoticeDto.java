@@ -1,6 +1,6 @@
 package com.website.demo.notice;
 
-import com.website.demo.user.DoctorDto;
+import com.website.demo.user.doctor.DoctorDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;

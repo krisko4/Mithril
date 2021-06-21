@@ -60,13 +60,13 @@ public class VisitService {
     }
 
 
-    public List<LocalTime> getAvailableVisitHoursForDoctorByDate(String date, Long doctor_id) {
-        Schedule schedule = scheduleService.findSchedulesForDoctorBy(date, doctor_id).get(0);
+    public List<LocalTime> getAvailableVisitHoursForDoctorByDate(String date, Long doctorId) {
+        Schedule schedule = scheduleService.findSchedulesForDoctorBy(date, doctorId).get(0);
         LocalTime startHour = LocalTime.parse(schedule.getStartHour());
         LocalTime endHour = LocalTime.parse(schedule.getEndHour());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         LocalDate localDate = LocalDate.parse(date, formatter);
-        List<Visit> visitList = visitRepository.findAllVisitsForOneDoctorByDate(localDate, doctor_id);
+        List<Visit> visitList = visitRepository.findAllVisitsForOneDoctorByDate(localDate, doctorId);
         List<LocalTime> visitHourList = new ArrayList<>();
         if (!visitList.isEmpty()) {
             for (Visit visit : visitList) {
@@ -81,7 +81,7 @@ public class VisitService {
             if (!visitHourList.contains(startHour)) {
                 hourList.add(startHour);
             }
-            startHour = startHour.plusMinutes(20);
+            startHour = startHour.plusMinutes(schedule.getVisitDuration() + schedule.getBreakDuration());
         }
         return hourList;
     }
@@ -109,7 +109,6 @@ public class VisitService {
             }
             return visitRepository.findAllVisitsForOneDoctorByDate(localDate, doctorId);
 
-
         }
         if (patientId != null && doctorId != null) {
             if (finished != null) {
@@ -129,12 +128,12 @@ public class VisitService {
                          Long[] medicationIds,
                          ReferralRequest[] referrals,
                          String research) {
-        Patient patient = patientRepository.findById(patientId).get();
-        AppUser doctor = appUserRepository.findById(doctorId).get();
+        Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new RuntimeException("Patient not found"));
+        AppUser doctor = appUserRepository.findById(doctorId).orElseThrow(() -> new RuntimeException("Doctor not found"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ENGLISH);
         LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
         Example<Visit> example = Example.of(new Visit(patient, doctor, localDateTime, duration));
-        Visit visit = visitRepository.findOne(example).get();
+        Visit visit = visitRepository.findOne(example).orElseThrow(() -> new RuntimeException("Visit not found"));
         Examination examination = new Examination(interview, research, visit);
         examinationRepository.save(examination);
 
@@ -181,7 +180,6 @@ public class VisitService {
             if (prescription.isPresent()) {
                 prescriptionDto = PrescriptionDto.from(prescription.get());
             }
-
             FinishedVisitResponse visitResponse = new FinishedVisitResponse(
                     VisitDto.from(visit),
                     referralList,
@@ -200,15 +198,8 @@ public class VisitService {
         if (finished == null || finished) {
             return getFullVisitData(visitList);
         }
-
         return visitList.stream().map(VisitDto::from).collect(Collectors.toList());
 
-
-        //            List<VisitResponse> visitResponseList = new ArrayList<>();
-//            for(Visit visit: visitList){
-//                visitResponseList.add(new UnfinishedVisitResponse(VisitDto.from(visit)));
-//            }
-//            return visitResponseList;
     }
 
 

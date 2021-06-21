@@ -2,6 +2,7 @@ package com.website.demo.notice;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -17,15 +18,11 @@ import java.util.stream.Collectors;
 public class NoticeController {
 
     private final NoticeService noticeService;
-    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
-    @RequestMapping("notice-sub")
-    public SseEmitter subscribe(){
-        SseEmitter emitter = new SseEmitter(0L);
-        emitters.add(emitter);
-       // emitter.onCompletion(() -> emitters.remove(emitter));
-        return emitter;
 
+    @GetMapping("yoooo")
+    public String hey(@RequestParam(defaultValue = "Roman") String name){
+        return noticeService.sayHello(name);
     }
 
 
@@ -53,13 +50,6 @@ public class NoticeController {
                noticeRequest.getDoctorId(),
                noticeRequest.getDate()
        ));
-        for(SseEmitter emitter : emitters){
-            try {
-                emitter.send(SseEmitter.event().name("notice").data(noticeDto));
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        }
     }
 
 

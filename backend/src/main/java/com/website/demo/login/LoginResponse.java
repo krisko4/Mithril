@@ -1,6 +1,7 @@
 package com.website.demo.login;
 
 
+import com.website.demo.authorities.AppUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,5 +18,5 @@ public class LoginResponse {
     private String lastName;
     private Long id;
     private String imageName;
-
+    private AppUserRole role;
 }

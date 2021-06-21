@@ -11,11 +11,6 @@ public class RegistrationAdminController {
 
     private final RegistrationService registrationService;
 
-  //  @PostMapping
-  //  public String register(@RequestBody RegistrationRequest request){
-       // request.setRole(AppUserRole.ADMIN);
-       // return registrationService.register(request);
- //   }
 
     @GetMapping(path = "confirm")
     public String confirm(@RequestParam("token") String token){

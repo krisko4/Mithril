@@ -11,6 +11,9 @@ import com.website.demo.user.AppUserService;
 import com.website.demo.validation.EmailValidator;
 import com.website.demo.validation.PasswordValidator;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,15 +25,15 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class RegistrationService {
+public class RegistrationService  {
 
     private static final String EMAIL_NOT_VALID_MSG = "E-mail %s is invalid";
+    private final static String USER_NOT_FOUND_MSG = "User with email %s not found";
     private static final String PASSWORD_NOT_VALID_MSG = "Password %s is invalid";
     private final EmailValidator emailValidator;
     private final PasswordValidator passwordValidator;
     private final AppUserService appUserService;
     private final AppUserRepository appUserRepository;
-    private final AddressRepository addressRepository;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
     private final String CONFIRMATION_LINK = "http://localhost:8081/confirm/";
@@ -41,62 +44,16 @@ public class RegistrationService {
         return LocalDate.parse(birthdateString, formatter);
     }
 
-    public String register(AppUser appUser, MultipartFile image) {
-
+    public void register(AppUser appUser, MultipartFile image) {
+        String email = appUser.getEmail();
         // resending email confirmation message for existing user
         if(appUserRepository.existsByEmail(appUser.getEmail())){
-            appUser = appUserRepository.findByEmail(appUser.getEmail()).get();
+            appUser = appUserRepository.findByEmail(appUser.getEmail()).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
             if(!appUser.isEnabled()){
                 resendEmail(appUser.getEmail(), CONFIRMATION_LINK);
             }
         }
-/*
-        boolean isValidEmail = emailValidator.test(appUser.getEmail());
-        boolean isValidPassword = passwordValidator.test(appUser.getPassword());
-        if (!isValidEmail) {
-            throw new IllegalStateException(String.format(EMAIL_NOT_VALID_MSG, appUser.getEmail()));
-        }
-        if (!isValidPassword) {
-            throw new IllegalStateException(String.format(PASSWORD_NOT_VALID_MSG, appUser.getEmail()));
-        }*/
-
- /*       Address requestAddress = new Address(
-                request.getCountry(),
-                request.getCity(),
-                request.getStreet(),
-                request.getFlatNumber(),
-                request.getPostCode()
-        );
-*/
-        /*
-        Address address;
-        boolean addressExists = addressRepository.exists(Example.of(requestAddress));
-        if (addressExists) {
-            address = addressRepository.findOne(Example.of(requestAddress)).get();
-        } else {
-            address = requestAddress;
-            addressRepository.save(address);
-        }*/
-      //  Address address = addressRepository.save(requestAddress);
-
-   /*     String birthdateString = request.getBirthdate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate birthdate = LocalDate.parse(birthdateString, formatter);
-
-        AppUser appUser =   new AppUser(
-                request.getFirstName(),
-                request.getSecondName(),
-                request.getLastName(),
-                request.getEmail(),
-                request.getPassword(),
-                request.getPhone(),
-                address,
-                birthdate,
-                request.getRole()
-        );*/
-
         String token = appUserService.signUp(appUser);
-
         if(image != null) {
             // full path to project directory
             String projectDirectory = new File("").getAbsolutePath();
@@ -111,30 +68,24 @@ public class RegistrationService {
                 throw new RuntimeException("Failed to transfer file to destinated directory.");
             }
             appUserService.setImageName(originalFilename, appUser.getEmail());
-
         }
         emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), CONFIRMATION_LINK + token));
-        return token;
+      //  return token;
     }
 
     @Transactional
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
                 .orElseThrow(() -> new IllegalStateException("Token not found"));
-
         if (confirmationToken.getConfirmedAt() != null) {
             throw new IllegalStateException("E-mail already confirmed");
         }
-
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
-
         if (expiredAt.isBefore(LocalDateTime.now())) {
             throw new IllegalStateException("Token expired");
         }
-
         confirmationTokenService.setConfirmedAt(token);
         appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
-
         return "confirmed";
     }
 
@@ -208,7 +159,8 @@ public class RegistrationService {
     }
 
     public String resendEmail(String email, String firstName) {
-        AppUser appUser = appUserRepository.findByEmail(email).get();
+        AppUser appUser = appUserRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,

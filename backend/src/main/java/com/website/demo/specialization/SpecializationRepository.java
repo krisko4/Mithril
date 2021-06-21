@@ -1,9 +1,12 @@
 package com.website.demo.specialization;
 
 import com.website.demo.dispensary.Dispensary;
+import org.cryptacular.spec.Spec;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +25,13 @@ public interface SpecializationRepository extends JpaRepository<Specialization, 
             "    ) \n" +
             ")", nativeQuery = true)
     Specialization findByNameAndDispensaryName(String name, String dispensaryName);
+
+
+    @Query(value = "select id from specialization where name = ?1", nativeQuery = true)
+    Optional<Long> findIdByName(String name);
+
+    @Transactional
+    @Modifying
+    @Query(value = "insert into doctor_specialization values (?1, ?2)", nativeQuery = true)
+    void setSpecializationForDoctor(Long doctorId, Long specializationId);
 }
