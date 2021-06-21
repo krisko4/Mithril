@@ -1,17 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex'
-import axios from "@/axios";
+
 
 Vue.use(Vuex)
 
 
 export const store = new Vuex.Store({
     state:{
-
+        signedIn: false,
         token: '' | localStorage.getItem('token'),
         date: '',
-        patient: '',
-        doctors: [],
         doctorsAchieved: false,
         patientSelected: false,
         cardIndex: null,
@@ -24,14 +22,20 @@ export const store = new Vuex.Store({
 
     },
     mutations: {
-        getDoctors(state) {
-            if (state.date) {
-                axios.get('users/doctors/' + state.date).then(response => {
-                    state.doctors = response.data
-                    state.doctorsAchieved = true
-                })
-            }
+        // getDoctors(state) {
+        //     if (state.date) {
+        //         // axios.get('users/doctors/' + state.date).then(response => {
+        //         //     state.doctors = response.data
+        //         //     state.doctorsAchieved = true
+        //         // })
+        //     }
+        // },
+        signIn(state){
+            state.signedIn = true
         },
+        signOut(state){
+            state.signedIn = false
+        }
 
 
 

@@ -1,12 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Registration from "@/components/Registration/Registration";
-import VisitComponent from "@/components/VisitSaving/VisitComponent";
 import Confirmation from "@/components/Registration/Confirmation/Confirmation";
 import Login from "@/components/Login/Login";
 import {tokenAxios} from "@/axios";
-import DoctorPanel from "@/components/DoctorPanel/DoctorPanel";
-import PatientDetailsComponent from "@/components/DoctorPanel/MyPatients/PatientDetails";
+import PanelSelector from "@/components/Panels/PanelSelector";
 
 Vue.use(Router);
 
@@ -20,11 +18,6 @@ const RouterVue = new Router({
             component: Registration
         },
         {
-            path: '/visit',
-            name: 'visit',
-            component: VisitComponent
-        },
-        {
             path: '/confirm/:token',
             name: 'confirm',
             component: Confirmation,
@@ -34,21 +27,17 @@ const RouterVue = new Router({
         },
         {
             path: '',
-            name: 'home',
+            name: 'panelSelector',
             meta: {
                 requiresAuth: true
             },
-            component: DoctorPanel
-        },
-        {
-            path: '/test',
-            name: 'test',
-            component: PatientDetailsComponent
+            component: PanelSelector
         },
         {
             path: '/login',
             name: 'login',
             component: Login,
+            meta: { transitionName: 'slide' },
 
         }
 
@@ -63,7 +52,7 @@ const RouterVue = new Router({
 
 RouterVue.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (localStorage.getItem('user') === null) {
+        if (localStorage.getItem('user') === null || localStorage.getItem('role') === null) {
             next({name: 'login'})
         } else {
             tokenAxios.get('jwt').then(() => next())

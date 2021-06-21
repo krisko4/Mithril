@@ -87,7 +87,8 @@
 export default {
     name: "Step3",
     props: {
-        continueClicked: Boolean
+        continueClicked: Boolean,
+        registrationType: String
     },
     data() {
         return {
@@ -102,6 +103,10 @@ export default {
             formData: null,
         }
     },
+    created() {
+        console.log(this.registrationType)
+    },
+
 
     watch: {
         continueClicked() {
@@ -110,7 +115,6 @@ export default {
     },
     methods: {
         browse() {
-            console.log('zawsze tu whcodze')
             this.isLoading = true
             window.addEventListener('focus', () => {
                 this.isLoading = false
@@ -163,7 +167,6 @@ export default {
                 this.image = this.selectedFile
                 this.isSubmitLoading = false
                 this.$toast.success('Image uploaded successfully.')
-
             }, 1000)
 
         },

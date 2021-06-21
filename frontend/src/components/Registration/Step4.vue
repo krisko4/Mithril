@@ -21,7 +21,7 @@
                             multiple
                             chips
                             :loading="loading"
-                            :items="items"
+                            :items="specializations"
                             v-model="value"
                             label="Specializations"
                             cache-items
@@ -31,16 +31,16 @@
 
                 </v-card>
                 <v-col cols="12">
-                        <v-row justify="center" class="mt-3">
-                            <v-btn
-                                color="primary"
-                                :loading="registerLoading"
-                                @click="registerDoctor"
-                                block
-                                :disabled="value.length === 0"
-                            >Submit
-                            </v-btn>
-                        </v-row>
+                    <v-row justify="center" class="mt-3">
+                        <v-btn
+                            color="primary"
+                            :loading="registerLoading"
+                            @click="registerDoctor"
+                            block
+                            :disabled="value.length === 0"
+                        >Submit
+                        </v-btn>
+                    </v-row>
                 </v-col>
             </v-col>
         </v-row>
@@ -58,7 +58,7 @@ export default {
     },
     data() {
         return {
-            items: [],
+            specializations: [],
             loading: false,
             registerLoading: false,
             search: '',
@@ -68,43 +68,47 @@ export default {
     created() {
         axios.get("specializations").then((response) => {
             response.data.forEach((element) => {
-                this.items.push(element.name)
+                this.specializations.push(element.name)
             })
         })
     },
 
     methods: {
+
+        //TODO: add specialization during registration
+
         registerDoctor() {
             this.registerLoading = true
-            console.log(this.userData)
+            let registrationType = {registrationType : 'doctorType'}
+            this.userData = Object.assign(this.userData, registrationType)
+           // let specializationNames = {specializationNames : this.specializations}
             const formData = new FormData()
             for (const element in this.userData) {
-                formData.append(element.toString(), this.userData[element])
+                formData.append(element, this.userData[element])
             }
-            axios.post("doctor/registration", formData, {
+            formData.append('specializationNames', JSON.stringify(this.specializations))
+            for (const value of formData.values()) {
+                console.log(value)
+            }
+            axios.post("registration", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
             })
                 .then(() => {
-                    this.$emit('fourthStepComplete', this.userData.email, this.userData.firstName)
+                    this.$emit('fourthStepComplete')
                     this.$toast.success('Congratulations! You have registered successfully.')
-                    this.registerLoading = false
                 })
                 .catch((error) => {
                         this.$toast.error('Registration failed. Some of the fields are invalid.')
                         console.log(error)
-                        this.registerLoading = false
                     }
-                )
+                ).finally(() => {
+                this.registerLoading = false
+            })
 
         }
     },
-    watch: {
-        value(){
-            console.log(this.value)
-        }
-    }
 }
 </script>
 

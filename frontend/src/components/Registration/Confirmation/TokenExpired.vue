@@ -35,10 +35,10 @@ export default {
     },
     methods: {
         goBack(){
-            this.$router.push({name:'home'})
+            this.$router.push({name:'login'})
         },
         refresh(){
-            axios.post('doctor/registration/resendEmailToken', {
+            axios.post('doctor/registration/resend-token', {
                 token: this.token
             })
                 .then((response) => {

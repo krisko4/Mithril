@@ -14,8 +14,6 @@
                     </v-card-actions>
                 </v-row>
             <v-card-text>Once confirmed, your account will be available to use.</v-card-text>
-
-
         </v-card>
     </v-col>
     </v-row>
@@ -39,20 +37,20 @@ export default {
     methods: {
         resendEmail(){
             this.resendButtonLoading = true
-            axios.post('doctor/registration/resendEmail', {
+            axios.post('registration/resend-email', {
                 email: this.email,
                 firstName: this.firstName
             }).then((response) => {
                 console.log(response)
+                this.$toast.success('Confirmation mail sent successfully!')
             }).finally(()=>{
                 this.resendButtonLoading = false
-                this.$toast.success('Confirmation mail sent successfully!')
             })
         }
     },
     created(){
         console.log(this.email)
-        axios.get('users/nameByMail',{
+        axios.get('users/first-name',{
             params: {
                 email: this.email
             }

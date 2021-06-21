@@ -23,21 +23,17 @@ export default {
         }
 
     },
-    methods:{
-
-
-    },
     created(){
-        axios.get('doctor/registration/confirm?token=' + this.$route.params.token)
-            .then((response)=>{
-                console.log(response)
+        axios.get('registration/confirm?token=' + this.$route.params.token)
+            .then(()=>{
                 this.confirmationSucceeded = true
             }).catch((error) => {
             let errorMessage = error.response.data.message
             if(errorMessage === 'Token expired'){
                 this.tokenExpired = true
+                return
             }
-            else if(errorMessage === 'E-mail already confirmed'){
+            if(errorMessage === 'E-mail already confirmed'){
                 this.emailAlreadyConfirmed = true
             }
         })

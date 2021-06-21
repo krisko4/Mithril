@@ -1,8 +1,6 @@
 <template>
-    <v-main>
-    <v-container fill-height>
+    <v-container fill-height v-if="!$store.state.signedIn">
         <MailConfirmComponent v-if="!isAccountActive" :email="email"></MailConfirmComponent>
-<v-container v-else>
     <v-row justify="center">
         <v-col cols="3" md="4" sm="5">
             <v-card elevation="10">
@@ -12,7 +10,7 @@
                     <v-spacer></v-spacer>
                 </v-card-title>
                 <v-card-subtitle class="text-center">
-                    Sign in to your doctor panel
+                    Sign in to your workspace
                 </v-card-subtitle>
                     <transition name="fade">
                         <p style="color:red;" class="text-center" v-if="errorPopped">{{ error }}</p>
@@ -68,9 +66,7 @@
             </v-card>
         </v-col>
     </v-row>
-</v-container>
     </v-container>
-    </v-main>
 </template>
 
 <script>
@@ -120,10 +116,12 @@ export default {
                 localStorage.setItem('secondName', response.data.secondName)
                 localStorage.setItem('lastName', response.data.lastName)
                 localStorage.setItem('id', response.data.id)
+                localStorage.setItem('role', response.data.role)
                 if(response.data.imageName != null) {
                     localStorage.setItem('imageName', response.data.imageName)
                 }
-                this.$router.push({name: 'home'})
+                this.$store.commit('signIn')
+                this.$router.push({name: 'panelSelector'})
             }).catch((error) => {
                 this.errorPopped = true
                 if(error.response.data.message === 'This user has not been activated'){
@@ -147,5 +145,13 @@ export default {
 </script>
 
 <style scoped>
+.slide-enter-active,
+.slide-leave-active{
+    transition: all 5s;
+}
+
+.slide-enter, .slide-leave-to{
+    transform: translateY(-600px);
+}
 
 </style>
