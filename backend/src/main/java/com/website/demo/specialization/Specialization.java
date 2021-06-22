@@ -2,6 +2,7 @@ package com.website.demo.specialization;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.website.demo.dispensary.Dispensary;
+import com.website.demo.user.AppUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

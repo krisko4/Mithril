@@ -4,6 +4,7 @@ package com.website.demo.visit;
 
 import com.website.demo.patient.PatientDto;
 import com.website.demo.user.doctor.DoctorDto;
+import com.website.demo.visit.response.VisitResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

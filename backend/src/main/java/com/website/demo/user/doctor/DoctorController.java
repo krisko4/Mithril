@@ -1,6 +1,6 @@
 package com.website.demo.user.doctor;
 
-import com.website.demo.user.FriendDto;
+import com.website.demo.user.AppUserDto;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +18,9 @@ public class DoctorController {
         return doctorService.getDoctorsBy(date);
     }
 
-    @GetMapping("doctors/except-for/{id}")
-    public List<FriendDto> getDoctorsBy(@PathVariable Long id) {
-        return doctorService.getDoctorsExceptForOne(id);
-    }
+//    @GetMapping("doctors/except-for/{id}")
+//    public List<AppUserDto> getDoctorsBy(@PathVariable Long id) {
+//        return doctorService.getDoctorsExceptForOne(id);
+//    }
 
 }

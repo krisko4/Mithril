@@ -1,5 +1,7 @@
 package com.website.demo.user;
 
+import com.website.demo.specialization.Specialization;
+import com.website.demo.specialization.SpecializationDto;
 import com.website.demo.user.doctor.DoctorDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
@@ -21,11 +24,13 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     boolean existsByEmail(String email);
 
-    @Query("select a from AppUser a")
-    List<AppUser> findAllDoctors();
+    @Query("select u.specializations from AppUser u where u.id = ?1")
+    Set<Specialization> getSpecializationsForDoctor(Long id);
 
-//    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName,  a.email, a.phone, a.id) from AppUser a")
-//    List<DoctorDto> findAllDoctors();
+
+    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName,  a.email, a.phone, a.id) from AppUser a")
+    List<DoctorDto> findAllDoctors();
+
 
     Optional<AppUser> findByEmailAndPassword(String email, String password);
 
@@ -45,8 +50,10 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     List<DoctorDto> findAllByScheduleDate(String date);
 
 
-    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName, a.id) from AppUser a where a.id <> ?1")
-    List<DoctorDto> findAllExceptFor(Long id);
+
+
+    @Query("select new com.website.demo.user.AppUserDto(a.firstName, a.secondName, a.lastName, a.imageName, a.id) from AppUser a where a.id <> ?1")
+    List<AppUserDto> findAllExceptFor(Long id);
 
     @Transactional
     @Modifying

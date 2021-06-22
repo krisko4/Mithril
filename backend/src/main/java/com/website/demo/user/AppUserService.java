@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -106,6 +107,10 @@ public class AppUserService implements UserDetailsService {
 
     public AppUser findById(Long id){
         return appUserRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id: " + id + "not found"));
+    }
 
+
+    public List<AppUserDto> findUsersExceptForOne(Long id) {
+        return appUserRepository.findAllExceptFor(id);
     }
 }

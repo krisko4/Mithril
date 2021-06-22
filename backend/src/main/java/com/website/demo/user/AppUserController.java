@@ -35,6 +35,11 @@ public class AppUserController {
         return appUserService.findFirstNameByEmail(email);
     }
 
+    @GetMapping("except-for/{id}")
+    public List<AppUserDto> findUsersExceptForOne(@PathVariable Long id){
+        return appUserService.findUsersExceptForOne(id);
+    }
+
 //    @GetMapping("{id}/getName")
 //    public String getNameById(@PathVariable Long id){
 //        return appUserService.getNameById(id);

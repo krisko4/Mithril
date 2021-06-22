@@ -4,13 +4,10 @@ package com.website.demo.visit;
 
 import com.website.demo.dispensary.Dispensary;
 import com.website.demo.dispensary.DispensaryRepository;
-import com.website.demo.dispensary.DispensaryService;
 import com.website.demo.examination.Examination;
 import com.website.demo.examination.ExaminationDto;
 import com.website.demo.examination.ExaminationRepository;
-import com.website.demo.medication.Medication;
 import com.website.demo.medication.MedicationRepository;
-import com.website.demo.medication.MedicationRequest;
 import com.website.demo.patient.Patient;
 import com.website.demo.patient.PatientRepository;
 import com.website.demo.prescription.Prescription;
@@ -25,16 +22,17 @@ import com.website.demo.specialization.Specialization;
 import com.website.demo.specialization.SpecializationRepository;
 import com.website.demo.user.AppUser;
 import com.website.demo.user.AppUserRepository;
+import com.website.demo.visit.response.AvailableHoursResponse;
+import com.website.demo.visit.response.FinishedVisitResponse;
+import com.website.demo.visit.response.VisitResponse;
 import lombok.Data;
-import org.apache.tomcat.jni.Local;
 import org.springframework.data.domain.Example;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -59,14 +57,18 @@ public class VisitService {
         return visitRepository.findAll();
     }
 
+    public List<Visit> findAllVisitsForOneDoctorByDate(LocalDate localDate, Long doctorId){
+        return visitRepository.findAllVisitsForOneDoctorByDate(localDate, doctorId);
+    }
 
-    public List<LocalTime> getAvailableVisitHoursForDoctorByDate(String date, Long doctorId) {
+
+    public AvailableHoursResponse getAvailableVisitHoursForDoctorByDate(String date, Long doctorId) {
         Schedule schedule = scheduleService.findSchedulesForDoctorBy(date, doctorId).get(0);
         LocalTime startHour = LocalTime.parse(schedule.getStartHour());
         LocalTime endHour = LocalTime.parse(schedule.getEndHour());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         LocalDate localDate = LocalDate.parse(date, formatter);
-        List<Visit> visitList = visitRepository.findAllVisitsForOneDoctorByDate(localDate, doctorId);
+        List<Visit> visitList = findAllVisitsForOneDoctorByDate(localDate, doctorId);
         List<LocalTime> visitHourList = new ArrayList<>();
         if (!visitList.isEmpty()) {
             for (Visit visit : visitList) {
@@ -83,7 +85,7 @@ public class VisitService {
             }
             startHour = startHour.plusMinutes(schedule.getVisitDuration() + schedule.getBreakDuration());
         }
-        return hourList;
+        return new AvailableHoursResponse(hourList, schedule.getVisitDuration());
     }
 
 
@@ -120,20 +122,20 @@ public class VisitService {
     }
 
 
-    public void addVisit(String date,
+    public void saveFinishedVisit(String date,
                          Long doctorId,
                          Long patientId,
-                         int duration,
+                        // int duration,
                          String interview,
                          Long[] medicationIds,
                          ReferralRequest[] referrals,
                          String research) {
-        Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new RuntimeException("Patient not found"));
-        AppUser doctor = appUserRepository.findById(doctorId).orElseThrow(() -> new RuntimeException("Doctor not found"));
+        Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new NoSuchElementException("Patient not found"));
+        AppUser doctor = appUserRepository.findById(doctorId).orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ENGLISH);
         LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
-        Example<Visit> example = Example.of(new Visit(patient, doctor, localDateTime, duration));
-        Visit visit = visitRepository.findOne(example).orElseThrow(() -> new RuntimeException("Visit not found"));
+        Example<Visit> example = Example.of(new Visit(patient, doctor, localDateTime));
+        Visit visit = visitRepository.findOne(example).orElseThrow(() -> new NoSuchElementException("Visit not found"));
         Examination examination = new Examination(interview, research, visit);
         examinationRepository.save(examination);
 
@@ -162,8 +164,6 @@ public class VisitService {
         }
         visit.setFinished(true);
         visitRepository.save(visit);
-
-
     }
 
     public List<VisitResponse> getFullVisitData(List<Visit> visitList) {
@@ -206,5 +206,9 @@ public class VisitService {
     public List<VisitResponse> getFullVisitDataForPatient(Long patientId, Boolean finished) {
         List<Visit> visitList = getAllVisitsForPatient(patientId, finished);
         return getFullVisitData(visitList);
+    }
+
+    public void addNewUnfinishedVisit(Long patientId, Long doctorId, String date, int duration) {
+        visitRepository.saveNewVisit(date, duration, doctorId, patientId);
     }
 }

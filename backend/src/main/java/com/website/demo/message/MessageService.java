@@ -51,7 +51,7 @@ public class MessageService {
 
     }
 
-    public List<MessageDto> findMessagesForDoctor(Long id) {
-        return messageRepository.findMessagesForDoctor(id);
+    public List<MessageDto> findMessagesForUser(Long id) {
+        return messageRepository.findMessagesForUser(id);
     }
 }

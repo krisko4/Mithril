@@ -2,6 +2,7 @@ package com.website.demo.user.doctor;
 
 import com.website.demo.schedule.Schedule;
 import com.website.demo.specialization.Specialization;
+import com.website.demo.specialization.SpecializationDto;
 import com.website.demo.user.AppUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,9 +23,9 @@ public class DoctorDto {
     private String email;
     private String phone;
     private String imageName;
-    private Set<Specialization> specializations;
+    private Set<SpecializationDto> specializations;
 //    private Set<VisitDto> visitSet;
-    private Set<Schedule> schedules;
+   // private Set<Schedule> schedules;
 
 
     public DoctorDto(String firstName,
@@ -45,25 +46,7 @@ public class DoctorDto {
 
     }
 
-    public DoctorDto(String firstName,
-                     String secondName,
-                     String lastName,
-                     String imageName,
-                     String email,
-                     String phone,
-                     Long id,
-                     Set<Specialization> specializations
-    ) {
-        this.id = id;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.lastName = lastName;
-        this.imageName = imageName;
-        this.phone = phone;
-        this.email = email;
-        this.specializations = specializations;
 
-    }
 
     public DoctorDto(String firstName,
                      String secondName,

@@ -6,6 +6,8 @@ import com.website.demo.notice.Notice;
 import com.website.demo.notice.NoticeDto;
 import com.website.demo.notice.NoticeRequest;
 import com.website.demo.notice.NoticeService;
+import com.website.demo.visit.VisitDto;
+import com.website.demo.visit.request.NewUnfinishedVisitRequest;
 import lombok.Data;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -14,6 +16,7 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.TextMessage;
+import org.w3c.dom.Text;
 
 @Controller
 @Data
@@ -33,6 +36,12 @@ public class WebSocketController {
                 noticeRequest.getDate()
         );
         return NoticeDto.from(notice);
+    }
+
+    @MessageMapping("/new-visit/{id}")
+    @SendTo("/topic/{id}/today-visits")
+    public String saveNewUnfinishedVisit(@DestinationVariable String id, String date){
+        return date;
     }
 
 

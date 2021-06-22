@@ -22,12 +22,13 @@ import java.util.Date;
 public class Visit {
 
 
-    public Visit(Patient patient, AppUser doctor, LocalDateTime date, int duration) {
+    public Visit(Patient patient, AppUser doctor, LocalDateTime date) {
         this.patient = patient;
         this.doctor = doctor;
         this.date = date;
-        this.duration = duration;
     }
+
+
 
 
     @Id

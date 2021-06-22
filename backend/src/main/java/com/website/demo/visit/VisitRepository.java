@@ -1,8 +1,10 @@
 package com.website.demo.visit;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,4 +30,11 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     List<Visit> findByDoctor_Id(Long doctorId);
 
     List<Visit> findByPatient_idAndFinished(Long patientID, Boolean finished);
+
+    @Transactional
+    @Modifying
+    @Query(value = "insert into visit values (?1, 0, ?2, ?3, ?4)", nativeQuery = true)
+    void saveNewVisit(String date, int duration, Long doctorId, Long patientId);
+
+
 }

@@ -47,9 +47,9 @@ public class MessageController {
         return messageService.findMessagesBy(receiverId, senderId);
     }
 
-    @GetMapping("doctors/{id}/messages")
+    @GetMapping("users/{id}/messages")
     public List<MessageDto> getMessagesBy(@PathVariable Long id){
-        return messageService.findMessagesForDoctor(id);
+        return messageService.findMessagesForUser(id);
     }
 
 }

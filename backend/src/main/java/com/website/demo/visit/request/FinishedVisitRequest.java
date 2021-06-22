@@ -1,4 +1,4 @@
-package com.website.demo.visit;
+package com.website.demo.visit.request;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.website.demo.medication.Medication;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class VisitRequest {
+public class FinishedVisitRequest {
 
     private Long patientId;
     private Long doctorId;

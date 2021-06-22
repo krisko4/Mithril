@@ -16,5 +16,5 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<MessageDto> findMessagesBy(Long receiverId, Long senderId);
 
     @Query(value = "select new com.website.demo.message.MessageDto(m.content, m.date, m.sender.id, m.receiver.id) from message m where m.receiver.id = ?1 ")
-    List<MessageDto> findMessagesForDoctor(Long id);
+    List<MessageDto> findMessagesForUser(Long id);
 }
