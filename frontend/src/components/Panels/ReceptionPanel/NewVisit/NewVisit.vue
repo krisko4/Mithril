@@ -1,14 +1,15 @@
 <template>
+    <v-container fill-height>
     <v-row justify="center" class="mb-3 mt-3">
-        <v-col cols="6" v-if="step === 1">
+        <v-col lg="7" cols="12" v-if="step === 1">
         <transition name="fade" appear mode="out-in">
-            <DoctorComponent @returnClicked="step = 0" :patient="patient" :doctors="doctors" :date="date"
+            <DoctorComponent @returnClicked="step = 0" :key="date" :patient="patient" :doctors="doctors" :date="date"
                              ></DoctorComponent>
         </transition>
         </v-col>
-        <v-col cols="4">
+        <v-col lg="5" cols="12">
         <v-card
-            min-height="500px"
+            height="100%"
             :class="animation"
         >
             <v-card-title>
@@ -19,12 +20,10 @@
                 <v-divider></v-divider>
                 <DatePatientComponent @patientAndDateSelected="switchToDoctorComponent"></DatePatientComponent>
             </v-card-text>
-            <v-card-actions v-if="step === 100">
-                <v-btn text color="primary" @click="step = 0">Return</v-btn>
-            </v-card-actions>
         </v-card>
         </v-col>
     </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -41,6 +40,7 @@ export default {
             date: '',
             doctors: [],
             animation: '',
+            cols: 5,
         }
     },
     methods: {
@@ -51,6 +51,7 @@ export default {
             this.animation = 'transform'
             setTimeout(() => {
                 this.step = 1
+                this.cols = 4
             }, 1000)
         }
     },
@@ -71,11 +72,11 @@ export default {
 
 }
 
-.fade-leave-active {
-    transition: all 3s;
+.fade-leave-active, .fade-enter-active {
+    transition: all .5s;
 }
 
-.fade-leave-to {
+.fade.enter, .fade-leave-to {
     opacity: 0;
 }
 

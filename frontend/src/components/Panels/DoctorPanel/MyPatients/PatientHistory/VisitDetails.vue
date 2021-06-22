@@ -211,19 +211,16 @@ export default {
             this.visitData.medications.filter((medication) => {
                medicationIds.push(medication.id)
             })
-            console.log(medicationIds)
-            tokenAxios.post('visits', {
+            tokenAxios.put('visits', {
                 date: this.visitData.date,
-                duration: this.visitData.duration,
+               // duration: this.visitData.duration,
                 doctorId: localStorage.getItem('id'),
                 patientId: this.visitData.patient.id,
                 research: this.visitData.research,
                 interview: this.visitData.interview,
                 medicationIds: medicationIds,
                 referrals: this.visitData.referrals
-            }).then((response) => {
-                console.log(response.data)
-
+            }).then(() => {
                 this.$emit('visitFinished')
             }).finally(() => {
                 this.loading = false

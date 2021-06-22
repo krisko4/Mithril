@@ -98,8 +98,8 @@
 <script>
 import {tokenAxios} from "@/axios";
 import NewNotice from "@/components/Panels/DoctorPanel/HomePage/NoticeBoard/NewNotice";
-import SockJS from "sockjs-client";
-import Stomp from "webstomp-client";
+//import SockJS from "sockjs-client";
+//import Stomp from "webstomp-client";
 
 export default {
     name: "NoticeBoard",
@@ -120,13 +120,25 @@ export default {
             fourNoticesDetected: false,
             chosenNotice: {},
             canMoreOlderEventsBeFound: false,
-            webSocket: null,
-            stompClient: null,
         }
     },
+
+    watch:{
+        '$store.state.webSocketConnectionEstablished'(val){
+            if(val){
+                this.$store.state.stompClient.subscribe('/topic/notice-board', (message) => {
+                    if (!message.body) {
+                        return
+                    }
+                    this.addNewNotice(message.body)
+                })
+            }
+        }
+    },
+
     created() {
-        this.webSocket = new SockJS('http://localhost:8080/notice-board')
-        this.stompClient = Stomp.over(this.webSocket)
+        //  this.webSocket = new SockJS('http://localhost:8080/notice-board')
+        //   this.stompClient = Stomp.over(this.webSocket)
         tokenAxios.get('http://localhost:8080/notices').then((response) => {
             if (response.data.length === 0) {
                 this.noticesEmpty = true
@@ -135,21 +147,27 @@ export default {
             this.noticesEmpty = false
             this.addNotices(response)
         })
-        this.stompClient.connect(
-            {},
-            () => {
-                this.stompClient.subscribe('/topic/notice-board', (message) => {
-                    if (!message.body) {
-                        return
-                    }
-                    this.addNewNotice(message.body)
-                });
-
-            },
-            error => {
-                console.log(error);
-            }
-        );
+        // this.$store.state.stompClient.subscribe('/topic/notice-board', (message) => {
+        //     if (!message.body) {
+        //         return
+        //     }
+        //     this.addNewNotice(message.body)
+        // })
+        // this.stompClient.connect(
+        //     {},
+        //     () => {
+        //         this.stompClient.subscribe('/topic/notice-board', (message) => {
+        //             if (!message.body) {
+        //                 return
+        //             }
+        //             this.addNewNotice(message.body)
+        //         });
+        //
+        //     },
+        //     error => {
+        //         console.log(error);
+        //     }
+        // );
 
 
     },
@@ -172,7 +190,7 @@ export default {
             switch (this.notices.length) {
                 case 0:
                     this.notices.push(notice)
-                    this.allLoadedNotices.push(Object.assign({},notice))
+                    this.allLoadedNotices.push(Object.assign({}, notice))
                     return
                 case 3:
                     this.notices[0].animation = this.notices[2].animation = 'flip'
@@ -181,7 +199,7 @@ export default {
                     break
                 default:
                     this.notices.splice(0, 0, notice)
-                    this.allLoadedNotices.splice(0, 0, Object.assign({},notice))
+                    this.allLoadedNotices.splice(0, 0, Object.assign({}, notice))
                     return
             }
             setTimeout(() => {
@@ -213,7 +231,7 @@ export default {
                     this.notices[2].date = noticeCopy2.date
                     this.notices[2].img = noticeCopy2.img
 
-                    this.allLoadedNotices.splice(0, 0, Object.assign({},notice))
+                    this.allLoadedNotices.splice(0, 0, Object.assign({}, notice))
                     this.noticeGroupIndex = 0
                     this.arrowUpDisabled = true
                     this.arrowDownDisabled = false
@@ -249,7 +267,7 @@ export default {
 
         windowToggle(areOlderNoticesSearched) {
             let newNotices = []
-         //   let alreadyLoaded = false
+            //   let alreadyLoaded = false
             this.arrowUpDisabled = true
             this.arrowDownDisabled = true
             // if arrowDown was pressed
@@ -267,7 +285,7 @@ export default {
                         })
                     })
                 } else {
-                   // alreadyLoaded = true
+                    // alreadyLoaded = true
                     switch (this.allLoadedNotices.length) {
                         case this.noticeGroupIndex + 1:
                             newNotices = [
@@ -281,7 +299,7 @@ export default {
                             ]
                             break
                         default:
-                            if(this.allLoadedNotices.length === this.noticeGroupIndex + 4){
+                            if (this.allLoadedNotices.length === this.noticeGroupIndex + 4) {
                                 this.canMoreOlderEventsBeFound = true
                             }
                             newNotices = [
@@ -339,7 +357,7 @@ export default {
         },
 
         saveNewNotice(notice) {
-            this.stompClient.send('/app/new-notice', JSON.stringify(notice))
+            this.$store.state.stompClient.send('/app/new-notice', JSON.stringify(notice))
             this.newNoticeDialog = false
         },
 

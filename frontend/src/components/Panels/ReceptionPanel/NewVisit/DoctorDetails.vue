@@ -1,5 +1,5 @@
 <template>
-    <v-card flat class="d-flex flex-column mt-4" min-height="600px">
+    <v-card flat class="d-flex flex-column mt-4" min-height="617px">
         <v-list-item three-line>
             <v-list-item-content>
                 <div class="overline mb-4">
@@ -9,7 +9,7 @@
                 <v-list-item-title class="headline">
                     {{ 'dr ' + doctor.firstName + ' ' + doctor.lastName }}
                 </v-list-item-title>
-                    <v-list-item-subtitle class="mt-3">proktolog</v-list-item-subtitle>
+                    <v-list-item-subtitle class="mt-3">{{getSpecializations(doctor.specializations)}}</v-list-item-subtitle>
                 </div>
 
             </v-list-item-content>
@@ -65,13 +65,13 @@
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="addVisit">Reserve</v-btn>
+            <v-btn text color="primary" :loading="reserveLoading" @click="addVisit">Reserve</v-btn>
         </v-card-actions>
     </v-card>
 </template>
 
 <script>
-import axios, {tokenAxios} from "@/axios";
+import {tokenAxios} from "@/axios";
 
 export default {
     name: "DoctorDetails",
@@ -80,12 +80,15 @@ export default {
         doctor: Object,
         date: String
     },
+
     data() {
         return {
             hours: [],
             selectedItem: undefined,
             hourIndex: '',
             imgSrc: '',
+            visitDuration: 0,
+            reserveLoading: false
         }
     },
 
@@ -96,27 +99,37 @@ export default {
                 date: this.date
             }
         }).then((response) => {
-            this.hours = response.data
+            this.hours = response.data.hourList
+            this.visitDuration = response.data.visitDuration
         })
     },
 
     methods: {
         addVisit() {
+            this.reserveLoading = true
             const localDateTime = this.date + ' ' + this.hours[this.hourIndex];
-            axios.post("visits/add", {
-                patient_id: this.patient.id,
-                doctor_id: this.doctor.id,
-                date: localDateTime
-            }).then((response) => {
-                console.log(response)
+            tokenAxios.post("visits", {
+                patientId: this.patient.id,
+                doctorId: this.doctor.id,
+                date: localDateTime,
+                duration: this.visitDuration
+            }).then(() => {
                 this.hours.splice(this.hourIndex, 1)
+                this.$toast.success('Visit saved.')
+                this.$store.state.stompClient.send('/app/new-visit/' + this.doctor.id, this.date)
             }).finally(() => {
-                    this.$toast.success('Visit saved.')
-                }
-            )
+                this.reserveLoading = false
+            })
         },
         goBack() {
             this.$emit('returnClicked')
+        },
+        getSpecializations(specializations){
+            const specs = specializations.map(specialization => {
+                return specialization.name
+            })
+            return specs.join(", ").toString()
+
         }
     },
 }

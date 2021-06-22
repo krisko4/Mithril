@@ -17,6 +17,9 @@ export default {
             return localStorage.getItem('role')
         }
     },
+    created() {
+        this.$store.commit('initializeWebSocketConnection')
+    }
 }
 </script>
 

@@ -146,8 +146,8 @@
 <script>
 
 import {tokenAxios} from "@/axios";
-import SockJS from "sockjs-client"
-import Stomp from "webstomp-client";
+//import SockJS from "sockjs-client"
+//import Stomp from "webstomp-client";
 import {format} from "date-fns"
 import differenceInHours from 'date-fns/differenceInHours'
 import differenceInMinutes from 'date-fns/differenceInMinutes'
@@ -184,10 +184,9 @@ export default {
 
 
     created() {
-
-        this.webSocket = new SockJS('http://localhost:8080/messenger')
-        this.stompClient = Stomp.over(this.webSocket)
-        tokenAxios.get('users/doctors/except-for/' + localStorage.getItem('id'))
+       // this.webSocket = new SockJS('http://localhost:8080/messenger')
+      //  this.stompClient = Stomp.over(this.webSocket)
+        tokenAxios.get('users/except-for/' + localStorage.getItem('id'))
             .then((response) => {
                 let fullName
                 response.data.filter((friend) => {
@@ -202,22 +201,23 @@ export default {
                         image: 'http://localhost:8080/images/doctors/' + friend.imageName
                     })
                 })
-                this.stompClient.connect(
-                    {},
-                    () => {
-                        this.setSubscription(localStorage.getItem('id'), this.friends[this.selectedItem].id)
-                        this.openChat(this.friends[this.selectedItem])
-                        this.isChatOpen = true
-                    },
-                    error => {
-                        console.log(error);
-                    }
-                );
+                this.setSubscription(localStorage.getItem('id'), this.friends[this.selectedItem].id)
+                // this.stompClient.connect(
+                //     {},
+                //     () => {
+                //         this.setSubscription(localStorage.getItem('id'), this.friends[this.selectedItem].id)
+                //         this.openChat(this.friends[this.selectedItem])
+                //         this.isChatOpen = true
+                //     },
+                //     error => {
+                //         console.log(error);
+                //     }
+                // );
 
 
             })
 
-        tokenAxios.get('doctors/' + localStorage.getItem('id') + '/messages')
+        tokenAxios.get('users/' + localStorage.getItem('id') + '/messages')
             .then((response) => {
                 response.data.filter((message) => {
                     let friend = this.friends.find((friend) => {
@@ -246,7 +246,7 @@ export default {
 
         setSubscription(myId, friendId) {
             let sum = parseInt(myId) + parseInt(friendId)
-            this.stompClient.subscribe('/topic/' + sum, (message) => {
+            this.$store.state.stompClient.subscribe('/topic/' + sum, (message) => {
                 if (!message.body) {
                     return
                 }
@@ -280,7 +280,7 @@ export default {
                 date: format(new Date(), 'yyyy-MM-dd HH:mm')
             }
             let sum = parseInt(newMessage.senderId) + parseInt(newMessage.receiverId)
-            this.stompClient.send('/app/hello/' + sum, JSON.stringify(newMessage))
+            this.$store.state.stompClient.send('/app/hello/' + sum, JSON.stringify(newMessage))
             this.typedMessage = ''
 
         },

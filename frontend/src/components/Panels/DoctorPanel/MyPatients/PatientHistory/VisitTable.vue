@@ -81,7 +81,7 @@ export default {
             this.visitDetailsDialog = true
         },
         getAllVisitsForPatient() {
-            tokenAxios().get('patients/' + this.patientData.id + '/visits')
+            tokenAxios.get('patients/' + this.patientData.id + '/visits')
                 .then((response) => {
                     console.log(response.data)
                     response.data.forEach((element) => {
@@ -90,7 +90,7 @@ export default {
                 })
         },
         getAllVisitsForPatientAndDoctor() {
-            tokenAxios().get('doctors/' + localStorage.getItem('id') + '/visits', {
+            tokenAxios.get('doctors/' + localStorage.getItem('id') + '/visits', {
                 params: {
                     patient_id: this.patientData.id
                 }
@@ -113,7 +113,6 @@ export default {
     },
     created() {
         if (this.tabIndex === 1) {
-            // localhost:8080/patients/{id}/visits
             this.getAllVisitsForPatient()
 
         } else if (this.tabIndex === 2) {

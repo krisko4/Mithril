@@ -163,7 +163,6 @@ export default {
         },
 
         saveStep4(){
-            console.log(this.visitData)
             let medication = this.medications.some((medication) => {
                 return !medication.quantity && this.firstMedicationSearchStarted
             })

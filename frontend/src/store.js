@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex'
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 
 Vue.use(Vuex)
@@ -12,8 +14,10 @@ export const store = new Vuex.Store({
         date: '',
         doctorsAchieved: false,
         patientSelected: false,
+        webSocketConnectionEstablished: false,
         cardIndex: null,
-
+        stompClient: null,
+        webSocket: null,
         scrollDuration: 300,
         scrollOffset: 0,
         scrollEasing: 'easeInOutCubic',
@@ -22,25 +26,25 @@ export const store = new Vuex.Store({
 
     },
     mutations: {
-        // getDoctors(state) {
-        //     if (state.date) {
-        //         // axios.get('users/doctors/' + state.date).then(response => {
-        //         //     state.doctors = response.data
-        //         //     state.doctorsAchieved = true
-        //         // })
-        //     }
-        // },
         signIn(state){
             state.signedIn = true
         },
         signOut(state){
             state.signedIn = false
-        }
-
-
+        },
+        initializeWebSocketConnection(state){
+            state.webSocket = new SockJS('http://localhost:8080/doctor-panel')
+            state.stompClient = Stomp.over(state.webSocket)
+            state.stompClient.connect({}, (frame) => {
+                console.log('Connected: ' + frame);
+                state.webSocketConnectionEstablished = true
+            })
+        },
 
 
     },
+
+
 
 
 });

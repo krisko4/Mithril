@@ -90,9 +90,6 @@ export default {
         console.log(this.$route.params)
     },
 
-
-
-
     methods: {
         navigationChosen(index) {
             this.cardIndex = index

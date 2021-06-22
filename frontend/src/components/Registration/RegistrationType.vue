@@ -7,16 +7,16 @@
 </v-card-text>
     <v-card-actions>
         <v-row>
-        <v-col cols="6" align="center">
+        <v-col cols="6"  align="center">
             <v-hover v-slot="{hover}">
                 <v-card
                     @click="chooseDoctorType"
                     :elevation="(hover||doctorTypeChosen)?7:1"
                 >
                     <v-card-text>
-                <v-img  height="300"  width="300" src="https://www.patientpop.com/wp-content/uploads/national-doctors-day-1.jpg"> </v-img>
+                <v-img height="300"  width="300" src="https://www.patientpop.com/wp-content/uploads/national-doctors-day-1.jpg"> </v-img>
                     <v-expand-transition>
-                        <div v-if="hover || doctorTypeChosen" class="d-flex transition-fast-in-fast-out transparent align-self-auto darken-2 v-card--reveal display-3 black--text " style="height: 100%;">
+                        <div v-if="hover || doctorTypeChosen" class="d-flex transition-fast-in-fast-out transparent align-center darken-2 v-card--reveal display-3 black--text " style="height: 100%;">
                             I'm a doctor
                         </div>
                     </v-expand-transition>

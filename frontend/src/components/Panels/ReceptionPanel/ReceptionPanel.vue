@@ -86,6 +86,7 @@ export default {
             if (localStorage.getItem('imageName') != null) {
                 localStorage.removeItem('imageName')
             }
+            this.$store.commit('signOut')
             this.$router.push({name: 'login'})
         },
         openNavigationDrawer() {
@@ -94,14 +95,6 @@ export default {
         loadHomeComponent() {
             this.cardIndex = 0
         },
-        beginVisit(patientData, selectedVisitDate, selectedVisitDuration) {
-            this.cardIndex = 5
-            this.patientData = patientData
-            this.selectedVisitDate = selectedVisitDate
-            this.selectedVisitDuration = selectedVisitDuration
-        },
-
-
     },
 
 }
