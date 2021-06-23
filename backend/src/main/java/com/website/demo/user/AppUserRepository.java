@@ -3,6 +3,7 @@ package com.website.demo.user;
 import com.website.demo.specialization.Specialization;
 import com.website.demo.specialization.SpecializationDto;
 import com.website.demo.user.doctor.DoctorDto;
+import com.website.demo.user.doctor.DoctorName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -59,4 +60,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Modifying
     @Query(value = "INSERT INTO doctor_schedule VALUES (?2, ?1)", nativeQuery = true)
     void setSchedule(Long scheduleID, Long id);
+
+    @Query("select new com.website.demo.user.doctor.DoctorName(a.firstName, a.secondName, a.lastName) from AppUser a where a.id = ?1")
+    DoctorName getDoctorName(Long id);
 }

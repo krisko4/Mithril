@@ -13,10 +13,7 @@ import java.util.List;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
-    List<Patient> findByFirstNameStartsWith(String character);
 
-    @Query(value = "select * from patient where doctor_id=?1", nativeQuery = true)
-    List<Patient> findByDoctorId(Long doctorID);
 
     @Transactional
     @Modifying
@@ -27,4 +24,16 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Modifying
     @Query(value = "update patient set doctor_id = ?1 where id = ?2", nativeQuery = true)
     void addDoctorForPatient(Long doctor_id, Long id);
+
+
+    @Query("select new com.website.demo.patient.PatientDto(p.id, p.firstName, p.secondName, p.lastName, p.pesel, p.birthdate, p.phone, p.address, p.email, p.appUser.id) from patient p")
+    List<PatientDto> findAllPatients();
+
+
+    @Query("select new com.website.demo.patient.PatientDto(p.id, p.firstName, p.secondName, p.lastName, p.pesel, p.birthdate, p.phone, p.address, p.email, p.appUser.id) from patient p where p.firstName like :character%")
+    List<PatientDto> findByFirstNameStartsWith(String character);
+
+    @Query("select new com.website.demo.patient.PatientDto(p.id, p.firstName, p.secondName, p.lastName, p.pesel, p.birthdate, p.phone, p.address, p.email, p.appUser.id) from patient p where p.appUser.id = ?1")
+    List<PatientDto> findByDoctorId(Long doctorId);
+
 }

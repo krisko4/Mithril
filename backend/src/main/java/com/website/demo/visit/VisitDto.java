@@ -25,7 +25,8 @@ public class VisitDto extends VisitResponse {
     public static VisitDto from(Visit visit){
         VisitDto visitDto = new VisitDto();
         visitDto.date = visit.getDate();
-        visitDto.patient = PatientDto.from(visit.getPatient());
+        //visitDto.patient = PatientDto.from(visit.getPatient());
+        visitDto.patient = new PatientDto(visit.getPatient());
         visitDto.doctor = DoctorDto.from(visit.getDoctor());
         visitDto.duration = visit.getDuration();
         visitDto.finished = visit.getFinished();

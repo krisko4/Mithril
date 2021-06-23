@@ -40,10 +40,6 @@ public class AppUserController {
         return appUserService.findUsersExceptForOne(id);
     }
 
-//    @GetMapping("{id}/getName")
-//    public String getNameById(@PathVariable Long id){
-//        return appUserService.getNameById(id);
-//    }
 
 
 

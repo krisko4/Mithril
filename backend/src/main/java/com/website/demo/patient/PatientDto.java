@@ -26,28 +26,44 @@ public class PatientDto {
     private String phone;
     private Address address;
     private String email;
-    private Long doctorID;
+    private Long doctorId;
    // private Set<VisitDto> visit;
 
-    public static PatientDto from(Patient patient){
-        PatientDto patientDto = new PatientDto();
-        patientDto.id = patient.getId();
-        patientDto.firstName = patient.getFirstName();
-        patientDto.secondName = patient.getSecondName();
-        patientDto.lastName = patient.getLastName();
-        patientDto.pesel = patient.getPesel();
-        patientDto.birthdate = patient.getBirthdate();
-        patientDto.phone = patient.getPhone();
-        patientDto.address = patient.getAddress();
-        patientDto.email = patient.getEmail();
-        try{
-            patientDto.doctorID = patient.getAppUser().getId();
-        }
-        catch (NullPointerException ignored){
-        }
+    public PatientDto(Long id,
+                      String firstName,
+                      String secondName,
+                      String lastName,
+                      String pesel,
+                      LocalDate birthdate,
+                      String phone,
+                      Address address,
+                      String email,
+                      Long doctorId) {
+        this.id = id;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.pesel = pesel;
+        this.birthdate = birthdate;
+        this.phone = phone;
+        this.address = address;
+        this.email = email;
+        this.doctorId = doctorId;
+    }
 
-       // patientDto.visit = patient.getVisitSet().stream().map(VisitDto::new).collect(Collectors.toSet());
-        return patientDto;
+
+    public PatientDto(Patient patient){
+        this.id = patient.getId();
+        this.firstName = patient.getFirstName();
+        this.secondName = patient.getSecondName();
+        this.lastName = patient.getLastName();
+        this.pesel = patient.getPesel();
+        this.birthdate = patient.getBirthdate();
+        this.phone = patient.getPhone();
+        this.address = patient.getAddress();
+        this.email = patient.getEmail();
+        this.doctorId = patient.getAppUser().getId();
+
     }
 
 }

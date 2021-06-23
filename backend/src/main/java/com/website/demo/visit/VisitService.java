@@ -211,4 +211,6 @@ public class VisitService {
     public void addNewUnfinishedVisit(Long patientId, Long doctorId, String date, int duration) {
         visitRepository.saveNewVisit(date, duration, doctorId, patientId);
     }
+
+
 }

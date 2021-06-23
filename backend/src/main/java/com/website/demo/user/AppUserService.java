@@ -49,9 +49,6 @@ public class AppUserService implements UserDetailsService {
 
     public String findFirstNameByEmail(String email){
         return appUserRepository.findFirstNameByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
-//        return appUserRepository.findByEmail(email)
-//                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)))
-//                .getFirstName();
     }
 
 
@@ -93,10 +90,6 @@ public class AppUserService implements UserDetailsService {
     }
 
 
-    public String getNameById(Long id) {
-        AppUser appUser = findById(id);
-        return appUser.getFirstName() + " " + appUser.getSecondName() + " " + appUser.getLastName();
-    }
 
     public void setSchedule(Schedule schedule, Long id) {
         AppUser appUser = findById(id);

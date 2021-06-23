@@ -1,6 +1,7 @@
 package com.website.demo.user.doctor;
 
 import com.website.demo.specialization.SpecializationDto;
+import com.website.demo.user.AppUser;
 import com.website.demo.user.AppUserRepository;
 import com.website.demo.user.AppUserDto;
 import com.website.demo.visit.VisitService;
@@ -34,6 +35,11 @@ public class DoctorService {
             doctor.setSpecializations(specializationDtoSet);
         }
         return doctors;
+    }
+
+    public String getNameById(Long id) {
+        DoctorName doctorName = appUserRepository.getDoctorName(id);
+        return doctorName.getFirstName() + " " + doctorName.getSecondName() + " " + doctorName.getLastName();
     }
 
 //    public List<AppUserDto> getDoctorsExceptForOne(Long id){

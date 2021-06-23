@@ -39,23 +39,23 @@ public class PatientService {
 
 
 
-    public void removeDoctorForPatient(Long doctorID, Long patientID) {
-        patientRepository.removeDoctorForPatient(doctorID, patientID);
+    public void removeDoctorForPatient(Long patientId, Long doctorId) {
+        patientRepository.removeDoctorForPatient(doctorId, patientId);
     }
 
-    public Patient addDoctorForPatient(Long doctorID, Long patientID) {
-        patientRepository.addDoctorForPatient(doctorID, patientID);
-        return patientRepository.findById(patientID).get();
+    public void addDoctorForPatient(Long doctorId, Long patientId) {
+        patientRepository.addDoctorForPatient(doctorId, patientId);
+        //return patientRepository.findById(patientID).get();
     }
 
-    public List<Patient> getPatientsBy(String character, Long doctorID) {
+    public List<PatientDto> getPatientsBy(String character, Long doctorID) {
         if(character != null){
             return patientRepository.findByFirstNameStartsWith(character);
         }
         if(doctorID != null){
             return patientRepository.findByDoctorId(doctorID);
         }
-        return patientRepository.findAll();
+        return patientRepository.findAllPatients();
 
     }
 }
