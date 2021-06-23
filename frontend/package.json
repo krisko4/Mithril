@@ -1,5 +1,5 @@
 {
-  "name": "Clinic",
+  "name": "Mithril",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,6 +23,7 @@
     "vue-lodash": "^2.1.2",
     "vue-router": "^3.5.1",
     "vue-toast-notification": "^0.6.1",
+    "vue-typer": "^1.2.0",
     "vuetify": "^2.4.0",
     "vuex": "^3.6.2",
     "webstomp-client": "^1.2.6"

@@ -1,8 +1,8 @@
 <template>
-    <v-container fill-height v-if="!$store.state.signedIn">
+    <v-container :style="{'background-image':'url(http://localhost:8080/images/static/logo_transparent.png)'}" fill-height>
         <MailConfirmComponent v-if="!isAccountActive" :email="email"></MailConfirmComponent>
-    <v-row justify="center">
-        <v-col cols="3" md="4" sm="5">
+    <v-row justify="end">
+        <v-col lg="4" cols="5" md="5" sm="6">
             <v-card elevation="10">
                 <v-card-title class="display-2">
                     <v-spacer></v-spacer>
@@ -120,7 +120,6 @@ export default {
                 if(response.data.imageName != null) {
                     localStorage.setItem('imageName', response.data.imageName)
                 }
-                this.$store.commit('signIn')
                 this.$router.push({name: 'panelSelector'})
             }).catch((error) => {
                 this.errorPopped = true
@@ -147,11 +146,11 @@ export default {
 <style scoped>
 .slide-enter-active,
 .slide-leave-active{
-    transition: all 5s;
+    transition: all 1s;
 }
 
 .slide-enter, .slide-leave-to{
-    transform: translateY(-600px);
+    transform: translateY(-100%);
 }
 
 </style>

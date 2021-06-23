@@ -1,9 +1,9 @@
 <template>
     <div>
-        <transition appear name="test" mode="out-in">
+        <transition name="fade" mode="out-in">
             <v-app v-if="!messengerOpened && cardIndex !== 6" style="background-color: whitesmoke">
                 <v-main>
-                    <Navigation :navigationOpened="navigationOpened" @navigationChosen="navigationChosen"></Navigation>
+                    <Navigation :navigationOpened="navigationOpened" @navigationClosed="navigationOpened = false" @navigationChosen="navigationChosen"></Navigation>
                     <v-img
                         gradient="to top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)"
                         height="700px"
@@ -12,7 +12,6 @@
 
                         <v-toolbar style="background-color: transparent">
                             <v-app-bar-nav-icon @click=openNavigationDrawer></v-app-bar-nav-icon>
-                            <v-toolbar-title>Title</v-toolbar-title>
                             <v-row justify="end" class="mr-4">
                                 <v-btn @click="messengerOpened = true" text>Messenger</v-btn>
                                 <v-btn text>My account</v-btn>
@@ -22,7 +21,9 @@
                         <v-container fill-height>
                             <v-container>
                                 <v-row>
-                                    <div class="text-uppercase  font-weight-bold mb-4 display-3">Hello, {{ name }}</div>
+                                    <div class="text-uppercase  font-weight-bold mb-4 display-3">
+                                        <vue-typer  erase-style='backspace' :text="text"></vue-typer>
+                                    </div>
                                 </v-row>
                                 <v-row>
                                     <div class="mb-4 display-2 font-weight-light">Welcome to the reception panel
@@ -34,14 +35,17 @@
                             </v-container>
                         </v-container>
                     </v-img>
-
-                <v-main class="mt-4">
-                    <HomePage @cardChosen="cardChosen" v-if="cardIndex === 0"></HomePage>
-                    <NewVisit v-if="cardIndex === 2"></NewVisit>
-                </v-main>
+                    <v-main class="mt-4">
+                        <transition name="fade" mode="out-in">
+                            <HomePage @cardChosen="cardChosen" v-if="cardIndex === 0"></HomePage>
+                            <NewVisit v-if="cardIndex === 2"></NewVisit>
+                            <PatientTable v-if="cardIndex === 1"></PatientTable>
+                        </transition>
+                    </v-main>
                 </v-main>
                 <Footer></Footer>
             </v-app>
+            <Messenger @messengerClosed="messengerOpened = false; cardIndex = 0" v-else></Messenger>
         </transition>
     </div>
 </template>
@@ -52,10 +56,13 @@ import Footer from "@/components/Footer";
 import HomePage from "@/components/Panels/ReceptionPanel/HomePage/HomePage";
 import NewVisit from "@/components/Panels/ReceptionPanel/NewVisit/NewVisit";
 import Navigation from "@/components/Panels/ReceptionPanel/Navigation";
+import Messenger from "@/components/Panels/DoctorPanel/Messenger/Messenger";
+import { VueTyper } from 'vue-typer'
+import PatientTable from "@/components/Panels/ReceptionPanel/Patients/PatientTable";
 
 export default {
     name: "ReceptionPanel",
-    components: {HomePage, Footer, Navigation, NewVisit},
+    components: {HomePage, Footer, Navigation, NewVisit, Messenger, VueTyper, PatientTable},
     data() {
         return {
             messengerOpened: false,
@@ -65,7 +72,7 @@ export default {
             navigationOpened: false,
             selectedVisitDate: '',
             selectedVisitDuration: 0,
-            name: localStorage.getItem('firstName'),
+            text: 'Hello, ' + localStorage.getItem('firstName'),
 
         }
     },
@@ -76,6 +83,7 @@ export default {
         },
         cardChosen(index) {
             this.cardIndex = index
+            this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
         },
 
         logout() {
@@ -86,11 +94,13 @@ export default {
             if (localStorage.getItem('imageName') != null) {
                 localStorage.removeItem('imageName')
             }
-            this.$store.commit('signOut')
+            this.$store.state.webSocketConnectionEstablished = false
+            this.$store.state.webSocket.close()
             this.$router.push({name: 'login'})
+
         },
         openNavigationDrawer() {
-            this.navigationOpened = !this.navigationOpened
+            this.navigationOpened = true
         },
         loadHomeComponent() {
             this.cardIndex = 0
@@ -102,5 +112,12 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 1s;
+}
 
+.fade-enter, .fade-leave-to {
+    opacity: 0
+}
 </style>

@@ -1,15 +1,24 @@
 <template>
     <v-app>
         <v-app-bar
+            class="indigo lighten-1 white--text text-center"
             app
             clipped-right
             clipped-left
             height="72"
+
         >
-            <span class="headline">Chatroom</span>
+            <v-img
+                src="http://localhost:8080/images/static/logo_transparent1.png"
+                max-height="90px"
+                max-width="90px"
+                contain
+                class="mt-3"
+            >
+            </v-img>
             <v-spacer></v-spacer>
-            <v-btn text>
-                <v-icon @click="goBack">
+            <v-btn text @click="goBack">
+                <v-icon color="white">
                     mdi-home
                 </v-icon>
             </v-btn>
@@ -27,22 +36,23 @@
             clipped
             right
         >
-            <v-list v-show="recentMessages">
-                <v-list-item
-                    v-for="(recentMessage, i) in recentMessages"
-                    :key="i"
-                    link
-                    three-line
-                >
-                    <v-list-item-avatar>
-                        <v-img :src="recentMessage.senderImg"></v-img>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                        <v-list-item-title>{{ recentMessage.senderName }}</v-list-item-title>
-                        <v-list-item-subtitle> {{ recentMessage.date }}<br>{{ recentMessage.content }}
-                        </v-list-item-subtitle>
-                    </v-list-item-content>
-                </v-list-item>
+            <v-list>
+                <v-subheader>RECENT MESSAGES</v-subheader>
+                    <v-list-item
+                        v-for="(recentMessage, i) in recentMessages"
+                        :key="i"
+                        link
+                        three-line
+                    >
+                        <v-list-item-avatar>
+                            <v-img :src="recentMessage.senderImg"></v-img>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                            <v-list-item-title class="font-weight-bold">{{ recentMessage.senderName }}</v-list-item-title>
+                            <v-list-item-subtitle> {{ recentMessage.date }}<br>{{ recentMessage.content }}
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
             </v-list>
         </v-navigation-drawer>
         <v-navigation-drawer
@@ -51,6 +61,7 @@
             clipped
         >
             <v-list rounded>
+                <v-subheader>COLLEAGUES</v-subheader>
                 <v-list-item-group
                     mandatory
                     color="primary"
@@ -86,7 +97,7 @@
                     </v-toolbar-title>
                 </v-toolbar>
                 <v-divider></v-divider>
-                <v-responsive max-height="680px" class="overflow">
+                <v-responsive max-height="780px" class="overflow">
                     <v-col cols="12">
                         <v-toolbar flat v-for="(message, i) in messages" :key="i" class="mt-10">
                             <v-spacer></v-spacer>
@@ -146,8 +157,6 @@
 <script>
 
 import {tokenAxios} from "@/axios";
-//import SockJS from "sockjs-client"
-//import Stomp from "webstomp-client";
 import {format} from "date-fns"
 import differenceInHours from 'date-fns/differenceInHours'
 import differenceInMinutes from 'date-fns/differenceInMinutes'
@@ -166,17 +175,16 @@ export default {
             firstName: localStorage.getItem('firstName'),
             messages: [],
             recentMessages: [],
-            webSocket: null,
-            stompClient: null,
             chatIndex: null,
             isUserOnline: false
         }
     },
 
-
-
     watch: {
         selectedItem(val) {
+            if(this.chatIndex){
+                this.$store.state.stompClient.unsubscribe('chat')
+            }
             this.setSubscription(localStorage.getItem('id'), this.friends[this.selectedItem].id)
             this.openChat(this.friends[val])
         },
@@ -184,8 +192,7 @@ export default {
 
 
     created() {
-       // this.webSocket = new SockJS('http://localhost:8080/messenger')
-      //  this.stompClient = Stomp.over(this.webSocket)
+
         tokenAxios.get('users/except-for/' + localStorage.getItem('id'))
             .then((response) => {
                 let fullName
@@ -201,43 +208,40 @@ export default {
                         image: 'http://localhost:8080/images/doctors/' + friend.imageName
                     })
                 })
+                this.getRecentMessages()
                 this.setSubscription(localStorage.getItem('id'), this.friends[this.selectedItem].id)
-                // this.stompClient.connect(
-                //     {},
-                //     () => {
-                //         this.setSubscription(localStorage.getItem('id'), this.friends[this.selectedItem].id)
-                //         this.openChat(this.friends[this.selectedItem])
-                //         this.isChatOpen = true
-                //     },
-                //     error => {
-                //         console.log(error);
-                //     }
-                // );
-
-
+                this.isChatOpen = true
+                this.openChat(this.friends[this.selectedItem])
             })
 
-        tokenAxios.get('users/' + localStorage.getItem('id') + '/messages')
-            .then((response) => {
-                response.data.filter((message) => {
-                    let friend = this.friends.find((friend) => {
-                        return friend.id === message.senderId
-                    })
-                    this.recentMessages.push({
-                        content: message.content,
-                        date: message.date.substring(0, 10) + ' ' + message.date.substring(11),
-                        senderName: friend.fullName,
-                        senderImg: friend.image
-                    })
-                })
 
-            })
     },
+
     methods: {
 
+        getRecentMessages(){
+            tokenAxios.get('users/' + localStorage.getItem('id') + '/messages')
+                .then((response) => {
+                    console.log(response.data)
+                    response.data.filter((message) => {
+                        let friend = this.friends.find((friend) => {
+                            return friend.id === message.senderId
+                        })
+                        console.log(friend)
+                        this.recentMessages.push({
+                            content: message.content,
+                            date: message.date.substring(0, 10) + ' ' + message.date.substring(11),
+                            senderName: friend.fullName,
+                            senderImg: friend.image
+                        })
+                    })
+
+                })
+        },
 
         goBack(){
-          this.$emit('messengerClosed')
+            this.$store.state.stompClient.unsubscribe('chat')
+            this.$emit('messengerClosed')
         },
 
         afterEnter(){
@@ -245,8 +249,8 @@ export default {
         },
 
         setSubscription(myId, friendId) {
-            let sum = parseInt(myId) + parseInt(friendId)
-            this.$store.state.stompClient.subscribe('/topic/' + sum, (message) => {
+            this.chatIndex = parseInt(myId) + parseInt(friendId)
+            this.$store.state.stompClient.subscribe('/topic/' + this.chatIndex, (message) => {
                 if (!message.body) {
                     return
                 }
@@ -267,7 +271,7 @@ export default {
                     color: color
                 })
 
-            });
+            }, {id: 'chat'});
 
         },
 

@@ -5,7 +5,9 @@
         <v-divider class="mx-4"></v-divider>
         <v-card-subtitle class="text-center">
             <span
-                class="text-h2 text-sm-h2 text-md-h2 text-lg-h2">{{ time }}</span><br>{{ date.toISOString().substr(0, 10) }}<span></span>
+                class="text-h2 text-sm-h2 text-md-h2 text-lg-h2">{{
+                    time
+                }}</span><br>{{ date.toISOString().substr(0, 10) }}<span></span>
         </v-card-subtitle>
         <v-card-text>
             <v-sheet height="600" class="mt-2">
@@ -53,6 +55,9 @@ export default {
     beforeDestroy() {
         clearInterval(this.interval)
     },
+    destroyed() {
+        this.$store.state.stompClient.unsubscribe('today-visits')
+    },
     watch: {
 
         historyDialog(val) {
@@ -61,22 +66,8 @@ export default {
             }
 
         },
-        '$store.state.webSocketConnectionEstablished'(val){
-            if(val){
-                this.$store.state.stompClient.subscribe('/topic/' + localStorage.getItem('id') + '/today-visits', (message) => {
-                    if (!message.body) {
-                        return
-                    }
-                    if(message.body === format(new Date(), 'yyyy-MM-dd')){
-                    this.$toast.info('New visit has been added to your schedule for today', {
-                        duration: 0
-                    })
-                    this.getVisitsForToday()
-                    }
-
-
-                })
-            }
+        '$store.state.webSocketConnectionEstablished'(val) {
+            this.setSubscription(val)
         }
 
 
@@ -90,13 +81,29 @@ export default {
             }).format()
         }, 1000)
         this.getVisitsForToday()
-
-
-
+        this.setSubscription(this.$store.state.webSocketConnectionEstablished)
     },
     methods: {
 
-        getVisitsForToday(){
+        setSubscription(val) {
+            if (val) {
+                this.$store.state.stompClient.subscribe('/topic/' + localStorage.getItem('id') + '/today-visits', (message) => {
+                    if (!message.body) {
+                        return
+                    }
+                    if (message.body === format(new Date(), 'yyyy-MM-dd')) {
+                        this.$toast.info('New visit has been added to your schedule for today', {
+                            duration: 0
+                        })
+                        this.getVisitsForToday()
+                    }
+
+
+                }, {id: 'today-visits'})
+            }
+        },
+
+        getVisitsForToday() {
             this.visits = []
             tokenAxios.get('doctors/' + localStorage.getItem('id') + '/visits', {
                 params: {

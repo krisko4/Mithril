@@ -9,9 +9,9 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state:{
-        signedIn: false,
         token: '' | localStorage.getItem('token'),
         date: '',
+        patient: {},
         doctorsAchieved: false,
         patientSelected: false,
         webSocketConnectionEstablished: false,
@@ -26,12 +26,6 @@ export const store = new Vuex.Store({
 
     },
     mutations: {
-        signIn(state){
-            state.signedIn = true
-        },
-        signOut(state){
-            state.signedIn = false
-        },
         initializeWebSocketConnection(state){
             state.webSocket = new SockJS('http://localhost:8080/doctor-panel')
             state.stompClient = Stomp.over(state.webSocket)

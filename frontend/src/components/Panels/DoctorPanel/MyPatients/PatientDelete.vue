@@ -5,7 +5,7 @@
         </v-card-title>
         <v-card-text>
             Are you sure you want to remove <b>{{ patientData.firstName }}
-            {{ patientData.lastName }}</b> from your table?
+            {{ patientData.lastName }}</b> from your patient list?
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>

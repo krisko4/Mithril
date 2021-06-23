@@ -12,7 +12,7 @@
         <v-tabs centered v-model="tabIndex">
             <v-tab @click="tabIndex = 0">Patient details</v-tab>
             <v-tab @click="tabIndex = 1">All visits</v-tab>
-            <v-tab @click="tabIndex = 2">My visits</v-tab>
+            <v-tab @click="tabIndex = 2" v-if="role === 'DOCTOR'">My visits</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabIndex">
             <v-tab-item>
@@ -25,9 +25,6 @@
                 <VisitTable :patientData="patientData" :tabIndex="tabIndex"></VisitTable>
             </v-tab-item>
         </v-tabs-items>
-
-
-
 
         <v-dialog v-model="confirmDialogOpen" max-width="400">
             <v-card>
@@ -65,7 +62,9 @@ export default {
     data(){
         return{
             tabIndex: 0,
-            confirmDialogOpen: false
+            confirmDialogOpen: false,
+            role: localStorage.getItem('role')
+
         }
     },
     methods:{

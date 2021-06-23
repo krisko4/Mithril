@@ -5,9 +5,6 @@
             </v-img>
             <v-card-title>{{patientData.firstName}} {{patientData.secondName}} {{patientData.lastName}}</v-card-title>
             <v-card-subtitle>Patient</v-card-subtitle>
-            <v-card-text>
-                <v-divider></v-divider>
-            </v-card-text>
 
             <v-card-text>
                 <v-list>

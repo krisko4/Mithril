@@ -23,7 +23,7 @@
                     </v-btn>
                 </v-card-text>
                 <v-card-text class="white--text pt-0">
-                    This is a simple medical panel created in learning purposes, designed with Vuetify.
+                    This is a simple medical panel created in educational purposes, designed with Vuetify.
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-text class="white--text">

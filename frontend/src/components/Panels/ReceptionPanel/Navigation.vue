@@ -56,13 +56,19 @@ export default {
                 {icon: 'mdi-account', title: 'My account'},
                 {icon: 'mdi-calendar', title: 'New visit'},
                 {icon: 'mdi-account-heart', title: 'Patients'},
+                {icon: 'mdi-account-check-outline', title: 'New patient'},
             ]
 
         }
     },
     watch: {
-        navigationOpened() {
-            this.drawer = true
+        navigationOpened(val) {
+            this.drawer = val
+        },
+        drawer(val){
+            if(!val){
+                this.$emit('navigationClosed')
+            }
         }
     },
 
@@ -77,7 +83,7 @@ export default {
         redirect(index) {
             this.drawer = false
             this.$emit('navigationChosen', index)
-
+            this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
 
         }
     },

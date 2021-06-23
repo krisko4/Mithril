@@ -123,22 +123,15 @@ export default {
         }
     },
 
-    watch:{
-        '$store.state.webSocketConnectionEstablished'(val){
-            if(val){
-                this.$store.state.stompClient.subscribe('/topic/notice-board', (message) => {
-                    if (!message.body) {
-                        return
-                    }
-                    this.addNewNotice(message.body)
-                })
-            }
+
+    watch: {
+        '$store.state.webSocketConnectionEstablished'(val) {
+            this.setSubscription(val)
         }
     },
 
     created() {
-        //  this.webSocket = new SockJS('http://localhost:8080/notice-board')
-        //   this.stompClient = Stomp.over(this.webSocket)
+
         tokenAxios.get('http://localhost:8080/notices').then((response) => {
             if (response.data.length === 0) {
                 this.noticesEmpty = true
@@ -147,31 +140,24 @@ export default {
             this.noticesEmpty = false
             this.addNotices(response)
         })
-        // this.$store.state.stompClient.subscribe('/topic/notice-board', (message) => {
-        //     if (!message.body) {
-        //         return
-        //     }
-        //     this.addNewNotice(message.body)
-        // })
-        // this.stompClient.connect(
-        //     {},
-        //     () => {
-        //         this.stompClient.subscribe('/topic/notice-board', (message) => {
-        //             if (!message.body) {
-        //                 return
-        //             }
-        //             this.addNewNotice(message.body)
-        //         });
-        //
-        //     },
-        //     error => {
-        //         console.log(error);
-        //     }
-        // );
-
-
+        this.setSubscription(this.$store.state.webSocketConnectionEstablished)
     },
+
+    destroyed() {
+        this.$store.state.stompClient.unsubscribe('notice-board')
+    },
+
     methods: {
+        setSubscription(val){
+            if (val) {
+                this.$store.state.stompClient.subscribe('/topic/notice-board', (message) => {
+                    if (!message.body) {
+                        return
+                    }
+                    this.addNewNotice(message.body)
+                }, {id: 'notice-board'})
+            }
+        },
 
         addNewNotice(notice) {
             this.arrowUpDisabled = true
@@ -191,6 +177,9 @@ export default {
                 case 0:
                     this.notices.push(notice)
                     this.allLoadedNotices.push(Object.assign({}, notice))
+                    this.$toast.info('New notice has been added to your notice board', {
+                        duration: 0
+                    })
                     return
                 case 3:
                     this.notices[0].animation = this.notices[2].animation = 'flip'
@@ -200,6 +189,9 @@ export default {
                 default:
                     this.notices.splice(0, 0, notice)
                     this.allLoadedNotices.splice(0, 0, Object.assign({}, notice))
+                    this.$toast.info('New notice has been added to your notice board', {
+                        duration: 0
+                    })
                     return
             }
             setTimeout(() => {
@@ -238,6 +230,8 @@ export default {
                     this.$toast.info('New notice has been added to your notice board', {
                         duration: 0
                     })
+                    this.allLoadedNotices.splice(3)
+                    console.log(this.allLoadedNotices)
                 }, 1200)
 
             }, 200)

@@ -5,9 +5,7 @@
         temporary
         v-model="drawer"
     >
-        <v-list
-
-        >
+        <v-list>
             <v-list-item>
                 <v-list-item-avatar>
                     <v-img :src="imgSrc"></v-img>
@@ -62,8 +60,14 @@ export default {
         }
     },
     watch: {
-        navigationOpened() {
-            this.drawer = true
+        navigationOpened(val) {
+            this.drawer = val
+        },
+
+        drawer(val){
+            if(!val){
+                this.$emit('navigationClosed')
+            }
         }
     },
 
@@ -78,6 +82,7 @@ export default {
         redirect(index) {
             this.drawer = false
             this.$emit('navigationChosen', index)
+            this.$vuetify.goTo(this.$store.state.target, this.$store.state.options)
 
 
         }

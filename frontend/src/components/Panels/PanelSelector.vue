@@ -17,19 +17,19 @@ export default {
             return localStorage.getItem('role')
         }
     },
-    created() {
+    created(){
         this.$store.commit('initializeWebSocketConnection')
     }
 }
 </script>
 
 <style scoped>
-.test-enter-active,
-.test-leave-active {
-    transition: all 5s;
+.slide-enter-active,
+.slide-leave-active{
+    transition: all 1s;
 }
 
-.test-enter, .test-leave-to {
-    opacity: 0;
+.slide-enter, .slide-leave-to{
+    opacity: 0
 }
 </style>
