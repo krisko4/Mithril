@@ -14,7 +14,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Entity(name = "visit")
+@Entity(name = "Visit")
+@Table(name = "visit")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

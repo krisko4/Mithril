@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity
+@Entity(name = "Dispensary")
 @Table(name="dispensary")
 public class Dispensary {
 

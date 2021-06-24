@@ -10,7 +10,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@Entity(name = "message")
+@Table(name = "message")
+@Entity(name = "Message")
 @Data
 @NoArgsConstructor
 public class Message {

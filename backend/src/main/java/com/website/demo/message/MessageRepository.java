@@ -12,9 +12,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
 
 
-    @Query(value = "select new com.website.demo.message.MessageDto(m.content, m.date, m.sender.id, m.receiver.id) from message m where (m.sender.id = ?2 and m.receiver.id = ?1) or (m.sender.id = ?1 and m.receiver.id = ?2) order by m.date asc")
+    @Query(value = "select new com.website.demo.message.MessageDto(m.content, m.date, m.sender.id, m.receiver.id) from Message m where (m.sender.id = ?2 and m.receiver.id = ?1) or (m.sender.id = ?1 and m.receiver.id = ?2) order by m.date asc")
     List<MessageDto> findMessagesBy(Long receiverId, Long senderId);
 
-    @Query(value = "select new com.website.demo.message.MessageDto(m.content, m.date, m.sender.id, m.receiver.id) from message m where m.receiver.id = ?1 ")
+    @Query(value = "select new com.website.demo.message.MessageDto(m.content, m.date, m.sender.id, m.receiver.id) from Message m where m.receiver.id = ?1 ")
     List<MessageDto> findMessagesForUser(Long id);
 }

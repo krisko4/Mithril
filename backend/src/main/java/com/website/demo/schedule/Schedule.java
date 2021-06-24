@@ -14,7 +14,8 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.Set;
 
-@Entity(name = "schedule")
+@Entity(name = "Schedule")
+@Table(name = "schedule")
 @Getter
 @Setter
 @NoArgsConstructor

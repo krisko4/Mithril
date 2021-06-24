@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Data
-@Entity
+@Entity(name = "Specialization")
 @Table(name="specialization")
 @NoArgsConstructor
 public class Specialization {

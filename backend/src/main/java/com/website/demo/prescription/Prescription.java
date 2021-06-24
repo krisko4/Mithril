@@ -13,7 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Entity(name = "prescription")
+@Table(name = "prescription")
+@Entity(name = "Prescription")
 @Data
 @NoArgsConstructor
 public class Prescription {

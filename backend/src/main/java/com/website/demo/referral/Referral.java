@@ -16,7 +16,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity(name="referral")
+@Entity(name = "Referral")
+@Table(name = "referral")
 public class Referral {
 
     @Id

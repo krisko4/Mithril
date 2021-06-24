@@ -10,7 +10,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity(name = "notice")
+@Table(name = "notice")
+@Entity(name = "Notice")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

@@ -23,7 +23,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "AppUser")
 @Table(name = "app_user")
 public class AppUser implements UserDetails {
 
