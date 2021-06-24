@@ -16,7 +16,7 @@
         </v-tabs>
         <v-tabs-items v-model="tabIndex">
             <v-tab-item>
-                <PatientDetailsV2 :patientData="patientData"></PatientDetailsV2>
+                <PatientDetails :isEditable="false" :patientData="patientData"></PatientDetails>
             </v-tab-item>
             <v-tab-item>
                 <VisitTable :patientData="patientData" :tabIndex="tabIndex"></VisitTable>
@@ -50,11 +50,11 @@
 </template>
 
 <script>
-import PatientDetailsV2 from "@/components/Panels/DoctorPanel/MyPatients/PatientHistory/PatientDetailsV2";
 import VisitTable from "@/components/Panels/DoctorPanel/MyPatients/PatientHistory/VisitTable";
+import PatientDetails from "@/components/Panels/DoctorPanel/MyPatients/PatientDetails";
 export default {
     name: "PatientHistory",
-    components: {VisitTable, PatientDetailsV2},
+    components: {VisitTable, PatientDetails},
     props:{
         patientData: Object,
         visitChosen: Boolean,

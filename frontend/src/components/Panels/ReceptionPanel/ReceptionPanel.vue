@@ -1,7 +1,7 @@
 <template>
     <div>
         <transition name="fade" mode="out-in">
-            <v-app v-if="!messengerOpened && cardIndex !== 6" style="background-color: whitesmoke">
+            <v-app v-if="!messengerOpened && cardIndex !== 5" style="background-color: whitesmoke">
                 <v-main>
                     <Navigation :navigationOpened="navigationOpened" @navigationClosed="navigationOpened = false" @navigationChosen="navigationChosen"></Navigation>
                     <v-img
@@ -39,7 +39,8 @@
                         <transition name="fade" mode="out-in">
                             <HomePage @cardChosen="cardChosen" v-if="cardIndex === 0"></HomePage>
                             <NewVisit v-if="cardIndex === 2"></NewVisit>
-                            <PatientTable v-if="cardIndex === 1"></PatientTable>
+                            <PatientTable @returnClicked="cardIndex = 0" v-if="cardIndex === 3"></PatientTable>
+                            <NewPatient v-if="cardIndex === 4" @registrationFinished="cardIndex = 0"></NewPatient>
                         </transition>
                     </v-main>
                 </v-main>
@@ -58,11 +59,13 @@ import NewVisit from "@/components/Panels/ReceptionPanel/NewVisit/NewVisit";
 import Navigation from "@/components/Panels/ReceptionPanel/Navigation";
 import Messenger from "@/components/Panels/DoctorPanel/Messenger/Messenger";
 import { VueTyper } from 'vue-typer'
-import PatientTable from "@/components/Panels/ReceptionPanel/Patients/PatientTable";
+import PatientTable from "@/components/Panels/DoctorPanel/MyPatients/PatientTable";
+import NewPatient from "@/components/Panels/ReceptionPanel/NewPatient/NewPatient";
+
 
 export default {
     name: "ReceptionPanel",
-    components: {HomePage, Footer, Navigation, NewVisit, Messenger, VueTyper, PatientTable},
+    components: {HomePage, Footer, Navigation, NewVisit, Messenger, VueTyper, PatientTable, NewPatient},
     data() {
         return {
             messengerOpened: false,
@@ -101,9 +104,6 @@ export default {
         },
         openNavigationDrawer() {
             this.navigationOpened = true
-        },
-        loadHomeComponent() {
-            this.cardIndex = 0
         },
     },
 

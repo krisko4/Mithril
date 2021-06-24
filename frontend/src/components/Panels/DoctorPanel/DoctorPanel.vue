@@ -40,11 +40,11 @@
                     <v-main class="mt-4">
                         <transition name="fade" mode="out-in">
                         <HomePage @cardChosen="cardChosen" @visitStarted="beginVisit" v-if="cardIndex === 0"></HomePage>
-                        <VisitCard @goBack="loadHomeComponent" v-if="cardIndex === 2"></VisitCard>
+                        <VisitCard @goBack="cardIndex = 0" v-if="cardIndex === 2"></VisitCard>
                         <MySchedule v-if="cardIndex === 3"></MySchedule>
-                        <PatientTable v-if="cardIndex === 4" @goBack="loadHomeComponent"></PatientTable>
+                        <PatientTable v-if="cardIndex === 4" @returnClicked="cardIndex = 0"></PatientTable>
                         <Visit :selectedVisitDate="selectedVisitDate"
-                               @visitFinished="loadHomeComponent"
+                               @visitFinished="cardIndex = 0"
                                :selectedVisitDuration="selectedVisitDuration"
                                :patientData="patientData"
                                v-if="cardIndex === 5"
@@ -113,9 +113,6 @@ export default {
         },
         openNavigationDrawer() {
             this.navigationOpened = true
-        },
-        loadHomeComponent() {
-            this.cardIndex = 0
         },
         beginVisit(patientData, selectedVisitDate, selectedVisitDuration) {
             this.cardIndex = 5

@@ -5,7 +5,7 @@
                 <h2 class="display-1 font-weight-bold mb-3">
                     Step 1
                 </h2>
-                <h3  class="headline font-weight-thin mb-3">
+                <h3 class="headline font-weight-thin mb-3">
                     <i>Login credentials </i>
                 </h3>
                 <transition name="fade">
@@ -16,51 +16,53 @@
         <v-form ref="form" v-model="valid" class="login">
             <v-row justify="center">
                 <v-col cols="7">
-                        <v-text-field
-                            type="email"
-                            :rules="emailRules"
-                            clearable
-                            label="E-mail"
-                            error-count="1"
-                            required
-                            v-model="email"
-                        ></v-text-field>
-                        <v-text-field
-                            type="email"
-                            :rules="emailRules"
-                            clearable
-                            label="Confirm e-mail"
-                            error-count="1"
-                            required
-                            v-model="confirmEmail"
-                        ></v-text-field>
-                        <v-text-field
-                            type="password"
-                            :rules="passwordRules"
-                            clearable
-                            label="Password"
-                            error-count="5"
-                            required
-                            v-model="password"
-                        ></v-text-field>
-                        <v-text-field
-                            type="password"
-                            clearable
-                            label="Confirm password"
-                            :rules="[
+                    <v-text-field
+                        type="email"
+                        :rules="emailRules"
+                        clearable
+                        label="E-mail"
+                        error-count="1"
+                        required
+                        v-model="email"
+                    ></v-text-field>
+                    <v-text-field
+                        type="email"
+                        autocomplete="off"
+                        :rules="emailRules"
+                        clearable
+                        label="Confirm e-mail"
+                        error-count="1"
+                        required
+                        v-model="confirmEmail"
+                    ></v-text-field>
+                    <v-text-field
+                        type="password"
+                        :rules="passwordRules"
+                        clearable
+                        label="Password"
+                        error-count="5"
+                        required
+                        v-model="password"
+                    ></v-text-field>
+                    <v-text-field
+                        type="password"
+                        clearable
+                        label="Confirm password"
+                        :rules="[
             v => !!v || 'Please confirm your password.',
 
             ]"
-                            error-count="5"
-                            required
-                            v-model="confirmPassword"
-                        ></v-text-field>
+                        error-count="5"
+                        required
+                        v-model="confirmPassword"
+                    ></v-text-field>
                 </v-col>
             </v-row>
             <v-row justify="center">
                 <v-col cols="7">
                     <transition name="fade">
-                        <v-btn color="primary" large @click="validateAndContinue" block :disabled="!buttonEnabled" medium>Submit
+                        <v-btn color="primary" large @click="validateAndContinue" block :disabled="!buttonEnabled"
+                               medium>Submit
                         </v-btn>
                     </transition>
                 </v-col>
@@ -79,7 +81,6 @@ export default {
 
     data() {
         return {
-
             valid: false,
             passwordRules: [
                 v => !!v || "Please enter your password.",
@@ -95,7 +96,6 @@ export default {
                 v => !!v || "Please enter your e-mail.",
                 v => /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(v) || 'Correct e-mail example: example@example.com'
             ],
-
             buttonEnabled: false,
             errorPopped: false,
             password: '',
@@ -124,12 +124,12 @@ export default {
         validateAndContinue() {
             this.errorPopped = false;
             if (this.password !== this.confirmPassword) {
-                this.error = "Passwords are different."
+                this.error = "Passwords are different"
                 this.errorPopped = true;
                 return
             }
             if (this.email !== this.confirmEmail) {
-                this.error = "E-mails are different."
+                this.error = "E-mails are different"
                 this.errorPopped = true;
                 return
             }
@@ -156,7 +156,7 @@ export default {
         }
 
     }
-    ,
+
 }
 
 </script>

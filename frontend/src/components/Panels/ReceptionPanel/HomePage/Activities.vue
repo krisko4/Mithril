@@ -53,7 +53,7 @@ export default {
                     subtitle: 'Browse through patients and their recent visits in your clinic',
                     src: 'https://msd20-assets.s3.amazonaws.com/wp-content/uploads/2020/08/26165036/2.6_Patient-Engagement.jpg',
                     flex: 6,
-                    index: 1,
+                    index: 3,
                     icon: 'mdi-account-heart'
                 },
                 {
@@ -69,7 +69,7 @@ export default {
                     subtitle: 'Contact your colleagues via chat',
                     src: 'http://localhost:8080/images/static/forum.png',
                     flex: 6,
-                    index: 3,
+                    index: 5,
                     icon: 'mdi-forum'
                 },
                 {
@@ -77,7 +77,7 @@ export default {
                     subtitle: 'Add new person as patient in your clinic',
                     src: 'https://j-elita.org.pl/wp-content/uploads/2021/03/lekarz-i-pacjent.jpg',
                     flex: 6,
-                    index: 3,
+                    index: 4,
                     icon: 'mdi-account-check-outline'
                 },
             ],

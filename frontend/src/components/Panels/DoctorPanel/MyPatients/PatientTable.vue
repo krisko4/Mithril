@@ -81,7 +81,7 @@
                         </v-row>
                     </v-card-subtitle>
                     <v-dialog max-width="500" v-model="patientDetails">
-                        <PatientDetails :patientData="patientData"></PatientDetails>
+                        <PatientDetailsCard :patientData="patientData"></PatientDetailsCard>
                     </v-dialog>
                     <v-dialog v-model="historyDialog" max-width="700">
                         <PatientHistory :patientData="patientData"></PatientHistory>
@@ -116,7 +116,7 @@
                                 <td class="text-xs-right">
                                     <v-btn color="primary" x-small @click.stop="openHistoryDialog(item)">Check</v-btn>
                                 </td>
-                                <td>
+                                <td v-if="role === 'DOCTOR'">
                                     <v-icon
                                         @click.stop="openDeleteDialog(item)"
                                         color="primary"
@@ -141,13 +141,13 @@
 import {tokenAxios} from "@/axios";
 import PatientDelete from "@/components/Panels/DoctorPanel/MyPatients/PatientDelete";
 import PatientHistory from "@/components/Panels/DoctorPanel/MyPatients/PatientHistory/PatientHistory";
-import PatientDetails from "@/components/Panels/DoctorPanel/MyPatients/PatientDetails";
 import PatientSearchComponent from "@/components/Panels/ReceptionPanel/NewVisit/PatientSearchComponent";
+import PatientDetailsCard from "@/components/Panels/DoctorPanel/MyPatients/PatientDetailsCard";
 
 
 export default {
     name: "PatientTable",
-    components: {PatientDelete, PatientHistory, PatientDetails, PatientSearchComponent},
+    components: {PatientDelete, PatientHistory, PatientDetailsCard, PatientSearchComponent},
     data() {
         return {
             newPatientDialog: false,
@@ -161,7 +161,8 @@ export default {
             warningDialog: false,
             historyDialog: false,
             doctorName: '',
-            patientSelected: false
+            patientSelected: false,
+            role: localStorage.getItem('role')
         }
 
     },
@@ -184,7 +185,7 @@ export default {
             this.patientDetails = true
         },
         goBack() {
-            this.$emit('goBack')
+            this.$emit('returnClicked')
         },
         openDeleteDialog(item) {
             this.patientData = item
@@ -239,26 +240,9 @@ export default {
 
     },
 
-    watch: {
-        // patientData(val) {
-        //     // if patientSelected is true <=> button is enabled, check if such patient is already present in the table
-        //     // if so, disable button
-        //     console.log(val)
-        //     if (val) {
-        //         this.patients.filter((element) => {
-        //             if (element.pesel === this.patientData.pesel) {
-        //                 this.patientSelected = false
-        //             }
-        //         })
-        //     }
-        //     console.log(this.patientSelected)
-        // },
-
-    },
-
     computed: {
         headers() {
-            return [
+            let headers = [
                 {
                     text: 'First name',
                     align: 'start',
@@ -280,35 +264,87 @@ export default {
                 {text: 'Post code', value: 'postCode'},
                 {text: 'City', value: 'city'},
                 {text: 'History', value: 'history', sortable: false},
-                {text: 'Actions', value: 'actions', sortable: false},
+
 
             ]
+            if(this.role === 'DOCTOR'){
+                headers.push( {text: 'Actions', value: 'actions', sortable: false})
+            }
+            return headers
+            // return [
+            //     {
+            //         text: 'First name',
+            //         align: 'start',
+            //         sortable: true,
+            //         value: 'firstName',
+            //     },
+            //     {
+            //         text: 'Second name',
+            //         value: 'secondName',
+            //
+            //     },
+            //     {text: 'Last name', value: 'lastName'},
+            //     {text: 'PESEL', value: 'pesel'},
+            //     {text: 'Date of birth', value: 'birthdate'},
+            //     {text: 'Phone', value: 'phone'},
+            //     {text: 'E-mail', value: 'email'},
+            //     {text: 'Street', value: 'street'},
+            //     {text: 'Flat number', value: 'flatNumber'},
+            //     {text: 'Post code', value: 'postCode'},
+            //     {text: 'City', value: 'city'},
+            //     {text: 'History', value: 'history', sortable: false},
+            //     {text: 'Actions', value: 'actions', sortable: false},
+            //
+            // ]
         },
 
     },
 
     created() {
-        tokenAxios.get('patients/', {
-            params: {
-                doctor_id: localStorage.getItem('id')
-            }
-        }).then((response) => {
-            response.data.filter((element) => {
-                this.patients.push(
-                    {
-                        id: element.id,
-                        firstName: element.firstName,
-                        secondName: element.secondName,
-                        lastName: element.lastName,
-                        pesel: element.pesel,
-                        birthdate: element.birthdate,
-                        phone: element.phone,
-                        email: element.email,
-                        address: element.address
-                    }
-                )
+        if(this.role === 'DOCTOR'){
+            tokenAxios.get('patients/', {
+                params: {
+                    doctorId: localStorage.getItem('id')
+                }
+            }).then((response) => {
+                response.data.filter((element) => {
+                    this.patients.push(
+                        {
+                            id: element.id,
+                            firstName: element.firstName,
+                            secondName: element.secondName,
+                            lastName: element.lastName,
+                            pesel: element.pesel,
+                            birthdate: element.birthdate,
+                            phone: element.phone,
+                            email: element.email,
+                            address: element.address
+                        }
+                    )
+                })
             })
-        })
+            return
+        }
+        tokenAxios.get('patients')
+            .then((response) => {
+                console.log(response.data)
+                response.data.forEach((element) => {
+                    this.patients.push(
+                        {
+                            id: element.id,
+                            firstName: element.firstName,
+                            secondName: element.secondName,
+                            lastName: element.lastName,
+                            pesel: element.pesel,
+                            birthdate: element.birthdate,
+                            phone: element.phone,
+                            email: element.email,
+                            address: element.address
+                        }
+                    )
+                })
+            })
+
     }
 }
 </script>

@@ -5,7 +5,7 @@
         :search-input.sync="search"
         :loading="loading"
         :items="items"
-        label="Patients"
+        label="Doctors"
     >
     </v-autocomplete>
 </template>
@@ -19,56 +19,59 @@ export default {
             loading: false,
             search: null,
             items: [],
-            patient: null,
-            patientSelected: false
+            doctor: null,
+            doctorSelected: false,
         }
     },
     watch: {
         search(val) {
-            this.patientSelected = false
+            this.doctorSelected = false
             this.loading = true
-            this.findPatientsDebounced(val)
+            this.findDoctorsDebounced(val)
         },
     },
     methods: {
-        findPatientsDebounced(val) {
+        findDoctorsDebounced(val) {
             clearTimeout(this._searchTimerId)
             this._searchTimerId = setTimeout(() => {
-                this.findPatients(val)
+                this.findDoctors(val)
             }, 300)
 
         },
 
-        findPatients(val) {
+        findDoctors(val) {
             if (!val) {
                 this.items = []
                 this.loading = false
-                this.patientSelected = false
-                this.$emit('patientSelected', this.patient, this.patientSelected)
+                this.doctorSelected = false
+                this.$emit('doctorSelected', this.doctor, this.doctorSelected)
                 return
             }
-            tokenAxios.get("patients", {
+            tokenAxios.get("doctors", {
                 params: {
                     name: val
                 }
             }).then((response) => {
                 if(this.items.includes(val)){
-                    this.patientSelected = true
+                    console.log('hej')
+                    this.doctorSelected = true
+                    this.$emit('doctorSelected', this.doctor, this.doctorSelected)
                     return
                 }
-                if(response.data.length === 0){
-                    this.patientSelected = false
-                }
-                response.data.filter((patient) => {
-                    this.patient = patient
-                    const patientData = patient.firstName + " " + patient.lastName + " " + patient.pesel;
-                    if (!this.items.includes(patientData)) {
-                        this.items.push(patientData)
+                 if(response.data.length === 0){
+                     this.doctorSelected = false
+                     this.$emit('doctorSelected', this.doctor, this.doctorSelected)
+                     return
+                 }
+                response.data.filter((doctor) => {
+                    this.doctor = doctor
+                    const doctorData = doctor.firstName + " " + doctor.lastName;
+                    if (!this.items.includes(doctorData)) {
+                        this.items.push(doctorData)
                     }
                 })
             }).finally(() => {
                 this.loading = false
-                this.$emit('patientSelected', this.patient, this.patientSelected)
             })
 
         }

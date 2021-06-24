@@ -11,7 +11,7 @@
                             Fill all the steps to register your account
                         </v-card-subtitle>
                         <transition v-if="isRegistrationTypeChosen" appear name="fade" mode="out-in">
-                        <Steps  :registrationType="registrationType" @registrationFinished="redirectToEmailConfirmation"></Steps>
+                        <Steps :registrationType="registrationType" @registrationFinished="redirectToEmailConfirmation"></Steps>
                         </transition>
                         <transition v-else name="fade">
                         <RegistrationType  @registrationTypeChosen="goToStep1" ></RegistrationType>

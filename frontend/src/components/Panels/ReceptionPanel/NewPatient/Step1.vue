@@ -1,13 +1,10 @@
 <template>
     <v-card-text>
-        <v-row class="text-center">
+        <v-row class="text-center mt-3">
             <v-col class="mb-4">
                 <h2 class="display-1 font-weight-bold mb-3">
-                    Step 2
+                    Patient registration form
                 </h2>
-                <h3 class="headline font-weight-thin mb-3">
-                    <i>Personal data</i>
-                </h3>
                 <transition name="fade">
                     <p style="color:red;" v-if="errorPopped">{{ error }}</p>
                 </transition>
@@ -17,12 +14,24 @@
             <v-col cols="10" align="center">
                 <v-form ref="form" v-model="valid" class="login">
                     <v-row justify="center">
+                        <v-col cols="12">
+                            <v-text-field
+                                type="email"
+                                autocomplete="off"
+                                :rules="emailRules"
+                                label="E-mail address"
+                                error-count="1"
+                                required
+                                v-model="email"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row justify="center">
                         <v-col cols="6">
-
                             <v-text-field
                                 @keypress="isLetter($event)"
                                 label="First name"
-                                :rules="[v => !!v || 'Please enter your first name.']"
+                                :rules="[v => !!v || 'Please enter a first name.']"
                                 required
                                 v-model="firstName"
                                 type="text"
@@ -32,7 +41,7 @@
                             <v-text-field
                                 @keypress="isLetter($event)"
                                 label="Last name"
-                                :rules="[v => !!v || 'Please enter your last name.']"
+                                :rules="[v => !!v || 'Please enter a last name.']"
                                 required
                                 v-model="lastName"
                             ></v-text-field>
@@ -50,55 +59,69 @@
                             <v-text-field
                                 @keypress="isNumber($event)"
                                 label="Phone"
-                                :rules="[v => !!v || 'Please enter your phone number.']"
+                                :rules="[v => !!v || 'Please enter a phone number.']"
                                 required
                                 v-model="phone"
                             ></v-text-field>
                         </v-col>
                     </v-row>
-                    <v-col cols="12">
-                        <v-dialog
-                            ref="dialog"
-                            v-model="modal"
-                            :return-value.sync="date"
-                            persistent
-                            width="290px"
-                        >
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                    v-model="date"
-                                    label="Birthdate"
-                                    prepend-icon="mdi-calendar"
-                                    readonly
-                                    v-bind="attrs"
-                                    v-on="on"
-                                ></v-text-field>
-                            </template>
-                            <v-date-picker
-                                v-model="date"
-                                scrollable
-                                :allowed-dates="allowedDates"
+                    <v-row>
+                        <v-col cols="6">
+                            <v-dialog
+                                ref="dialog"
+                                v-model="modal"
+                                :return-value.sync="date"
+                                persistent
+                                width="290px"
                             >
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                    text
-                                    color="primary"
-                                    @click="modal = false"
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date"
+                                        label="Birthdate"
+                                        prepend-icon="mdi-calendar"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                    v-model="date"
+                                    scrollable
+                                    :allowed-dates="allowedDates"
                                 >
-                                    Cancel
-                                </v-btn>
-                                <v-btn
-                                    text
-                                    color="primary"
-                                    @click="$refs.dialog.save(date)"
-                                >
-                                    OK
-                                </v-btn>
-                            </v-date-picker>
-                        </v-dialog>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        text
+                                        color="primary"
+                                        @click="modal = false"
+                                    >
+                                        Cancel
+                                    </v-btn>
+                                    <v-btn
+                                        text
+                                        color="primary"
+                                        @click="$refs.dialog.save(date)"
+                                    >
+                                        OK
+                                    </v-btn>
+                                </v-date-picker>
+                            </v-dialog>
 
-                    </v-col>
-
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field
+                                label="PESEL"
+                                :rules="[
+                                                   v => !!v || 'Please enter a PESEL number',
+                                                     v => v.length === 11 || 'PESEL number requires exactly 11 digits']"
+                                min="11"
+                                required
+                                v-model="pesel"
+                                v-mask="'###########'"
+                            >
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
                     <v-row justify="center">
                         <v-col cols="6" align="center">
                             <v-text-field
@@ -107,7 +130,7 @@
                                 :rules="[
                             () => !!address || 'This field is required',
                             () => address.length <= 25 || 'Address must be less than 25 characters',
-                            v => /(?=.*[A-Za-z]{3})/.test(v) || 'Your address should contain at least 3 letters.',
+                            v => /(?=.*[A-Za-z]{3})/.test(v) || 'The address should contain at least 3 letters.',
                             ]"
 
                                 label="Address Line"
@@ -118,8 +141,8 @@
                         </v-col>
                         <v-col cols="6" align="center">
                             <v-text-field
-                                ref="address"
                                 v-mask="'#####'"
+                                ref="address"
                                 type="number"
                                 v-model="address_2"
                                 :rules="[
@@ -168,10 +191,10 @@
                     </v-row>
                 </v-form>
                 <v-row justify="center">
-                    <v-col cols="12" align="center">
+                    <v-col cols="12" class="mb-3" align="center">
                         <v-btn
                             color="primary"
-                            @click="validateForm"
+                            @click="registerNewPatient"
                             :disabled="!buttonEnabled"
                             large
                             block
@@ -182,15 +205,14 @@
             </v-col>
         </v-row>
     </v-card-text>
-
-
 </template>
 
 <script>
 export default {
+    name: "Step1",
     data() {
         return {
-            countries: ['Polska', 'England'],
+            countries: ['Poland', 'England'],
             firstName: '',
             lastName: '',
             secondName: '',
@@ -200,31 +222,40 @@ export default {
             postCode: '',
             country: '',
             phone: '',
+            pesel: '',
+            email: '',
             buttonEnabled: false,
             valid: false,
             errorPopped: '',
             date: new Date().toISOString().substr(0, 10),
             modal: false,
             allowedDates: val => val <= new Date().toISOString().substr(0, 10),
+            emailRules: [
+                v => !!v || "Please enter an e-mail address.",
+                v => /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(v) || 'Correct e-mail example: example@example.com'
+            ],
         }
     },
     methods: {
-        validateForm() {
-            this.$emit('secondStepComplete', {
-                'firstName': this.firstName,
-                'lastName': this.lastName,
-                'secondName': this.secondName,
-                'street': this.address,
-                'flatNumber': this.address_2,
-                'city': this.city,
-                'postCode': this.postCode,
-                'country': this.country,
-                'phone': this.phone,
-                'birthdate': this.date,
-            })
 
-            this.$toast.success('Step 2 completed successfully.')
+        registerNewPatient(){
+            let patient = {
+                firstName: this.firstName,
+                lastName: this.lastName,
+                secondName: this.secondName,
+                street: this.address,
+                flatNumber: this.address_2,
+                city: this.city,
+                postCode: this.postCode,
+                country: this.country,
+                phone: this.phone,
+                birthdate: this.date,
+                pesel: this.pesel,
+                email: this.email
+            }
+            this.$emit('firstStepFinished', patient)
         },
+
         isLetter(e) {
             let char = String.fromCharCode(e.keyCode);
             if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/.test(char)) return true;
@@ -237,14 +268,17 @@ export default {
         },
         showButton() {
             this.buttonEnabled = this.valid
-        },
+        }
 
     },
     watch: {
         valid() {
-            console.log(this.valid)
             setTimeout(this.showButton, 200);
         }
-    },
+    }
 }
 </script>
+
+<style scoped>
+
+</style>
