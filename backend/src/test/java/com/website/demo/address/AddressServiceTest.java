@@ -20,7 +20,7 @@ class AddressServiceTest {
         when(addressRepository.findOne(Example.of(address)).orElseThrow(IllegalStateException::new))
                 .thenReturn(address);
         when(addressRepository.save(address)).thenReturn(address);
-        assertThat(addressService.getAddressAndSaveIfNotExists("Polska", "Warszawa", "Okońska", 1, "02-032"))
+        assertThat(addressService.getAddressAndSaveIfNotExists(address))
                 .isNotNull();
 
     }

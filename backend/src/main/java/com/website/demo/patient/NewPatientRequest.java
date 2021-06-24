@@ -1,24 +1,15 @@
-package com.website.demo.registration;
-
+package com.website.demo.patient;
 
 import com.website.demo.authorities.AppUserRole;
-import com.website.demo.specialization.SpecializationNames;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Pattern;
-import java.util.List;
 
-@Getter
-@AllArgsConstructor
-@EqualsAndHashCode
-@ToString
-public class RegistrationRequest {
+@Data
+public class NewPatientRequest {
 
-
+    private Long doctorId;
     @Pattern(regexp="^[A-Za-z\\p{L}]+$")
     private final String firstName;
     @Pattern(regexp="^[A-Za-z\\p{L}]*$")
@@ -27,10 +18,6 @@ public class RegistrationRequest {
     private final String lastName;
     @Pattern(regexp="^[0-9]*$")
     private final String phone;
-    @Pattern(regexp= "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
-    private final String password;
-    @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-    private final String email;
     @Pattern(regexp="^[A-Za-z\\p{L}]+$")
     private final String country;
     @Pattern(regexp="^[A-Za-z\\p{L}]+$")
@@ -42,12 +29,10 @@ public class RegistrationRequest {
     private final String postCode;
     @Pattern(regexp = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")
     private final String birthdate;
-    private final String registrationType;
-    private final String specializationNames;
-    private final MultipartFile image;
-    private AppUserRole role;
+    @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+    private final String email;
 
-    public void setRole(AppUserRole role) {
-        this.role = role;
-    }
+    private final String pesel;
+
+
 }

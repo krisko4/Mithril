@@ -58,7 +58,6 @@ public class DoctorDto {
         this.secondName = secondName;
         this.lastName = lastName;
         this.imageName = imageName;
-
     }
 
     public static DoctorDto from(AppUser appUser) {
@@ -71,8 +70,7 @@ public class DoctorDto {
         dto.phone = appUser.getPhone();
         dto.imageName = appUser.getImageName();
 
-  //      dto.visitSet = doctor.getVisitSet().stream().map(VisitDto::new).collect(Collectors.toSet());
-  //      dto.schedules = doctor.getSchedules().stream().map(ScheduleDto::from).collect(Collectors.toSet());
+
 
         return dto;
     }

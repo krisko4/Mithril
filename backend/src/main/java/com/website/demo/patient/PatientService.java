@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -57,5 +59,14 @@ public class PatientService {
         }
         return patientRepository.findAllPatients();
 
+    }
+
+    public LocalDate birthdayToLocalDate(String birthdateString){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(birthdateString, formatter);
+    }
+
+    public void addNewPatient(Patient patient) {
+        patientRepository.save(patient);
     }
 }

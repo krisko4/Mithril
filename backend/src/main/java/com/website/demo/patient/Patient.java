@@ -48,4 +48,28 @@ public class Patient {
         this.lastName = lastName;
         this.secondName = secondName;
     }
+
+    public Patient(String firstName,
+                   String secondName,
+                   String lastName,
+                   String pesel,
+                   LocalDate birthdate,
+                   String phone,
+                   String email,
+                   Address address,
+                   AppUser appUser
+    ) {
+
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.pesel = pesel;
+        this.birthdate = birthdate;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.appUser = appUser;
+
+    }
+
 }

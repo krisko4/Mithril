@@ -29,7 +29,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Set<Specialization> getSpecializationsForDoctor(Long id);
 
 
-    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName,  a.email, a.phone, a.id) from AppUser a")
+    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName,  a.email, a.phone, a.id) from AppUser a where a.role = 'DOCTOR'")
     List<DoctorDto> findAllDoctors();
 
 
@@ -47,7 +47,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             "SET a.imageName = ?1 WHERE a.email = ?2")
     void setImageName(String imagePath, String email);
 
-    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName,  a.email, a.phone, a.id) from AppUser a join a.schedules schedule where schedule.date = ?1")
+    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.secondName, a.lastName, a.imageName,  a.email, a.phone, a.id) from AppUser a join a.schedules schedule where a.role = 'DOCTOR' and schedule.date = ?1")
     List<DoctorDto> findAllByScheduleDate(String date);
 
 
@@ -63,4 +63,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     @Query("select new com.website.demo.user.doctor.DoctorName(a.firstName, a.secondName, a.lastName) from AppUser a where a.id = ?1")
     DoctorName getDoctorName(Long id);
+
+    @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.lastName, a.secondName, a.imageName, a.id) from AppUser a where a.firstName like :name%")
+    List<DoctorDto> findByFirstNameStartsWith(String name);
 }

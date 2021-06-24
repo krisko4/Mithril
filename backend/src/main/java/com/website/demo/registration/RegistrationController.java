@@ -49,11 +49,7 @@ public class RegistrationController {
                 request.getEmail(),
                 request.getPassword(),
                 request.getPhone(),
-                addressService.getAddressAndSaveIfNotExists(requestAddress.getCountry(),
-                        requestAddress.getCity(),
-                        requestAddress.getStreet(),
-                        requestAddress.getFlatNumber(),
-                        requestAddress.getPostCode()),
+                addressService.getAddressAndSaveIfNotExists(requestAddress),
                 registrationService.birthdayToLocalDate(request.getBirthdate()),
                 role
         );

@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -99,7 +100,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     public AppUser findById(Long id){
-        return appUserRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id: " + id + "not found"));
+        return appUserRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User with id: " + id + "not found"));
     }
 
 

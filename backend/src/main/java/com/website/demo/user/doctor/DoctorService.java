@@ -19,14 +19,19 @@ public class DoctorService {
     private final AppUserRepository appUserRepository;
     private final VisitService visitService;
 
-    public List<DoctorDto> getDoctorsBy(String date){
+    public List<DoctorDto> getDoctorsBy(String date, String name){
         List<DoctorDto> doctors;
-        if(date == null){
+        if(date == null && name == null){
             doctors = appUserRepository.findAllDoctors();
         }
-        else{
+        else if(date == null){
+            doctors = appUserRepository.findByFirstNameStartsWith(name);
+            return doctors;
+        }
+        else {
             doctors = appUserRepository.findAllByScheduleDate(date);
         }
+
         for(DoctorDto doctor : doctors){
             Set<SpecializationDto> specializationDtoSet = appUserRepository.getSpecializationsForDoctor(doctor.getId())
                     .stream()

@@ -14,8 +14,8 @@ public class DoctorController {
     private final DoctorService doctorService;
 
     @GetMapping("doctors")
-    public List<DoctorDto> getDoctorsBy(@RequestParam(required = false) String date) {
-        return doctorService.getDoctorsBy(date);
+    public List<DoctorDto> getDoctorsBy(@RequestParam(required = false) String name, @RequestParam(required = false) String date) {
+        return doctorService.getDoctorsBy(date, name);
     }
 
     @GetMapping("doctors/{id}/name")

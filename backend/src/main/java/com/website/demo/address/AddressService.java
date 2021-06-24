@@ -15,8 +15,7 @@ public class AddressService {
 
 
 
-    public Address getAddressAndSaveIfNotExists(String country, String city, String street, Integer flatNumber, String postCode){
-        Address address = new Address(country, city, street, flatNumber, postCode);
+    public Address getAddressAndSaveIfNotExists(Address address){
         boolean addressExists = addressRepository.exists(Example.of(address));
         if (addressExists) {
             return addressRepository.findOne(Example.of(address)).orElseThrow(IllegalStateException::new);

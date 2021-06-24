@@ -1,11 +1,17 @@
 package com.website.demo.patient;
 
+import com.website.demo.address.Address;
+import com.website.demo.address.AddressService;
+import com.website.demo.user.AppUser;
+import com.website.demo.user.AppUserRepository;
+import com.website.demo.user.AppUserService;
 import com.website.demo.visit.Visit;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,7 +24,35 @@ import java.util.stream.Collectors;
 public class PatientController {
 
     private final PatientService patientService;
+    private final AppUserService appUserService;
+    private final AddressService addressService;
 
+
+    @PostMapping
+    public void addNewPatient(@RequestBody NewPatientRequest newPatientRequest){
+
+        Address requestAddress = new Address(
+                newPatientRequest.getCountry(),
+                newPatientRequest.getCity(),
+                newPatientRequest.getStreet(),
+                newPatientRequest.getFlatNumber(),
+                newPatientRequest.getPostCode()
+        );
+        AppUser appUser = appUserService
+                .findById(newPatientRequest.getDoctorId());
+        Patient patient = new Patient(
+                newPatientRequest.getFirstName(),
+                newPatientRequest.getSecondName(),
+                newPatientRequest.getLastName(),
+                newPatientRequest.getPesel(),
+                patientService.birthdayToLocalDate(newPatientRequest.getBirthdate()),
+                newPatientRequest.getPhone(),
+                newPatientRequest.getEmail(),
+                addressService.getAddressAndSaveIfNotExists(requestAddress),
+                appUser
+        );
+        patientService.addNewPatient(patient);
+    }
 
     @GetMapping("{id}")
     public Optional<Patient> getPatient(@PathVariable Long id) {
@@ -27,8 +61,8 @@ public class PatientController {
 
 
     @GetMapping
-    public List<PatientDto> getPatientsBy(@RequestParam(required = false) String name, @RequestParam(required = false) Long doctor_id) {
-        return patientService.getPatientsBy(name, doctor_id);
+    public List<PatientDto> getPatientsBy(@RequestParam(required = false) String name, @RequestParam(required = false) Long doctorId) {
+        return patientService.getPatientsBy(name, doctorId);
     }
 
 
