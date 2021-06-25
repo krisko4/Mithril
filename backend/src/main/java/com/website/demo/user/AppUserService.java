@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -56,7 +57,6 @@ public class AppUserService implements UserDetailsService {
 
     public String signUp(AppUser appUser) {
         boolean userExists = appUserRepository.findByEmail(appUser.getEmail()).isPresent();
-
         if (userExists) {
             throw new IllegalStateException(String.format(EMAIL_TAKEN_MSG, appUser.getEmail()));
         }
@@ -103,8 +103,9 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User with id: " + id + "not found"));
     }
 
-
     public List<AppUserDto> findUsersExceptForOne(Long id) {
         return appUserRepository.findAllExceptFor(id);
     }
+
+
 }

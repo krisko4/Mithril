@@ -18,6 +18,7 @@ public class AppUserController {
     private final AppUserService appUserService;
 
 
+
     @GetMapping("email")
     public void checkEmailAvailability(@RequestParam("email") String email) {
         appUserService.checkEmailAvailability(email);
