@@ -38,7 +38,7 @@
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="saveAusculation">Save
+            <v-btn color="blue darken-1" text :disabled="selected.length === 0" @click="saveAusculation">Save
             </v-btn>
         </v-card-actions>
     </v-card>

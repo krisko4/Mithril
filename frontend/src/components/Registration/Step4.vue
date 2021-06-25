@@ -75,7 +75,6 @@ export default {
 
     methods: {
 
-        //TODO: add specialization during registration
 
         registerDoctor() {
             this.registerLoading = true

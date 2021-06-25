@@ -39,7 +39,7 @@
                         <transition name="fade" mode="out-in">
                             <HomePage @cardChosen="cardChosen" v-if="cardIndex === 0"></HomePage>
                             <NewVisit v-if="cardIndex === 2"></NewVisit>
-                            <PatientTable @returnClicked="cardIndex = 0" v-if="cardIndex === 3"></PatientTable>
+                            <PatientTable @newPatientClicked="cardIndex = 4" @returnClicked="cardIndex = 0" v-if="cardIndex === 3"></PatientTable>
                             <NewPatient v-if="cardIndex === 4" @registrationFinished="cardIndex = 0"></NewPatient>
                         </transition>
                     </v-main>

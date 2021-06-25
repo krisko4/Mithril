@@ -50,7 +50,7 @@ export default {
             cards: [
                 {
                     title: 'Patients',
-                    subtitle: 'Browse through patients and their recent visits in your clinic',
+                    subtitle: 'Browse through patients and their visits',
                     src: 'https://msd20-assets.s3.amazonaws.com/wp-content/uploads/2020/08/26165036/2.6_Patient-Engagement.jpg',
                     flex: 6,
                     index: 3,
@@ -58,7 +58,7 @@ export default {
                 },
                 {
                     title: 'New visit',
-                    subtitle: 'Register a new visit for patient in your clinic',
+                    subtitle: 'Register a new visit for patient',
                     src: 'http://localhost:8080/images/static/visit.jpg',
                     flex: 6,
                     index: 2,
@@ -74,7 +74,7 @@ export default {
                 },
                 {
                     title: 'Register new patient',
-                    subtitle: 'Add new person as patient in your clinic',
+                    subtitle: 'Add new person as patient',
                     src: 'https://j-elita.org.pl/wp-content/uploads/2021/03/lekarz-i-pacjent.jpg',
                     flex: 6,
                     index: 4,

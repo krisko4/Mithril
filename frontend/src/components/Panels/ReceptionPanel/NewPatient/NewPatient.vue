@@ -1,7 +1,7 @@
 <template>
-    <v-container>
-        <v-row justify="center">
-            <v-col cols="6">
+    <v-container fluid>
+        <v-row justify="center" class="mb-2">
+            <v-col cols="8" lg="5">
                 <v-card>
                     <v-card-title>
                         Patient registration

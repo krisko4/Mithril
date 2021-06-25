@@ -6,8 +6,8 @@
     <v-divider class="mt-2"></v-divider>
 </v-card-text>
     <v-card-actions>
-        <v-row>
-        <v-col cols="6"  align="center">
+        <v-row justify="center">
+        <v-col cols="10" lg="6"  align="center">
             <v-hover v-slot="{hover}">
                 <v-card
                     @click="chooseDoctorType"
@@ -26,7 +26,7 @@
             </v-hover>
         </v-col>
 
-        <v-col cols="6" align="center">
+        <v-col cols="10" lg="6" align="center">
             <v-hover v-slot="{hover}">
                 <v-card
                     :elevation="(hover || receptionistTypeChosen)?7:1"

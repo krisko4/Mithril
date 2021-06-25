@@ -1,13 +1,13 @@
 <template>
-    <v-container fill-height>
+    <v-container fluid fill-height>
     <v-row justify="center" class="mb-3 mt-3">
-        <v-col lg="7" cols="12" v-if="step === 1">
+        <v-col lg="6" cols="10" v-if="step === 1">
         <transition name="fade" appear mode="out-in">
             <DoctorComponent @returnClicked="step = 0" :key="date" :patient="patient" :doctors="doctors" :date="date"
                              ></DoctorComponent>
         </transition>
         </v-col>
-        <v-col lg="5" cols="12">
+        <v-col lg="4" cols="10">
         <v-card
             height="100%"
             :class="animation"

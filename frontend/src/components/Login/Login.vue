@@ -2,7 +2,7 @@
     <v-container :style="{'background-image':'url(http://localhost:8080/images/static/logo_transparent.png)'}" fill-height>
         <MailConfirmComponent v-if="!isAccountActive" :email="email"></MailConfirmComponent>
     <v-row justify="end">
-        <v-col lg="4" cols="5" md="5" sm="6">
+        <v-col lg="4" cols="6" xs="8">
             <v-card elevation="10">
                 <v-card-title class="display-2">
                     <v-spacer></v-spacer>
@@ -52,7 +52,7 @@
                             <v-btn
                                 color="primary"
                                 class="mb-4"
-                                @click="login"
+                                @click="overlay=!overlay"
                                 :disabled="!buttonEnabled"
                                 block
                                 large
@@ -66,6 +66,12 @@
             </v-card>
         </v-col>
     </v-row>
+        <v-overlay :value="overlay">
+            <v-progress-circular
+                indeterminate
+                size="64"
+            ></v-progress-circular>
+        </v-overlay>
     </v-container>
 </template>
 
@@ -78,6 +84,7 @@ export default {
 
     data(){
         return{
+            overlay: false,
             image: { backgroundImage : null},
             isAccountActive: true,
             email: '',
@@ -138,7 +145,16 @@ export default {
         valid() {
             setTimeout(this.showButton, 200);
             this.$emit('validCheck', this.valid)
-        }
+        },
+
+            overlay (val) {
+
+                val && setTimeout(() => {
+                    this.overlay = false
+                    this.login()
+                }, 1000)
+            },
+
     },
 }
 </script>

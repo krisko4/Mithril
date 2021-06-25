@@ -1,7 +1,7 @@
 <template>
 <v-container fluid>
     <v-row justify="center">
-    <v-col cols="3" align="center">
+    <v-col cols="6" xs="8" lg="3" align="center">
         <v-card>
             <v-card-subtitle class="display-1 text--primary">Verify your account</v-card-subtitle>
             <v-divider class="mx-4"></v-divider>

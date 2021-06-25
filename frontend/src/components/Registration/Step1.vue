@@ -147,8 +147,8 @@ export default {
                         })
                         this.$toast.success('Step 1 completed successfully.')
                     }
-                ).catch((error) => {
-                this.error = error.response.data.message
+                ).catch(() => {
+                this.error = "This e-mail is occupied"
                 this.errorPopped = true
             })
 

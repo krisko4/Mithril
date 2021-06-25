@@ -38,7 +38,7 @@ export default {
             this.$router.push({name:'login'})
         },
         refresh(){
-            axios.post('doctor/registration/resend-token', {
+            axios.post('registration/resend-token', {
                 token: this.token
             })
                 .then((response) => {

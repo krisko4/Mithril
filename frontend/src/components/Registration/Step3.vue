@@ -11,7 +11,7 @@
             </v-col>
         </v-row>
         <v-row justify="center">
-            <v-col cols="5" align="center">
+            <v-col cols="8" lg="6" align="center">
                 <v-card
                     ref="card"
                     class="mx-auto"

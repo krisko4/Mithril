@@ -1,7 +1,7 @@
 <template>
-    <v-container>
+    <v-container fluid>
         <v-row justify="center">
-            <v-col cols="11">
+            <v-col cols="10">
                 <v-card>
                     <v-card-title class="display-2">
                         Patient table
@@ -24,7 +24,7 @@
                                 <v-dialog max-width="400"
                                           v-model="newPatientDialog">
                                     <template v-slot:activator="on" v-on="on">
-                                        <v-btn @click="newPatientDialog = true" color="primary">New patient</v-btn>
+                                        <v-btn @click="startPatientAdding" color="primary">New patient</v-btn>
                                     </template>
                                     <template>
                                         <v-card>
@@ -48,7 +48,6 @@
                                                         >Add
                                                         </v-btn>
                                                     </template>
-                                                    <template>
                                                         <v-card>
                                                             <v-card-title>Warning</v-card-title>
                                                             <v-card-text>Patient <b>{{ patientData.firstName }}
@@ -70,9 +69,7 @@
                                                                 <v-spacer></v-spacer>
                                                             </v-card-actions>
                                                         </v-card>
-                                                    </template>
                                                 </v-dialog>
-
                                             </v-card-text>
                                         </v-card>
                                     </template>
@@ -167,6 +164,16 @@ export default {
 
     },
     methods: {
+
+        startPatientAdding(){
+          if(localStorage.getItem('role') === 'DOCTOR'){
+              this.newPatientDialog = true
+              return
+          }
+          this.$emit('newPatientClicked')
+
+
+        },
         selectPatientToAdd(patient, patientSelected) {
             this.patientData = patient
             this.patientSelected = patientSelected
@@ -223,7 +230,6 @@ export default {
 
         },
         deletePatient() {
-            console.log(this.patientData)
             tokenAxios.patch('patients/' + this.patientData.id + '/remove-doctor', {}, {
                     params: {
                         doctorId: localStorage.getItem('id')
@@ -271,31 +277,6 @@ export default {
                 headers.push( {text: 'Actions', value: 'actions', sortable: false})
             }
             return headers
-            // return [
-            //     {
-            //         text: 'First name',
-            //         align: 'start',
-            //         sortable: true,
-            //         value: 'firstName',
-            //     },
-            //     {
-            //         text: 'Second name',
-            //         value: 'secondName',
-            //
-            //     },
-            //     {text: 'Last name', value: 'lastName'},
-            //     {text: 'PESEL', value: 'pesel'},
-            //     {text: 'Date of birth', value: 'birthdate'},
-            //     {text: 'Phone', value: 'phone'},
-            //     {text: 'E-mail', value: 'email'},
-            //     {text: 'Street', value: 'street'},
-            //     {text: 'Flat number', value: 'flatNumber'},
-            //     {text: 'Post code', value: 'postCode'},
-            //     {text: 'City', value: 'city'},
-            //     {text: 'History', value: 'history', sortable: false},
-            //     {text: 'Actions', value: 'actions', sortable: false},
-            //
-            // ]
         },
 
     },

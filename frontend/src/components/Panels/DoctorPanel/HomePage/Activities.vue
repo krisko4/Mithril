@@ -9,7 +9,7 @@
                 <v-col
                     v-for="card in cards"
                     :key="card.title"
-                    :cols="card.flex"
+                    cols = 6
                 >
                     <v-hover
                         v-slot="{hover}">
@@ -52,7 +52,6 @@ export default {
                     title: 'My visits',
                     subtitle: 'Browse through your visits',
                     src: 'http://localhost:8080/images/static/visit.jpg',
-                    flex: 6,
                     index: 2,
                     icon: 'mdi-calendar'
                 },
@@ -60,15 +59,13 @@ export default {
                     title: 'My patients',
                     subtitle: 'Manage your patients',
                     src: 'http://localhost:8080/images/static/doctor-patient.jpg',
-                    flex: 6,
                     index: 4,
                     icon: 'mdi-account-heart'
                 },
                 {
                     title: 'My schedule',
-                    subtitle: 'Manage your working hours and availability',
+                    subtitle: 'Manage your working hours',
                     src: 'http://localhost:8080/images/static/schedule.jpg',
-                    flex: 6,
                     index: 3,
                     icon: 'mdi-calendar-heart'
                 },
@@ -76,7 +73,6 @@ export default {
                     title: 'Interact',
                     subtitle: 'Contact your colleagues via chat',
                     src: 'http://localhost:8080/images/static/forum.png',
-                    flex: 6,
                     index: 6,
                     icon: 'mdi-forum'
                 },
