@@ -19,6 +19,11 @@ public class DoctorService {
     private final AppUserRepository appUserRepository;
     private final VisitService visitService;
 
+
+    public List<DoctorDto> test(){
+        return appUserRepository.test();
+    }
+
     public List<DoctorDto> getDoctorsBy(String date, String name){
         List<DoctorDto> doctors;
         if(date == null && name == null){

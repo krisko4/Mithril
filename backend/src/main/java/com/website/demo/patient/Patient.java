@@ -37,7 +37,7 @@ public class Patient {
     @ManyToOne(optional = false)
     @JoinColumn(name = "address_id")
     private Address address;
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private Set<Visit> visitSet;
     @ManyToOne
     @JoinColumn(name = "doctor_id")

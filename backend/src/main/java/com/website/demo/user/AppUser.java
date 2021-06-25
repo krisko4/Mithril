@@ -4,6 +4,7 @@ import com.website.demo.address.Address;
 import com.website.demo.authorities.AppUserRole;
 import com.website.demo.schedule.Schedule;
 import com.website.demo.specialization.Specialization;
+import com.website.demo.user.doctor.DoctorDto;
 import com.website.demo.visit.Visit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,25 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity(name = "AppUser")
 @Table(name = "app_user")
+
+@SqlResultSetMapping(
+        name="myMapping",
+        classes={
+                @ConstructorResult(
+                        targetClass = DoctorDto.class,
+                        columns = {
+                                @ColumnResult(name="id", type = Long.class),
+                                @ColumnResult(name="first_name", type = String.class)
+                        }
+                )
+        }
+)
+@NamedNativeQuery(
+        name ="AppUser.test",
+        resultSetMapping = "myMapping",
+        query = "select id, first_name from app_user"
+)
+
 public class AppUser implements UserDetails {
 
     @Id
@@ -41,7 +61,7 @@ public class AppUser implements UserDetails {
     @ManyToMany
     @JoinTable(name = "doctor_specialization", joinColumns = {@JoinColumn(name = "app_user_id")}, inverseJoinColumns = {@JoinColumn(name = "specialization_id")})
     private Set<Specialization> specializations;
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private Set<Visit> visitSet;
     @ManyToOne
     @JoinColumn(name = "address_id")

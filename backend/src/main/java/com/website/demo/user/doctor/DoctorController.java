@@ -18,15 +18,15 @@ public class DoctorController {
         return doctorService.getDoctorsBy(date, name);
     }
 
+    @GetMapping("doctors/test")
+    public List<DoctorDto> test(){
+        return doctorService.test();
+    }
     @GetMapping("doctors/{id}/name")
     public String getNameById(@PathVariable Long id){
         return doctorService.getNameById(id);
     }
 
 
-//    @GetMapping("doctors/except-for/{id}")
-//    public List<AppUserDto> getDoctorsBy(@PathVariable Long id) {
-//        return doctorService.getDoctorsExceptForOne(id);
-//    }
 
 }

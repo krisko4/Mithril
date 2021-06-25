@@ -47,6 +47,12 @@ public class DoctorDto {
     }
 
 
+    public DoctorDto(Long id, String firstName){
+        this.id = id;
+        this.firstName = firstName;
+
+    }
+
 
     public DoctorDto(String firstName,
                      String secondName,

@@ -66,4 +66,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     @Query("select new com.website.demo.user.doctor.DoctorDto(a.firstName, a.lastName, a.secondName, a.imageName, a.id) from AppUser a where a.firstName like :name%")
     List<DoctorDto> findByFirstNameStartsWith(String name);
+
+    @Query(nativeQuery = true)
+    List<DoctorDto> test();
 }
