@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hibernate.loader.Loader.SELECT;
 
@@ -35,6 +36,9 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     @Modifying
     @Query(value = "insert into visit values (?1, 0, ?2, ?3, ?4)", nativeQuery = true)
     void saveNewVisit(String date, int duration, Long doctorId, Long patientId);
+
+    @Query(value = "select * from visit where patient_id=?1 and app_user_id=?2 and date=?3", nativeQuery = true)
+    Optional<Visit> findVisitByPatientAndDoctorAndDate(Long patientId, Long doctorId, String date);
 
 
 }

@@ -35,7 +35,6 @@ public class VisitController {
                 finishedVisitRequest.getDate(),
                 finishedVisitRequest.getDoctorId(),
                 finishedVisitRequest.getPatientId(),
-               // finishedVisitRequest.getDuration(),
                 finishedVisitRequest.getInterview(),
                 finishedVisitRequest.getMedicationIds(),
                 finishedVisitRequest.getReferrals(),
@@ -54,15 +53,20 @@ public class VisitController {
     @ResponseBody
     public List<VisitResponse> getVisitsForDoctorBy(@PathVariable Long id,
                                                     @RequestParam(required = false) String date,
-                                                    @RequestParam(required = false) Long patient_id,
+                                                    @RequestParam(required = false) Long patientId,
                                                     @RequestParam(required = false) Boolean finished) {
-        return visitService.getFullVisitDataForDoctorBy(id, date, patient_id, finished);
+        return visitService.getFullVisitDataForDoctorBy(id, date, patientId, finished);
     }
 
     @GetMapping("patients/{id}/visits")
     public List<VisitResponse> getAllVisitsForPatient(@PathVariable Long id,
                                                       @RequestParam(required = false) Boolean finished){
         return visitService.getFullVisitDataForPatient(id, finished);
+    }
+
+    @GetMapping("visits")
+    public Visit getVisitsByDate(@RequestParam Long patientId, @RequestParam Long doctorId, @RequestParam String date){
+        return visitService.getVisitsByDate(patientId, doctorId, date);
     }
 
 

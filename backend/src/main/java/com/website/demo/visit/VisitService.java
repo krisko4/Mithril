@@ -57,7 +57,7 @@ public class VisitService {
         return visitRepository.findAll();
     }
 
-    public List<Visit> findAllVisitsForOneDoctorByDate(LocalDate localDate, Long doctorId){
+    public List<Visit> findAllVisitsForOneDoctorByDate(LocalDate localDate, Long doctorId) {
         return visitRepository.findAllVisitsForOneDoctorByDate(localDate, doctorId);
     }
 
@@ -123,19 +123,19 @@ public class VisitService {
 
 
     public void saveFinishedVisit(String date,
-                         Long doctorId,
-                         Long patientId,
-                        // int duration,
-                         String interview,
-                         Long[] medicationIds,
-                         ReferralRequest[] referrals,
-                         String research) {
-        Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new NoSuchElementException("Patient not found"));
-        AppUser doctor = appUserRepository.findById(doctorId).orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ENGLISH);
-        LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
-        Example<Visit> example = Example.of(new Visit(patient, doctor, localDateTime));
-        Visit visit = visitRepository.findOne(example).orElseThrow(() -> new NoSuchElementException("Visit not found"));
+                                  Long doctorId,
+                                  Long patientId,
+                                  String interview,
+                                  Long[] medicationIds,
+                                  ReferralRequest[] referrals,
+                                  String research) {
+//        Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new NoSuchElementException("Patient not found"));
+//        AppUser doctor = appUserRepository.findById(doctorId).orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+//        LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
+//        Example<Visit> example = Example.of(new Visit(patient, doctor, localDateTime));
+//        Visit visit = visitRepository.findOne(example).orElseThrow(() -> new NoSuchElementException("Visit not found"));
+        Visit visit = visitRepository.findVisitByPatientAndDoctorAndDate(patientId, doctorId, date).orElseThrow(() -> new NoSuchElementException("Visit not found"));
         Examination examination = new Examination(interview, research, visit);
         examinationRepository.save(examination);
 
@@ -213,4 +213,7 @@ public class VisitService {
     }
 
 
+    public Visit getVisitsByDate(Long patientId, Long doctorId, String date) {
+        return visitRepository.findVisitByPatientAndDoctorAndDate(patientId, doctorId, date).get();
+    }
 }

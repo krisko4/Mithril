@@ -35,7 +35,7 @@ public class Visit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime date;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
@@ -49,4 +49,7 @@ public class Visit {
     private Boolean finished;
 
 
+    public Visit(LocalDateTime localDateTime) {
+        this.date = localDateTime;
+    }
 }
