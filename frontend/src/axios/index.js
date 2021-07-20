@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const tokenAxios = axios.create({
-    baseURL: 'http://localhost:8080',
+export const tokenAxios = axios.create({
+    baseURL: `${process.env.VUE_APP_BASE_URL}`,
 
 })
 
@@ -11,12 +11,10 @@ tokenAxios.interceptors.request.use(
         return config
     })
 
-export{
-    tokenAxios
-}
+
 
 export default axios.create({
-    baseURL: 'http://localhost:8080'
+    baseURL: `${process.env.VUE_APP_BASE_URL}`
 })
 
 

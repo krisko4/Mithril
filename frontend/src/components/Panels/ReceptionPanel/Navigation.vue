@@ -5,9 +5,7 @@
         temporary
         v-model="drawer"
     >
-        <v-list
-
-        >
+        <v-list>
             <v-list-item>
                 <v-list-item-avatar>
                     <v-img :src="imgSrc"></v-img>
@@ -41,7 +39,7 @@ export default {
     },
     data() {
         return {
-            imgSrc: 'http://localhost:8080/images/doctors/' + localStorage.getItem('imageName'),
+            imgSrc: `${process.env.VUE_APP_BASE_URL}/images/doctors/` + localStorage.getItem('imageName'),
             cardIndex: null,
             name: localStorage.getItem('firstName'),
             drawer: this.navigationOpened,
@@ -68,7 +66,7 @@ export default {
 
     created(){
         if(localStorage.getItem('imageName') === null ){
-            this.imgSrc = 'http://localhost:8080/images/static/avatar.png'
+            this.imgSrc = `${process.env.VUE_APP_BASE_URL}/images/static/avatar.png`
         }
     },
 

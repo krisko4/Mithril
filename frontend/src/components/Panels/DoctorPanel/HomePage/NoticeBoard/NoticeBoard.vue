@@ -98,8 +98,7 @@
 <script>
 import {tokenAxios} from "@/axios";
 import NewNotice from "@/components/Panels/DoctorPanel/HomePage/NoticeBoard/NewNotice";
-//import SockJS from "sockjs-client";
-//import Stomp from "webstomp-client";
+
 
 export default {
     name: "NoticeBoard",
@@ -132,7 +131,7 @@ export default {
 
     created() {
 
-        tokenAxios.get('http://localhost:8080/notices').then((response) => {
+        tokenAxios.get('notices').then((response) => {
             if (response.data.length === 0) {
                 this.noticesEmpty = true
                 return
@@ -169,7 +168,7 @@ export default {
                 title: notice.title,
                 content: notice.content,
                 date: notice.date.substring(0, 10) + ' ' + notice.date.substring(11),
-                img: 'http://localhost:8080/images/doctors/' + notice.doctor.imageName,
+                img: `${process.env.VUE_APP_BASE_URL}/images/doctors/` + notice.doctor.imageName,
                 doctorName: notice.doctor.firstName + ' ' + notice.doctor.lastName,
                 animation: 'fade'
             }
@@ -251,7 +250,7 @@ export default {
                     title: notice.title,
                     content: notice.content,
                     date: notice.date.substring(0, 10) + ' ' + notice.date.substring(11),
-                    img: 'http://localhost:8080/images/doctors/' + notice.doctor.imageName,
+                    img: `${process.env.VUE_APP_BASE_URL}/images/doctors/` + notice.doctor.imageName,
                     doctorName: notice.doctor.firstName + ' ' + notice.doctor.lastName,
                     animation: false
                 }
@@ -376,7 +375,7 @@ export default {
 
 @keyframes animate-flip {
     50% {
-        transform: translateX(-540px) rotateY(180deg);
+        transform: translateX(-500px) rotateY(180deg);
     }
     100% {
         transform: translateX(0) rotateY(0);
@@ -394,7 +393,7 @@ export default {
 
 @keyframes animate-flipReverse {
     50% {
-        transform: translateX(540px) rotateY(180deg);
+        transform: translateX(500px) rotateY(180deg);
     }
     100% {
         transform: translateX(0) rotateY(0);

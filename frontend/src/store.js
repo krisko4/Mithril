@@ -27,7 +27,7 @@ export const store = new Vuex.Store({
     },
     mutations: {
         initializeWebSocketConnection(state){
-            state.webSocket = new SockJS('http://localhost:8080/doctor-panel')
+            state.webSocket = new SockJS(`${process.env.VUE_APP_BASE_URL}/doctor-panel`)
             state.stompClient = Stomp.over(state.webSocket)
             state.stompClient.connect({}, (frame) => {
                 console.log('Connected: ' + frame);

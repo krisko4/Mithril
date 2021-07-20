@@ -58,8 +58,6 @@
                     </v-card-text>
                     <v-card-text>
                         <v-col cols="4">
-
-
                        <v-text-field
                            :disabled="!firstMedicationSearchStarted"
                            label="Quantity*"
@@ -115,7 +113,7 @@ export default {
             firstMedicationSearchStarted: false,
             loading: false,
             items: [],
-            imgDir: 'http://localhost:8080/images/medications/',
+            imgDir: `${process.env.VUE_APP_BASE_URL}/images/medications/`,
             medications: [{name: '', description: '', imageName: '', details: '', quantity: '', id: ''}],
             medicationFound: false,
             medication: null,

@@ -92,7 +92,7 @@ export default {
         getAllVisitsForPatientAndDoctor() {
             tokenAxios.get('doctors/' + localStorage.getItem('id') + '/visits', {
                 params: {
-                    patient_id: this.patientData.id
+                    patientId: this.patientData.id
                 }
             }).then((response) => {
                 response.data.forEach((element) => {

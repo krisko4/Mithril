@@ -1,8 +1,9 @@
 <template>
-    <v-container :style="{'background-image':'url(http://localhost:8080/images/static/logo_transparent.png)'}" fill-height>
+    <v-container fill-height align-self="center" :style="background">
         <MailConfirmComponent v-if="!isAccountActive" :email="email"></MailConfirmComponent>
     <v-row justify="end">
-        <v-col lg="4" cols="6" xs="8">
+        <v-col cols="8" align="center">
+        <v-col lg="6" cols="6" xs="8">
             <v-card elevation="10">
                 <v-card-title class="display-2">
                     <v-spacer></v-spacer>
@@ -42,6 +43,7 @@
                                 >
                                 </v-text-field>
                             </v-form>
+
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -65,6 +67,7 @@
                 </v-card-actions>
             </v-card>
         </v-col>
+        </v-col>
     </v-row>
         <v-overlay :value="overlay">
             <v-progress-circular
@@ -84,6 +87,7 @@ export default {
 
     data(){
         return{
+            background: `background-size: contain; background-image: url(${process.env.VUE_APP_BASE_URL}/images/static/logo_transparent.png)`,
             overlay: false,
             image: { backgroundImage : null},
             isAccountActive: true,
@@ -113,7 +117,7 @@ export default {
 
     methods : {
         login(){
-            axios.post('http://localhost:8080/login', {
+            axios.post(`${process.env.VUE_APP_BASE_URL}/login`, {
                 email: this.email,
                 password: this.password
             }).then((response) => {
@@ -164,9 +168,9 @@ export default {
 .slide-leave-active{
     transition: all 1s;
 }
-
 .slide-enter, .slide-leave-to{
     transform: translateY(-100%);
 }
+
 
 </style>

@@ -5,17 +5,17 @@
                 <v-main>
                     <Navigation :navigationOpened="navigationOpened" @navigationClosed="navigationOpened = false" @navigationChosen="navigationChosen"></Navigation>
                     <v-img
-                        gradient="to top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)"
-                        height="700px"
-                        src="https://rapidoffice.furniture/wp-content/uploads/2018/11/multi-front-zion-desk.jpg"
+                        gradient="to top, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)"
+                        height="1000px"
+                        :src="backgroundImage"
                     >
 
                         <v-toolbar style="background-color: transparent">
-                            <v-app-bar-nav-icon @click=openNavigationDrawer></v-app-bar-nav-icon>
+                            <v-app-bar-nav-icon  @click=openNavigationDrawer></v-app-bar-nav-icon>
                             <v-row justify="end" class="mr-4">
-                                <v-btn @click="messengerOpened = true" text>Messenger</v-btn>
-                                <v-btn text>My account</v-btn>
-                                <v-btn text @click="logout">Sign out</v-btn>
+                                <v-btn @click="messengerOpened = true" class="mr-2" text color="white">Messenger</v-btn>
+                                <v-btn text color="white" class="mr-2">My account</v-btn>
+                                <v-btn color="error" class="mr-2" @click="logout">Sign out</v-btn>
                             </v-row>
                         </v-toolbar>
                         <v-container fill-height>
@@ -26,7 +26,7 @@
                                     </div>
                                 </v-row>
                                 <v-row>
-                                    <div class="mb-4 display-2 font-weight-light">Welcome to the reception panel
+                                    <div class="mb-4  display-2 font-weight-light">Welcome to the reception panel
                                     </div>
                                 </v-row>
                                 <v-row>
@@ -68,6 +68,7 @@ export default {
     components: {HomePage, Footer, Navigation, NewVisit, Messenger, VueTyper, PatientTable, NewPatient},
     data() {
         return {
+            backgroundImage: `${process.env.VUE_APP_BASE_URL}/images/static/reception-panel.jpg`,
             messengerOpened: false,
             isActive: false,
             patientData: '',

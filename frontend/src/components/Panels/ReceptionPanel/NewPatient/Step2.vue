@@ -67,7 +67,7 @@ export default {
             }
             let imgSrc
             if (doctor.imageName) {
-                imgSrc = 'http://localhost:8080/images/doctors/' + doctor.imageName
+                imgSrc = `${process.env.VUE_APP_BASE_URL}/images/doctors/` + doctor.imageName
             } else {
                 imgSrc = this.emptyImgSrc
             }

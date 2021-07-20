@@ -93,7 +93,7 @@ export default {
     },
 
     created(){
-        this.imgSrc = "http://localhost:8080/images/doctors/" + this.doctor.imageName
+        this.imgSrc = `${process.env.VUE_APP_BASE_URL}/images/doctors/` + this.doctor.imageName
         tokenAxios.get('doctors/' + this.doctor.id + '/visit-hours', {
             params: {
                 date: this.date

@@ -51,28 +51,28 @@ export default {
                 {
                     title: 'My visits',
                     subtitle: 'Browse through your visits',
-                    src: 'http://localhost:8080/images/static/visit.jpg',
+                    src: `${process.env.VUE_APP_BASE_URL}/images/static/visit.jpg`,
                     index: 2,
                     icon: 'mdi-calendar'
                 },
                 {
                     title: 'My patients',
                     subtitle: 'Manage your patients',
-                    src: 'http://localhost:8080/images/static/doctor-patient.jpg',
+                    src: `${process.env.VUE_APP_BASE_URL}/images/static/doctor-patient.jpg`,
                     index: 4,
                     icon: 'mdi-account-heart'
                 },
                 {
                     title: 'My schedule',
                     subtitle: 'Manage your working hours',
-                    src: 'http://localhost:8080/images/static/schedule.jpg',
+                    src: `${process.env.VUE_APP_BASE_URL}/images/static/schedule.jpg`,
                     index: 3,
                     icon: 'mdi-calendar-heart'
                 },
                 {
                     title: 'Interact',
                     subtitle: 'Contact your colleagues via chat',
-                    src: 'http://localhost:8080/images/static/forum.png',
+                    src: `${process.env.VUE_APP_BASE_URL}/images/static/forum.png`,
                     index: 6,
                     icon: 'mdi-forum'
                 },

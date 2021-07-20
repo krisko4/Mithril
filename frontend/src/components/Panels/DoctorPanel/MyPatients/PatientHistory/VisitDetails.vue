@@ -18,7 +18,7 @@
             <v-list-item-avatar
                 size="80"
             >
-                <v-img :src="doctorImg"></v-img>
+                <v-img :src="this.doctorImgURL + this.visitData.doctorImg"></v-img>
             </v-list-item-avatar>
         </v-list-item>
         <v-card-text>
@@ -186,18 +186,17 @@ export default {
     },
     data() {
         return {
+            doctorImgURL: `${process.env.VUE_APP_BASE_URL}/images/doctors`,
             loading: false,
             medicationIndex: 0,
-            imgDir: 'http://localhost:8080/images/medications/',
+            imgDir: `${process.env.VUE_APP_BASE_URL}/images/medications/`,
             tabIndex: 0,
             referralIndex: 0,
-            doctorImg: 'http://localhost:8080/images/doctors/' + this.visitData.doctorImg,
             confirmDialog: false
         }
     },
 
-    created() {
-    },
+
     methods: {
         openConfirmDialog(){
             this.confirmDialog = true
@@ -213,7 +212,6 @@ export default {
             })
             tokenAxios.put('visits', {
                 date: this.visitData.date,
-               // duration: this.visitData.duration,
                 doctorId: localStorage.getItem('id'),
                 patientId: this.visitData.patient.id,
                 research: this.visitData.research,
@@ -222,9 +220,10 @@ export default {
                 referrals: this.visitData.referrals
             }).then(() => {
                 this.$emit('visitFinished')
-            }).finally(() => {
+                this.$toast.success('Your visit has been finished successfully.')
+            }).catch(() => this.$toast.error('For some reason we have failed to save your visit.'))
+                .finally(() => {
                 this.loading = false
-                this.$toast.success('Your visit has been finished successfully')
             })
         }
 

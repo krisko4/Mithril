@@ -59,7 +59,7 @@ export default {
                 {
                     title: 'New visit',
                     subtitle: 'Register a new visit for patient',
-                    src: 'http://localhost:8080/images/static/visit.jpg',
+                    src: `${process.env.VUE_APP_BASE_URL}/images/static/visit.jpg`,
                     flex: 6,
                     index: 2,
                     icon: 'mdi-calendar'
@@ -67,7 +67,7 @@ export default {
                 {
                     title: 'Interact',
                     subtitle: 'Contact your colleagues via chat',
-                    src: 'http://localhost:8080/images/static/forum.png',
+                    src: `${process.env.VUE_APP_BASE_URL}/images/static/forum.png`,
                     flex: 6,
                     index: 5,
                     icon: 'mdi-forum'
@@ -75,7 +75,7 @@ export default {
                 {
                     title: 'Register new patient',
                     subtitle: 'Add new person as patient',
-                    src: 'https://j-elita.org.pl/wp-content/uploads/2021/03/lekarz-i-pacjent.jpg',
+                    src: `https://j-elita.org.pl/wp-content/uploads/2021/03/lekarz-i-pacjent.jpg`,
                     flex: 6,
                     index: 4,
                     icon: 'mdi-account-check-outline'

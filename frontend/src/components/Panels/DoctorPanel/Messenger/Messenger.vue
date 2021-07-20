@@ -9,7 +9,7 @@
 
         >
             <v-img
-                src="http://localhost:8080/images/static/logo_transparent1.png"
+                :src="logo"
                 max-height="90px"
                 max-width="90px"
                 contain
@@ -167,11 +167,12 @@ export default {
     name: "Messenger",
     data() {
         return {
+            logo: `${process.env.VUE_APP_BASE_URL}/images/static/logo_transparent1.png`,
             isChatOpen: false,
             typedMessage: '',
             selectedItem: 0,
             friends: [],
-            myImage: 'http://localhost:8080/images/doctors/' + localStorage.getItem('imageName'),
+            myImage: `${process.env.VUE_APP_BASE_URL}/images/doctors/` + localStorage.getItem('imageName'),
             firstName: localStorage.getItem('firstName'),
             messages: [],
             recentMessages: [],
@@ -205,7 +206,7 @@ export default {
                     this.friends.push({
                         id: friend.id,
                         fullName: fullName,
-                        image: 'http://localhost:8080/images/doctors/' + friend.imageName
+                        image: `${process.env.VUE_APP_BASE_URL}/images/doctors/` + friend.imageName
                     })
                 })
                 this.getRecentMessages()
@@ -262,7 +263,7 @@ export default {
                 }
                 else{
                     color = 'pink'
-                    image = 'http://localhost:8080/images/doctors/' + localStorage.getItem('imageName')
+                    image = `${process.env.VUE_APP_BASE_URL}/images/doctors/` + localStorage.getItem('imageName')
                 }
                 this.messages.push({
                     content: newMessage.content,
