@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -26,15 +27,19 @@ public class ConfirmationTokenService {
         return confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
     }
 
+    public void removeToken(ConfirmationToken token){
+        confirmationTokenRepository.delete(token);
+    }
+
     public List<ConfirmationToken> getAll(){
         return confirmationTokenRepository.findAll();
     }
 
-    public ConfirmationToken findByToken(String token){
-        return confirmationTokenRepository.findByToken(token).get();
-    }
 
     public AppUser getUserByToken(String token) {
-        return confirmationTokenRepository.findByToken(token).get().getAppUser();
+        return confirmationTokenRepository
+                .findByToken(token)
+                .orElseThrow(() -> new NoSuchElementException("Token with value: " + token + " not found."))
+                .getAppUser();
     }
 }
