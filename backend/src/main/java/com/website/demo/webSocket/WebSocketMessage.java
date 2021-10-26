@@ -7,7 +7,7 @@ public class WebSocketMessage {
 
     private String date;
     private String content;
-    private Long senderId;
-    private Long receiverId;
+    private Integer senderId;
+    private Integer receiverId;
 
 }

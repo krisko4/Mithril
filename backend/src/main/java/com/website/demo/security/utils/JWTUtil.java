@@ -2,7 +2,7 @@ package com.website.demo.security.utils;
 
 
 
-import com.website.demo.user.AppUser;
+import com.website.demo.API.user.AppUser;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

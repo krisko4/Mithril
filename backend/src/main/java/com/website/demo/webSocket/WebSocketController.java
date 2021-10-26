@@ -1,22 +1,19 @@
 package com.website.demo.webSocket;
 
-import com.website.demo.message.MessageDto;
-import com.website.demo.message.MessageService;
-import com.website.demo.notice.Notice;
-import com.website.demo.notice.NoticeDto;
-import com.website.demo.notice.NoticeRequest;
-import com.website.demo.notice.NoticeService;
-import com.website.demo.visit.VisitDto;
-import com.website.demo.visit.request.NewUnfinishedVisitRequest;
+import com.website.demo.API.message.MessageDto;
+import com.website.demo.API.message.MessageService;
+import com.website.demo.API.notice.Notice;
+import com.website.demo.API.notice.NoticeDto;
+import com.website.demo.API.notice.NoticeRequest;
+import com.website.demo.API.notice.NoticeService;
+import com.website.demo.API.visit.VisitDto;
 import lombok.Data;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
-import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.TextMessage;
-import org.w3c.dom.Text;
 
 @Controller
 @Data

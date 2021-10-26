@@ -9,5 +9,25 @@
       "name": "jwt.header",
       "type": "java.lang.String",
       "description": "Description for jwt.header."
+    },
+    {
+      "name": "cloudinary.api.key",
+      "type": "java.lang.String",
+      "description": "Description for cloudinary.api.key."
+    },
+    {
+      "name": "cloudinary.api.secret",
+      "type": "java.lang.String",
+      "description": "Description for cloudinary.api.secret."
+    },
+    {
+      "name": "cloudinary.name",
+      "type": "java.lang.String",
+      "description": "Description for cloudinary.name."
+    },
+    {
+      "name": "cloudinary.url",
+      "type": "java.lang.String",
+      "description": "Description for cloudinary.url."
     }
   ] }

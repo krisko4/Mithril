@@ -2,7 +2,7 @@ package com.website.demo.security.config;
 
 
 import com.website.demo.security.utils.JWTRequestFilter;
-import com.website.demo.user.AppUserService;
+import com.website.demo.API.user.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/doctor-panel/**/*",
                         "/users/email",
                         "/users/first-name",
-                        "/specializations"
+                        "/specializations",
+                        "/users"
                         )
                 .permitAll()
                 .anyRequest()
