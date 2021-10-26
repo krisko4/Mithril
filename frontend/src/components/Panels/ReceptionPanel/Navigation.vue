@@ -8,7 +8,7 @@
         <v-list>
             <v-list-item>
                 <v-list-item-avatar>
-                    <v-img :src="imgSrc"></v-img>
+                    <v-img :src="img"></v-img>
                 </v-list-item-avatar>
                 <v-list-item-content>
                     <v-list-item-title class="font-weight-bold">{{ name }}</v-list-item-title>
@@ -39,7 +39,7 @@ export default {
     },
     data() {
         return {
-            imgSrc: `${process.env.VUE_APP_BASE_URL}/images/doctors/` + localStorage.getItem('imageName'),
+            img: localStorage.getItem('img'),
             cardIndex: null,
             name: localStorage.getItem('firstName'),
             drawer: this.navigationOpened,

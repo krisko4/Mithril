@@ -17,7 +17,7 @@
         </v-container>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="getDoctors" text large :disabled="!date || !patientSelected" color="primary" c>Submit</v-btn>
+            <v-btn @click="getDoctors" :loading="loading" text large :disabled="!date || !patientSelected" color="primary" >Submit</v-btn>
         </v-card-actions>
     </div>
 </template>
@@ -35,7 +35,8 @@ export default {
             doctors: [],
             date: '',
             patientSelected: false,
-            patient: null
+            patient: null,
+            loading: false
         }
     },
 
@@ -49,6 +50,7 @@ export default {
             this.date = date
         },
         getDoctors() {
+            this.loading = true
             tokenAxios.get('doctors', {
                 params: {
                     date: this.date
@@ -57,7 +59,10 @@ export default {
                 .then(response => {
                     this.doctors = response.data
                     this.$emit('patientAndDateSelected', this.patient, this.date, this.doctors)
-                })
+                }).catch(err => {
+                    console.log(err)
+                    this.$toast.error('Oops, something went wrong')
+                }).finally(() => this.loading = false)
         }
     },
 }

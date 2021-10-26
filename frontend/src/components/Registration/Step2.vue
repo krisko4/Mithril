@@ -122,22 +122,17 @@
                                 v-mask="'#####'"
                                 type="number"
                                 v-model="address_2"
-                                :rules="[
-                            () => !!address_2 || 'This field is required',
-
-                            ]"
                                 label="Address Line No.2 (house number)"
                                 placeholder="Address"
                                 counter="5"
-                                required
                             ></v-text-field>
                         </v-col>
                         <v-col cols="6">
                             <v-text-field
                                 ref="zip"
                                 v-mask="'##-###'"
-                                v-model="postCode"
-                                :rules="[() => !!postCode || 'This field is required']"
+                                v-model="postcode"
+                                :rules="[() => !!postcode || 'This field is required']"
                                 label="ZIP / Postal Code"
                                 required
                                 placeholder="Postal code"
@@ -197,7 +192,7 @@ export default {
             address: '',
             address_2: '',
             city: '',
-            postCode: '',
+            postcode: '',
             country: '',
             phone: '',
             buttonEnabled: false,
@@ -217,7 +212,7 @@ export default {
                 'street': this.address,
                 'flatNumber': this.address_2,
                 'city': this.city,
-                'postCode': this.postCode,
+                'postcode': this.postcode,
                 'country': this.country,
                 'phone': this.phone,
                 'birthdate': this.date,

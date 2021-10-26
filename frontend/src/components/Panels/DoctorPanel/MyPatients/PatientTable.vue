@@ -108,7 +108,7 @@
                                 <td class="text-xs-right">{{ item.email }}</td>
                                 <td class="text-xs-right">{{ item.address.street }}</td>
                                 <td class="text-xs-right">{{ item.address.flatNumber }}</td>
-                                <td class="text-xs-right">{{ item.address.postCode }}</td>
+                                <td class="text-xs-right">{{ item.address.postcode }}</td>
                                 <td class="text-xs-right">{{ item.address.city }}</td>
                                 <td class="text-xs-right">
                                     <v-btn color="primary" x-small @click.stop="openHistoryDialog(item)">Check</v-btn>
@@ -267,7 +267,7 @@ export default {
                 {text: 'E-mail', value: 'email'},
                 {text: 'Street', value: 'street'},
                 {text: 'Flat number', value: 'flatNumber'},
-                {text: 'Post code', value: 'postCode'},
+                {text: 'Post code', value: 'postcode'},
                 {text: 'City', value: 'city'},
                 {text: 'History', value: 'history', sortable: false},
 

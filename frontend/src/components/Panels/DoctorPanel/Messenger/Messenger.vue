@@ -25,7 +25,7 @@
             <v-spacer></v-spacer>
             <span class="mr-3">
                 <v-avatar>
-                <v-img :src="myImage"></v-img>
+                <v-img :src="img"></v-img>
             </v-avatar>
                 <span class="ml-2">{{ firstName }}</span>
             </span>
@@ -172,7 +172,7 @@ export default {
             typedMessage: '',
             selectedItem: 0,
             friends: [],
-            myImage: `${process.env.VUE_APP_BASE_URL}/images/doctors/` + localStorage.getItem('imageName'),
+            img: localStorage.getItem('img'),
             firstName: localStorage.getItem('firstName'),
             messages: [],
             recentMessages: [],

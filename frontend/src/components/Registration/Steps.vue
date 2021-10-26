@@ -141,9 +141,9 @@ export default {
             this.step = 3
             this.userData = Object.assign(this.userData, form)
         },
-        thirdStepComplete(image) {
-            if (image) {
-                this.userData = Object.assign(this.userData, {'image': image})
+        thirdStepComplete(img) {
+            if (img) {
+                this.userData['img'] = img
             }
             if (this.registrationType === 'doctorType') {
                 this.step = 4

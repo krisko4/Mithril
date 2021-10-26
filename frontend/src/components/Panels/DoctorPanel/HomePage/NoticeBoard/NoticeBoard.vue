@@ -168,7 +168,7 @@ export default {
                 title: notice.title,
                 content: notice.content,
                 date: notice.date.substring(0, 10) + ' ' + notice.date.substring(11),
-                img: `${process.env.VUE_APP_BASE_URL}/images/doctors/` + notice.doctor.imageName,
+                img: notice.doctor.img,
                 doctorName: notice.doctor.firstName + ' ' + notice.doctor.lastName,
                 animation: 'fade'
             }
@@ -250,7 +250,7 @@ export default {
                     title: notice.title,
                     content: notice.content,
                     date: notice.date.substring(0, 10) + ' ' + notice.date.substring(11),
-                    img: `${process.env.VUE_APP_BASE_URL}/images/doctors/` + notice.doctor.imageName,
+                    img: notice.doctor.img,
                     doctorName: notice.doctor.firstName + ' ' + notice.doctor.lastName,
                     animation: false
                 }

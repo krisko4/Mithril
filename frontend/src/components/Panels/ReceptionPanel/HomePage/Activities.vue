@@ -51,7 +51,7 @@ export default {
                 {
                     title: 'Patients',
                     subtitle: 'Browse through patients and their visits',
-                    src: 'https://msd20-assets.s3.amazonaws.com/wp-content/uploads/2020/08/26165036/2.6_Patient-Engagement.jpg',
+                    src: `${process.env.VUE_APP_BASE_URL}/images/static/Patient-holding-doctors-hand.jpg`,
                     flex: 6,
                     index: 3,
                     icon: 'mdi-account-heart'

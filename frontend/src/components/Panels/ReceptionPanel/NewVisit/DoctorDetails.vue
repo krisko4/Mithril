@@ -15,8 +15,9 @@
             </v-list-item-content>
             <v-list-item-avatar
                 size="150"
+                
             >
-                <v-img :src="imgSrc"></v-img>
+                <v-img :alt="doctor.firstName" :src="imgSrc"></v-img>
             </v-list-item-avatar>
         </v-list-item>
         <v-card-text>
@@ -86,14 +87,13 @@ export default {
             hours: [],
             selectedItem: undefined,
             hourIndex: '',
-            imgSrc: '',
+            imgSrc: localStorage.getItem('img'),
             visitDuration: 0,
             reserveLoading: false
         }
     },
 
     created(){
-        this.imgSrc = `${process.env.VUE_APP_BASE_URL}/images/doctors/` + this.doctor.imageName
         tokenAxios.get('doctors/' + this.doctor.id + '/visit-hours', {
             params: {
                 date: this.date
@@ -117,7 +117,8 @@ export default {
                 this.hours.splice(this.hourIndex, 1)
                 this.$toast.success('Visit saved.')
                 this.$store.state.stompClient.send('/app/new-visit/' + this.doctor.id, this.date)
-            }).finally(() => {
+            }).catch(() => this.$toast.error('Oops, something went wrong'))
+            .finally(() => {
                 this.reserveLoading = false
             })
         },

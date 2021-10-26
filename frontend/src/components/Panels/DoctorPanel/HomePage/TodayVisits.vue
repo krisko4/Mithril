@@ -125,7 +125,7 @@ export default {
                         end: dateString + ' ' + endHour
                     })
                 })
-            })
+            }).catch(() => this.$toast.error('Failed to load your visits for today'))
         },
 
         convertDate(date) {

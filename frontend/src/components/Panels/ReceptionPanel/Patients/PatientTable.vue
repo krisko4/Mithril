@@ -101,7 +101,7 @@
                                 <td class="text-xs-right">{{ item.email }}</td>
                                 <td class="text-xs-right">{{ item.address.street }}</td>
                                 <td class="text-xs-right">{{ item.address.flatNumber }}</td>
-                                <td class="text-xs-right">{{ item.address.postCode }}</td>
+                                <td class="text-xs-right">{{ item.address.postcode }}</td>
                                 <td class="text-xs-right">{{ item.address.city }}</td>
                                 <td class="text-xs-right">
                                     <v-btn color="primary" x-small @click.stop="openHistoryDialog(item)">Check</v-btn>
@@ -199,7 +199,6 @@ export default {
                         phone: response.data.phone,
                         email: response.data.email,
                         address: response.data.address,
-
                     })
             }).finally(() => {
                 this.newPatientDialog = false
@@ -213,7 +212,7 @@ export default {
                 tokenAxios.get('users/' + this.$store.state.patient.doctorID + '/getName')
                     .then((response) => {
                         this.doctorName = response.data
-
+ 
                     }).finally(() => {
                     this.newPatientDialog = false
                     this.warningDialog = true
@@ -267,7 +266,7 @@ export default {
                 {text: 'E-mail', value: 'email'},
                 {text: 'Street', value: 'street'},
                 {text: 'Flat number', value: 'flatNumber'},
-                {text: 'Post code', value: 'postCode'},
+                {text: 'Post code', value: 'postcode'},
                 {text: 'City', value: 'city'},
                 {text: 'History', value: 'history', sortable: false},
                 {text: 'Actions', value: 'actions', sortable: false},
@@ -293,6 +292,7 @@ export default {
                             phone: element.phone,
                             email: element.email,
                             address: element.address
+                        
                         }
                     )
                 })

@@ -8,13 +8,14 @@
                 <h3 class="headline mb-3">
                     <i>Specialization selection</i>
                 </h3>
+                <h4>Please select your specializations from options mentioned below </h4>
             </v-col>
         </v-row>
         <v-row justify="center">
             <v-col cols="7">
-                <v-card>
+                <!-- <v-card>
                     <v-card-title>Please choose your specialization</v-card-title>
-                    <v-card-text>
+                    <v-card-text> -->
                         <v-select
                             placeholder="Please choose your specialization"
                             prepend-icon="mdi-database-search"
@@ -27,9 +28,9 @@
                             cache-items
                         >
                         </v-select>
-                    </v-card-text>
+                    <!-- </v-card-text>
 
-                </v-card>
+                </v-card> -->
                 <v-col cols="12">
                     <v-row justify="center" class="mt-3">
                         <v-btn
@@ -66,6 +67,7 @@ export default {
         }
     },
     created() {
+        console.log(this.userData)
         axios.get("specializations").then((response) => {
             response.data.forEach((element) => {
                 this.specializations.push(element.name)
@@ -78,17 +80,12 @@ export default {
 
         registerDoctor() {
             this.registerLoading = true
-            let registrationType = {registrationType : 'doctorType'}
-            this.userData = Object.assign(this.userData, registrationType)
-           // let specializationNames = {specializationNames : this.specializations}
+            this.userData['registrationType'] = 'doctorType'
             const formData = new FormData()
             for (const element in this.userData) {
                 formData.append(element, this.userData[element])
             }
             formData.append('specializationNames', JSON.stringify(this.specializations))
-            for (const value of formData.values()) {
-                console.log(value)
-            }
             axios.post("registration", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'

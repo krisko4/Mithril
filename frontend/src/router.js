@@ -22,8 +22,10 @@ const RouterVue = new Router({
             name: 'confirm',
             component: Confirmation,
             meta: {
-                reload: false
+                reload: false,
+                transitionName: 'fade'
             }
+
         },
         {
             path: '',

@@ -1,7 +1,7 @@
 <template>
     <v-container fill-height align-self="center" :style="background">
         <MailConfirmComponent v-if="!isAccountActive" :email="email"></MailConfirmComponent>
-    <v-row justify="end">
+    <v-row v-else justify="end">
         <v-col cols="8" align="center">
         <v-col lg="6" cols="6" xs="8">
             <v-card elevation="10">
@@ -128,9 +128,8 @@ export default {
                 localStorage.setItem('lastName', response.data.lastName)
                 localStorage.setItem('id', response.data.id)
                 localStorage.setItem('role', response.data.role)
-                if(response.data.imageName != null) {
-                    localStorage.setItem('imageName', response.data.imageName)
-                }
+                response.data.img && localStorage.setItem('img', response.data.img)
+                response.data.imageName && localStorage.setItem('imageName', response.data.imageName)
                 this.$router.push({name: 'panelSelector'})
             }).catch((error) => {
                 this.errorPopped = true

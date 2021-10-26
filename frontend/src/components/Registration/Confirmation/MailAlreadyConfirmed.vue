@@ -5,14 +5,14 @@
                 <v-card>
                     <v-card-subtitle class="display-1 text--primary">Account is active</v-card-subtitle>
                     <v-divider class="mx-4"></v-divider>
-                    <v-card-text>Your account has already been activated. Feel free to sign up. </v-card-text>
+                    <v-card-text>Your account has already been activated. Feel free to sign in. </v-card-text>
                     <v-card-actions>
                         <v-col>
                             <v-row justify="center">
                                 <v-btn
                                     color="primary"
                                     @click="redirect"
-                                >Sign up
+                                >Sign in
                                 </v-btn>
 
                             </v-row>
