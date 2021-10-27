@@ -7,7 +7,7 @@
             Important message to your colleagues
         </v-card-subtitle>
         <v-card-text>
-            <v-divider></v-divider>
+           
             <v-form v-model="valid">
                 <v-text-field
                     v-model="title"
@@ -19,6 +19,7 @@
                 >
                 </v-text-field>
                 <v-textarea
+                    rows="8"
                     v-model="content"
                     solo
                     label="Content"

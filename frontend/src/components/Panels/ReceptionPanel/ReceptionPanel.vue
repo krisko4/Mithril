@@ -38,7 +38,7 @@
                     <v-main class="mt-4">
                         <transition name="fade" mode="out-in">
                             <HomePage @cardChosen="cardChosen" v-if="cardIndex === 0"></HomePage>
-                            <NewVisit v-if="cardIndex === 2"></NewVisit>
+                            <NewVisit v-if="cardIndex === 2" @returnClicked="cardIndex = 0"></NewVisit>
                             <PatientTable @newPatientClicked="cardIndex = 4" @returnClicked="cardIndex = 0" v-if="cardIndex === 3"></PatientTable>
                             <NewPatient v-if="cardIndex === 4" @registrationFinished="cardIndex = 0"></NewPatient>
                         </transition>

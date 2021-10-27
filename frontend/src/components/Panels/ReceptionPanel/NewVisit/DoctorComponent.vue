@@ -1,15 +1,15 @@
 <template>
-  <v-card height="100%">
+  <v-card height="790" class="flex-card">
     <v-card-title>Available doctors</v-card-title>
     <v-card-subtitle
       >Below you can find a list of available doctors on chosen
       date</v-card-subtitle
     >
-    <v-card-text>
+    <v-card-text class="flex-card-text">
       <v-divider></v-divider>
-      <v-row>
+      <v-row >
         <v-col cols="3">
-          <v-navigation-drawer height="620px" permanent v-model="drawer">
+          <v-navigation-drawer  permanent v-model="drawer">
             <v-list rounded>
               <v-subheader>DOCTORS</v-subheader>
               <v-list-item-group color="primary" v-model="selectedItem">
@@ -88,6 +88,15 @@ export default {
 </script>
 
 <style scoped>
+.flex-card{
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-card-text{
+  flex-grow: 1
+}
+
 .fade-enter,
 .fade-leave-to {
   opacity: 0;

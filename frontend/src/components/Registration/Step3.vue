@@ -37,7 +37,7 @@
             <input
               type="file"
               style="display: none"
-              ref="image"
+              ref="img"
               accept="image/*"
               @change="onBrowsing"
             />
@@ -85,7 +85,7 @@ export default {
       previewImage: `${process.env.VUE_APP_BASE_URL}/images/static/noPreview.jpg`,
       imageLoaded: false,
       buttonEnabled: false,
-      image: null,
+      img: null,
       elevation: 5,
       formData: null,
     };
@@ -150,13 +150,13 @@ export default {
           }
         );
       }
-      this.$emit("thirdStepComplete", this.image);
+      this.$emit("thirdStepComplete", this.img);
     },
 
     submitImage() {
       this.isSubmitLoading = true;
       setTimeout(() => {
-        this.image = this.selectedFile;
+        this.img = this.selectedFile;
         this.isSubmitLoading = false;
         this.$toast.success("Image uploaded successfully.");
       }, 1000);
@@ -165,7 +165,7 @@ export default {
       this.previewImage = `${process.env.VUE_APP_BASE_URL}/images/static/noPreview.jpg`;
       this.imageLoaded = false;
       this.selectedFile = null;
-      this.image = null;
+      this.img = null;
       this.$refs.image.value = null;
     },
   },

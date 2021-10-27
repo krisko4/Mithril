@@ -53,7 +53,6 @@ export default {
                 }
             }).then((response) => {
                 if(this.items.includes(val)){
-                    console.log('hej')
                     this.doctorSelected = true
                     this.$emit('doctorSelected', this.doctor, this.doctorSelected)
                     return

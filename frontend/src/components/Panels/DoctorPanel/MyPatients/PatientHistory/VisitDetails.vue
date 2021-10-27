@@ -18,7 +18,7 @@
             <v-list-item-avatar
                 size="80"
             >
-                <v-img :src="this.doctorImgURL + this.visitData.doctorImg"></v-img>
+                <v-img :src="visitData.doctorImg" :alt="visitData.doctorFullName"></v-img>
             </v-list-item-avatar>
         </v-list-item>
         <v-card-text>
@@ -186,7 +186,6 @@ export default {
     },
     data() {
         return {
-            doctorImgURL: `${process.env.VUE_APP_BASE_URL}/images/doctors`,
             loading: false,
             medicationIndex: 0,
             imgDir: `${process.env.VUE_APP_BASE_URL}/images/medications/`,

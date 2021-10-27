@@ -55,20 +55,18 @@ export default {
             let visitDetails = {
                 date: element.visit.date.replace(/T/g, ' '),
                 doctorFullName: element.visit.doctor.firstName + ' ' + element.visit.doctor.secondName + ' ' + element.visit.doctor.lastName,
-                doctorImg: element.visit.doctor.imageName,
+                doctorImg: element.visit.doctor.img,
                 referrals: element.referrals,
                 patient: element.visit.patient,
-                medications: [],
-                research: '',
-                interview: ''
+                medications: element.prescription ? element.prescription.medicationList : [],
+                research: element.examination ? element.examination.research : '',
+                interview: element.examination ? element.examination.interview : ''
             }
-            if(element.prescription){
-                visitDetails.medications = element.prescription.medicationList
-            }
-            if(element.examination){
-                visitDetails.interview = element.examination.interview
-                visitDetails.research = element.examination.research
-            }
+            // if(element.prescription){ visitDetails.medications = element.prescription.medicationList
+            // if(element.examination){
+            //     visitDetails.interview = element.examination.interview
+            //     visitDetails.research = element.examination.research
+            // }
             this.visits.push(visitDetails)
 
         },
@@ -76,7 +74,7 @@ export default {
 
         openVisitDetailsDialog(item) {
             this.visitData = item
-            this.visitData = Object.assign(this.visitData, {patient: this.patientData})
+            this.visitData['patient'] = this.patientData
             console.log(this.visitData)
             this.visitDetailsDialog = true
         },
