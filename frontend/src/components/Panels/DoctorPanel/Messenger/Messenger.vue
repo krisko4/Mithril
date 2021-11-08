@@ -71,11 +71,11 @@
                         :key="i"
                     >
                         <v-list-item-avatar>
-                            <v-img :src="friend.image"></v-img>
+                            <v-img :src="friend.img"></v-img>
                         </v-list-item-avatar>
                         <v-list-item-content>
                             <v-list-item-title>
-                                {{ friend.fullName }}
+                                {{ friend.firstName}} {{friend.secondName}} {{friend.lastName}}
                             </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
@@ -89,11 +89,12 @@
                     <v-spacer></v-spacer>
                     <v-badge bordered bottom dot offset-x="9" offset-y="13" color="green">
                         <v-avatar>
-                            <v-img :src="friends[selectedItem].image"></v-img>
+                            <v-img :src="friends[selectedItem].img" v-if="friends[selectedItem].img"></v-img>
+                             <span v-else class="white--text text-h5">36</span>
                         </v-avatar>
                     </v-badge>
                     <v-toolbar-title class="title ml-3">
-                        {{ friends[selectedItem].fullName }}
+                        {{ `${friends[selectedItem].firstName} ${friends[selectedItem].secondName} ${friends[selectedItem].lastName}` }}
                     </v-toolbar-title>
                 </v-toolbar>
                 <v-divider></v-divider>
@@ -183,9 +184,7 @@ export default {
 
     watch: {
         selectedItem(val) {
-            if(this.chatIndex){
-                this.$store.state.stompClient.unsubscribe('chat')
-            }
+            this.chatIndex && this.$store.state.stompClient.unsubscribe('chat')
             this.setSubscription(localStorage.getItem('id'), this.friends[this.selectedItem].id)
             this.openChat(this.friends[val])
         },
@@ -196,19 +195,7 @@ export default {
 
         tokenAxios.get('users/except-for/' + localStorage.getItem('id'))
             .then((response) => {
-                let fullName
-                response.data.filter((friend) => {
-                    if (friend.secondName === '') {
-                        fullName = friend.firstName + ' ' + friend.lastName
-                    } else {
-                        fullName = friend.firstName + ' ' + friend.secondName + ' ' + friend.lastName
-                    }
-                    this.friends.push({
-                        id: friend.id,
-                        fullName: fullName,
-                        image: `${process.env.VUE_APP_BASE_URL}/images/doctors/` + friend.imageName
-                    })
-                })
+                this.friends = response.data
                 this.getRecentMessages()
                 this.setSubscription(localStorage.getItem('id'), this.friends[this.selectedItem].id)
                 this.isChatOpen = true
@@ -222,21 +209,17 @@ export default {
 
         getRecentMessages(){
             tokenAxios.get('users/' + localStorage.getItem('id') + '/messages')
-                .then((response) => {
-                    console.log(response.data)
-                    response.data.filter((message) => {
-                        let friend = this.friends.find((friend) => {
-                            return friend.id === message.senderId
-                        })
+                .then(response => {
+                    response.data.forEach((message) => {
+                        let friend = this.friends.find(friend => friend.id === message.senderId)
                         console.log(friend)
                         this.recentMessages.push({
                             content: message.content,
                             date: message.date.substring(0, 10) + ' ' + message.date.substring(11),
-                            senderName: friend.fullName,
-                            senderImg: friend.image
+                            senderName: `${friend.firstName} ${friend.secondName} ${friend.lastName}`,
+                            senderImg: friend.img
                         })
                     })
-
                 })
         },
 
@@ -259,11 +242,11 @@ export default {
                 let color, image
                 if(newMessage.receiverId === parseInt(localStorage.getItem('id'))){
                     color = 'primary'
-                    image = this.friends[this.selectedItem].image
+                    image = this.friends[this.selectedItem].img
                 }
                 else{
                     color = 'pink'
-                    image = `${process.env.VUE_APP_BASE_URL}/images/doctors/` + localStorage.getItem('imageName')
+                    image = localStorage.getItem('img')
                 }
                 this.messages.push({
                     content: newMessage.content,
@@ -324,12 +307,12 @@ export default {
             }).then((response) => {
                 let senderImg
                 let color
-                response.data.filter((message) => {
+                response.data.forEach(message => {
                     if (friend.id === message.senderId) {
-                        senderImg = friend.image
+                        senderImg = friend.img
                         color = 'primary'
                     } else {
-                        senderImg = this.myImage
+                        senderImg = this.img
                         color = 'pink'
                     }
                     let date = this.setDifference(new Date(message.date))

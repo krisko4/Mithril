@@ -137,6 +137,7 @@ export default {
                 return
             }
             this.noticesEmpty = false
+            console.log(response.data)
             this.addNotices(response)
         })
         this.setSubscription(this.$store.state.webSocketConnectionEstablished)

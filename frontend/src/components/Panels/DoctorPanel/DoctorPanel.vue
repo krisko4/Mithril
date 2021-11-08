@@ -109,9 +109,7 @@ export default {
             localStorage.removeItem('secondName')
             localStorage.removeItem('lastName')
             localStorage.removeItem('role')
-            if (localStorage.getItem('imageName') != null) {
-                localStorage.removeItem('img')
-            }
+            localStorage.removeItem('img')
             this.$router.push({name: 'login'})
             this.$store.state.webSocketConnectionEstablished = false
             this.$store.state.webSocket.close()

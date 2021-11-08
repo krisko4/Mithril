@@ -10,7 +10,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="8" lg="7" align="center">
+      <v-col cols="8" lg="9" align="center">
         <v-card
           ref="card"
           class="mx-auto"
@@ -109,7 +109,7 @@ export default {
         },
         { once: true }
       );
-      this.$refs.image.click();
+      this.$refs.img.click();
     },
 
     onBrowsing(e) {

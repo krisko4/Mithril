@@ -16,7 +16,7 @@
                 </MyCalendar>
             </v-col>
 
-        <v-col cols="6" sm="7" lg="4" >
+        <v-col cols="6" sm="10" xs="10" lg="4" md="10" >
             <SchedulePlanner
                 :calendarDate="calendarDate"
                 :isScheduleAlreadyDeclared="isScheduleAlreadyDeclared"
