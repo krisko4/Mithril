@@ -17,8 +17,7 @@ public class CloudinaryConfig {
     private String CLOUDINARY_API_SECRET;
     @Value("${cloudinary.name}")
     private String CLOUDINARY_NAME;
-    @Value("${cloudinary.url}")
-    private String CLOUDINARY_URL;
+
     private Cloudinary cloudinary;
 
     @PostConstruct
@@ -34,18 +33,10 @@ public class CloudinaryConfig {
     public Cloudinary getCloudinary(){
         return cloudinary;
     }
+    public String getURL(){ return "https://res.cloudinary.com/dpkrneznq/image/upload/v1635196214/";}
 
-//    public Cloudinary getCloudinary(){
-//        return new Cloudinary(ObjectUtils.asMap(
-//                "cloud_name", CLOUDINARY_NAME,
-//                "api_key", CLOUDINARY_API_KEY,
-//                "api_secret", CLOUDINARY_API_SECRET,
-//                "secure", true
-//        ));
-//    }
 
-    public String getURL(){
-        return CLOUDINARY_URL;
-    }
+
+
 
 }

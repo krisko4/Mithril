@@ -29,7 +29,6 @@ public class NoticeService {
         AppUser appUser = appUserRepository.findById(doctorId).orElseThrow(IllegalStateException::new);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
-        if(appUser.getImg() != null) appUser.setImg(cloudinaryConfig.getURL() + appUser.getImg());
         Notice notice = new Notice(title, content, localDateTime,  appUser);
         return noticeRepository.save(notice);
     }

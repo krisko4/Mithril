@@ -12,23 +12,24 @@ public class AppUserDto {
     private String firstName;
     private String secondName;
     private String lastName;
-    private String imageName;
+    private String img;
     private Integer id;
+    private static final String CLOUDINARY_URL = "https://res.cloudinary.com/dpkrneznq/image/upload/v1635196214/";
 
 
-    public AppUserDto(String firstName, String secondName, String lastName, String imageName, Integer id) {
+    public AppUserDto(String firstName, String secondName, String lastName, String img, Integer id) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
-        this.imageName = imageName;
+        this.img = CLOUDINARY_URL + img;
         this.id = id;
     }
 
     public AppUserDto(AppUser appUser){
-        this.firstName = appUser.getPerson().getFirstName();
-        this.secondName = appUser.getPerson().getSecondName();
-        this.lastName = appUser.getPerson().getLastName();
-        this.imageName = appUser.getImg();
+        this.firstName = appUser.getFirstName();
+        this.secondName = appUser.getSecondName();
+        this.lastName = appUser.getLastName();
+        this.img = CLOUDINARY_URL + appUser.getImg();
         this.id = appUser.getId();
     }
 

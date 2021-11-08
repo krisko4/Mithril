@@ -52,8 +52,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     List<DoctorDto> findAllByScheduleDate(LocalDate date);
 
 
-
-
     @Query("select new com.website.demo.API.user.AppUserDto(a) from AppUser a where a.id <> ?1")
     List<AppUserDto> findAllExceptFor(Integer id);
 

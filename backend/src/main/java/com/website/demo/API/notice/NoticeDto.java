@@ -2,6 +2,7 @@ package com.website.demo.API.notice;
 
 import com.website.demo.API.user.doctor.DoctorDto;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 

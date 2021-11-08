@@ -7,6 +7,7 @@ import com.website.demo.API.user.AppUser;
 import com.website.demo.API.visit.Visit;
 import com.website.demo.API.visit.VisitDto;
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.LocalDate;
 

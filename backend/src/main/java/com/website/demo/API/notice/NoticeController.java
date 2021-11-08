@@ -1,5 +1,6 @@
 package com.website.demo.API.notice;
 
+import com.website.demo.cloudinary.CloudinaryConfig;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 public class NoticeController {
 
     private final NoticeService noticeService;
+
 
 
     @GetMapping("yoooo")

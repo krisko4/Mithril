@@ -6,6 +6,7 @@ import com.website.demo.API.user.AppUserRepository;
 import com.website.demo.API.user.AppUserDto;
 import com.website.demo.API.visit.VisitService;
 import com.website.demo.cloudinary.CloudinaryConfig;
+
 import lombok.Data;
 import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class DoctorService {
 
     private final AppUserRepository appUserRepository;
     private final VisitService visitService;
-    private final CloudinaryConfig cloudinaryConfig;
+
 
 
     public List<DoctorDto> test(){
@@ -43,7 +44,7 @@ public class DoctorService {
             doctors = appUserRepository.findAllByScheduleDate(date);
         }
         for(DoctorDto doctor : doctors){
-            if(doctor.getImg() != null) doctor.setImg(cloudinaryConfig.getURL() + doctor.getImg());
+
             Set<SpecializationDto> specializationDtoSet = appUserRepository.getSpecializationsForDoctor(doctor.getId())
                     .stream()
                     .map(SpecializationDto::from)

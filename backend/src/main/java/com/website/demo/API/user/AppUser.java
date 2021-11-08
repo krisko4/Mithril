@@ -137,6 +137,9 @@ public class AppUser implements UserDetails  {
     public String getFirstName(){
         return this.person.getFirstName();
     }
+    public String getSecondName(){return this.person.getSecondName();}
+    public String getLastName(){return this.person.getLastName();}
+    public String getPhone(){return this.person.getPhone();}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

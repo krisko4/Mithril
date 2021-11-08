@@ -6,14 +6,17 @@ import com.website.demo.API.schedule.Schedule;
 import com.website.demo.API.specialization.Specialization;
 import com.website.demo.API.specialization.SpecializationDto;
 import com.website.demo.API.user.AppUser;
+import com.website.demo.cloudinary.CloudinaryConfig;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
-@Getter
-@Setter
+
+@Data
 @NoArgsConstructor
 public class DoctorDto {
 
@@ -25,11 +28,7 @@ public class DoctorDto {
     private String phone;
     private String img;
     private Set<SpecializationDto> specializations;
-//    private Set<VisitDto> visitSet;
-   // private Set<Schedule> schedules;
-
-
-
+    private static final String CLOUDINARY_URL = "https://res.cloudinary.com/dpkrneznq/image/upload/v1635196214/";
 
     public DoctorDto(
             String firstName,
@@ -42,22 +41,6 @@ public class DoctorDto {
     }
 
 
-//    public DoctorDto(Integer id, String firstName){
-//        this.id = id;
-//        this.firstName = firstName;
-//
-//    }
-
-
-    public DoctorDto(String firstName,
-                     String secondName,
-                     String lastName,
-                     String imageName,
-                     Integer id) {
-        this.id = id;
-
-    }
-
 
     public DoctorDto(AppUser appUser, Person person){
         id = appUser.getId();
@@ -66,14 +49,14 @@ public class DoctorDto {
         lastName = person.getLastName();
         email = person.getEmail();
         phone = person.getPhone();
-        img = appUser.getImg();
+        img = CLOUDINARY_URL + appUser.getImg();
     }
 
 
     public static DoctorDto from(AppUser appUser) {
         DoctorDto dto = new DoctorDto();
         dto.id = appUser.getId();
-        dto.img = appUser.getImg();
+        dto.img =  CLOUDINARY_URL + appUser.getImg();
         dto.firstName = appUser.getPerson().getFirstName();
         dto.secondName = appUser.getPerson().getSecondName();
         dto.lastName = appUser.getPerson().getLastName();

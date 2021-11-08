@@ -32,17 +32,15 @@ public class LoginService {
         authenticate(email, password);
         AppUser appUser = (AppUser) appUserService.loadUserByUsername(email);
         String token =  jwtUtil.generateToken(appUser);
-        System.out.println(cloudinaryConfig.getURL());
-        System.out.println(cloudinaryConfig.getCloudinary());
         if(appUser.getImg() != null) {
             appUser.setImg(cloudinaryConfig.getURL() + appUser.getImg());
         }
         return new LoginResponse(
                 token,
                 email,
-                appUser.getPerson().getFirstName(),
-                appUser.getPerson().getSecondName(),
-                appUser.getPerson().getLastName(),
+                appUser.getFirstName(),
+                appUser.getSecondName(),
+                appUser.getLastName(),
                 appUser.getId(),
                 appUser.getImg(),
                 appUser.getRole()

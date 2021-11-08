@@ -26,7 +26,7 @@ public class Patient {
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private AppUser appUser;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
     private Person person;
     private String pesel;
