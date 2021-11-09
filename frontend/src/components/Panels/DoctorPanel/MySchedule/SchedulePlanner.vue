@@ -125,21 +125,20 @@ export default {
 
         tokenAxios.get('doctors/' + localStorage.getItem('id') + '/schedules')
             .then(response => {
-              //  let allEvents = []
+                let allEvents = []
                 this.visitsSubmitted = true
-                console.log(response.data)
-                // response.data.filter((schedule) => {
-                //     let events = this.setVisits(
-                //         schedule.date,
-                //         schedule.startHour,
-                //         schedule.endHour,
-                //         schedule.visitDuration,
-                //         schedule.breakDuration
-                //     )
-                //     allEvents = allEvents.concat(events)
-                // })
-                // this.stimulus = !this.stimulus
-                // this.$emit('newEvents', allEvents, this.visitsSubmitted, this.date, this.stimulus)
+                response.data.forEach((schedule) => {
+                    let events = this.setVisits(
+                        schedule.date,
+                        schedule.startHour,
+                        schedule.endHour,
+                        schedule.visitDuration,
+                        schedule.breakDuration
+                    )
+                    allEvents = allEvents.concat(events)
+                })
+                this.stimulus = !this.stimulus
+                this.$emit('newEvents', allEvents, this.visitsSubmitted, this.date, this.stimulus)
             }).catch(() => this.$toast.error('Oops, something went wrong'))
 
 
