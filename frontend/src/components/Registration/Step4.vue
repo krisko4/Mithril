@@ -23,7 +23,7 @@
                             chips
                             :loading="loading"
                             :items="specializations"
-                            v-model="value"
+                            v-model="selectedSpecializations"
                             label="Specializations"
                             cache-items
                         >
@@ -38,7 +38,7 @@
                             :loading="registerLoading"
                             @click="registerDoctor"
                             block
-                            :disabled="value.length === 0"
+                            :disabled="selectedSpecializations.length === 0"
                         >Submit
                         </v-btn>
                     </v-row>
@@ -63,7 +63,7 @@ export default {
             loading: false,
             registerLoading: false,
             search: '',
-            value: '',
+            selectedSpecializations: [],
         }
     },
     created() {
@@ -79,13 +79,14 @@ export default {
 
 
         registerDoctor() {
+            console.log(this.selectedSpecializations)
             this.registerLoading = true
             this.userData['registrationType'] = 'doctorType'
             const formData = new FormData()
             for (const element in this.userData) {
                 formData.append(element, this.userData[element])
             }
-            formData.append('specializationNames', JSON.stringify(this.specializations))
+            formData.append('specializationNames', JSON.stringify(this.selectedSpecializations))
             axios.post("registration", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
