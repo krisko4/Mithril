@@ -35,7 +35,6 @@
                                 </v-row>
                             </v-container>
                         </v-container>
-
                     </v-img>
                     <v-main class="mt-4">
                         <transition name="fade" mode="out-in">
@@ -87,7 +86,6 @@ export default {
             selectedVisitDate: '',
             selectedVisitDuration: 0,
             text: 'Hello, ' + localStorage.getItem('firstName'),
-
         }
     },
 

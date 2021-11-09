@@ -143,14 +143,6 @@ export default {
 
     nextStep() {
       this.img || this.$toast.warning('Your image has not been submitted. To upload, please press the submit button.', {duration: 4000})
-      // if (!this.image) {
-      //   this.$toast.warning(
-      //     "Your image has not been submitted. To upload, please press the submit button.",
-      //     {
-      //       duration: 4000,
-      //     }
-      //   );
-      // }
       this.$emit("thirdStepComplete", this.img);
     },
 
