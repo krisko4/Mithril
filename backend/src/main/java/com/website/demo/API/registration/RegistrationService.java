@@ -12,6 +12,8 @@ import com.website.demo.API.user.AppUserRepository;
 import com.website.demo.API.user.AppUserService;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@Data
 public class RegistrationService {
 
     private final static String USER_NOT_FOUND_MSG = "User with email %s not found";
@@ -33,15 +35,16 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final AddressService addressService;
     private final EmailSender emailSender;
-    private final String CONFIRMATION_LINK = "http://localhost:8081/confirm/";
     private final CloudinaryConfig cloudinaryConfig;
-
+    @Value("${client.url}")
+    private String CLIENT_URL;
 
 
     public LocalDate birthdayToLocalDate(String birthdateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(birthdateString, formatter);
     }
+
 
     @Transactional
     public void register(AppUser appUser, MultipartFile image) {
@@ -51,12 +54,12 @@ public class RegistrationService {
         if (appUserRepository.findByEmail(email).isPresent()) {
             appUser = appUserRepository.findByEmail(appUser.getEmail()).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
             if (!appUser.isEnabled()) {
-                resendEmail(appUser.getEmail(), CONFIRMATION_LINK);
+                resendEmail(appUser.getEmail(), appUser.getFirstName());
             }
         }
         System.out.println(appUser);
         String token = appUserService.signUp(appUser);
-        emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), CONFIRMATION_LINK + token));
+        emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), CLIENT_URL + "/confirm/" + token));
 
         if (image != null) {
             try {
@@ -182,8 +185,7 @@ public class RegistrationService {
                 appUser
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-        String link = CONFIRMATION_LINK + token;
-        emailSender.send(email, buildEmail(firstName, link));
+        emailSender.send(email, buildEmail(firstName, CLIENT_URL + "/confirm/" + token));
         return token;
     }
 }

@@ -26,9 +26,7 @@ public class DoctorService {
 
 
 
-    public List<DoctorDto> test(){
-        return appUserRepository.test();
-    }
+
 
     public List<DoctorDto> getDoctorsBy(String dateString, String name){
         List<DoctorDto> doctors;

@@ -1,6 +1,5 @@
 package com.website.demo.API.user;
 
-import com.website.demo.API.person.Person;
 import com.website.demo.API.person.PersonRepository;
 import com.website.demo.API.registration.token.ConfirmationToken;
 import com.website.demo.API.registration.token.ConfirmationTokenService;

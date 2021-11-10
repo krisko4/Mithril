@@ -4,8 +4,9 @@ import com.website.demo.API.user.AppUser;
 import com.website.demo.API.user.AppUserRepository;
 import com.website.demo.API.visit.Visit;
 import lombok.Data;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,6 @@ public class SpecializationService {
     private final AppUserRepository appUserRepository;
 
 
-
-
     public void setSpecializationsForDoctor(AppUser appUser, String specializationNames){
         try {
             JSONArray array = new JSONArray(specializationNames);
@@ -30,10 +29,6 @@ public class SpecializationService {
             }
             Set<Specialization> specializationSet = new HashSet<>();
             for(String specializationName : specializationNamesList){
-//                Long specializationId = specializationRepository
-//                        .findIdByName(specializationName)
-//                        .orElseThrow(() -> new RuntimeException("Specialization with name: " + specializationName + " not found"));
-               // specializationRepository.setSpecializationForDoctor(doctorId, specializationId);
                 Example<Specialization> example = Example.of(new Specialization(specializationName));
                 Specialization specialization =  specializationRepository
                         .findOne(example)
@@ -53,7 +48,7 @@ public class SpecializationService {
         return specializationRepository.findAll();
     }
 
-    public List<Specialization> getSpecializationsForDispensary(Long id) {
+    public List<Specialization> getSpecializationsForDispensary(Integer id) {
         return specializationRepository.findSpecializationsForDispensary(id);
     }
 }

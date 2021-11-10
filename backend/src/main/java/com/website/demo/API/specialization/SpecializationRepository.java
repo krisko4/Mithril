@@ -16,7 +16,7 @@ public interface SpecializationRepository extends JpaRepository<Specialization, 
     @Query(value = "select * from specialization where id in(\n" +
             "    select specialization_id from dispensary_specialization where dispensary_id = ?1\n" +
             ")", nativeQuery = true)
-    List<Specialization> findSpecializationsForDispensary(Long id);
+    List<Specialization> findSpecializationsForDispensary(Integer id);
 
     @Query(value = "select * from specialization where name = ?1 and id in (\n" +
             "    select specialization_id from dispensary_specialization where dispensary_id in  (\n" +
@@ -31,6 +31,6 @@ public interface SpecializationRepository extends JpaRepository<Specialization, 
 
     @Transactional
     @Modifying
-    @Query(value = "insert into doctor_specialization values (?1, ?2)", nativeQuery = true)
-    void setSpecializationForDoctor(Long doctorId, Long specializationId);
+    @Query(value = "insert into doctor_specialization(app_user_id, specialization_id) values (?1, ?2)", nativeQuery = true)
+    void setSpecializationForDoctor(Integer doctorId, Integer specializationId);
 }

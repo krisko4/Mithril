@@ -26,23 +26,7 @@ import java.util.Set;
 @Entity(name = "AppUser")
 @Table(name = "app_user")
 
-@SqlResultSetMapping(
-        name="myMapping",
-        classes={
-                @ConstructorResult(
-                        targetClass = DoctorDto.class,
-                        columns = {
-                                @ColumnResult(name="id", type = Long.class),
-                                @ColumnResult(name="first_name", type = String.class)
-                        }
-                )
-        }
-)
-@NamedNativeQuery(
-        name ="AppUser.test",
-        resultSetMapping = "myMapping",
-        query = "select id, first_name from app_user"
-)
+
 
 public class AppUser implements UserDetails  {
 
@@ -51,14 +35,6 @@ public class AppUser implements UserDetails  {
     private Integer id;
     private String password;
     private String img;
-//    private String firstName;
-//    private String secondName;
-//    private String lastName;
-//    private String phone;
-
-//    private String email;
-
-//    private LocalDate birthdate;
     @OneToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
@@ -67,9 +43,6 @@ public class AppUser implements UserDetails  {
     private Set<Specialization> specializations;
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private Set<Visit> visitSet;
-//    @ManyToOne
-//    @JoinColumn(name = "address_id")
-//    private Address address;
     @ManyToMany
     @JoinTable(name = "doctor_schedule", joinColumns = {@JoinColumn(name = "app_user_id")}, inverseJoinColumns = {@JoinColumn(name = "schedule_id")})
     private Set<Schedule> schedules;
@@ -79,11 +52,6 @@ public class AppUser implements UserDetails  {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
-
-//    public AppUser(String firstName, String secondName){
-//        this.firstName = firstName;
-//        this.secondName = secondName;
-//    }
 
 
     public AppUser(Person person,
@@ -135,11 +103,11 @@ public class AppUser implements UserDetails  {
     }
 
     public String getFirstName(){
-        return this.person.getFirstName();
+        return person.getFirstName();
     }
-    public String getSecondName(){return this.person.getSecondName();}
-    public String getLastName(){return this.person.getLastName();}
-    public String getPhone(){return this.person.getPhone();}
+    public String getSecondName(){return person.getSecondName();}
+    public String getLastName(){return person.getLastName();}
+    public String getPhone(){return person.getPhone();}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

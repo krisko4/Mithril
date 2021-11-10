@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Table(name="person")
 @NoArgsConstructor
 @Getter
+@Setter
 public class Person {
 
     @Id
@@ -26,14 +27,6 @@ public class Person {
     @ManyToOne(optional = false)
     @JoinColumn(name = "address_id")
     private Address address;
-
-
-
-    @OneToOne(mappedBy = "person")
-    private AppUser appUser;
-    @OneToOne(mappedBy = "person")
-    private Patient patient;
-
 
     public Person(String firstName,
                   String secondName,

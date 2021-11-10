@@ -66,6 +66,4 @@ public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     @Query("select new com.website.demo.API.user.doctor.DoctorDto(a, p) from AppUser a join Person p on p.id = a.person.id where lower(p.firstName) like lower(concat(:name,'%')) and a.role = 'DOCTOR'")
     List<DoctorDto> findByFirstNameStartsWith(String name);
 
-    @Query(nativeQuery = true)
-    List<DoctorDto> test();
 }

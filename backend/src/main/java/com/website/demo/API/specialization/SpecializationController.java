@@ -27,7 +27,7 @@ public class SpecializationController {
     }
 
     @GetMapping("dispensaries/{id}/specializations")
-    public List<Specialization> getSpecializationsForDispensary(@PathVariable Long id){
+    public List<Specialization> getSpecializationsForDispensary(@PathVariable Integer id){
         return specializationService.getSpecializationsForDispensary(id);
     }
 
