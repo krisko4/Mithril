@@ -17,7 +17,7 @@
                 size="150"
                 
             >
-                <v-img :alt="doctor.firstName" :src="imgSrc"></v-img>
+                <v-img :alt="doctor.firstName" :src="doctor.img"></v-img>
             </v-list-item-avatar>
         </v-list-item>
         <v-card-text>
@@ -66,7 +66,7 @@
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" :loading="reserveLoading" @click="addVisit">Reserve</v-btn>
+            <v-btn text color="primary" :disabled="hourIndex === ''" :loading="reserveLoading" @click="addVisit">Reserve</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -92,8 +92,10 @@ export default {
             reserveLoading: false
         }
     },
+    
 
     created(){
+        
         tokenAxios.get('doctors/' + this.doctor.id + '/visit-hours', {
             params: {
                 date: this.date

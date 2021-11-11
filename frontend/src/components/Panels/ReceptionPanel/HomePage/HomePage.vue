@@ -1,10 +1,10 @@
 <template>
     <v-container fluid>
         <v-row justify="center">
-            <v-col cols="10" lg="6">
+            <v-col xs="12" md="10" lg="6">
                 <Activities @cardChosen="cardChosen"></Activities>
             </v-col>
-            <v-col cols="10" lg="6">
+            <v-col xs="12" md="10" lg="6">
                 <NoticeBoard></NoticeBoard>
             </v-col>
         </v-row>

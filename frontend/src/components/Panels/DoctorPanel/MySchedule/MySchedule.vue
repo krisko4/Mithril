@@ -1,7 +1,7 @@
 <template>
     <v-container fluid fill-height>
         <v-row justify="center">
-            <v-col cols="10" lg="7" >
+            <v-col xs="11" lg="7" >
                 <MyCalendar @dayChosen="dayChosen"
                             :events="events"
                             :breakDuration="breakDuration"
@@ -16,7 +16,7 @@
                 </MyCalendar>
             </v-col>
 
-        <v-col cols="6" sm="10" xs="10" lg="4" md="10" >
+        <v-col  sm="10" xs="10" lg="4" md="9" >
             <SchedulePlanner
                 :calendarDate="calendarDate"
                 :isScheduleAlreadyDeclared="isScheduleAlreadyDeclared"

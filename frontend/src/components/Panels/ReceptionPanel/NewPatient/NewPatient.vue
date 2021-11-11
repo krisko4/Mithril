@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-row justify="center" class="mb-2">
-            <v-col cols="8" lg="5">
+            <v-col xs="11" md="10" lg="5">
                 <v-card>
                     <v-card-title>
                         Patient registration

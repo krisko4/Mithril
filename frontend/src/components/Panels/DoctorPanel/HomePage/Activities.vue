@@ -9,7 +9,7 @@
                 <v-col
                     v-for="card in cards"
                     :key="card.title"
-                    cols = 6
+                    cols="6"
                 >
                     <v-hover
                         v-slot="{hover}">
@@ -52,21 +52,21 @@ export default {
                     title: 'My visits',
                     subtitle: 'Browse through your visits',
                     src: `${process.env.VUE_APP_BASE_URL}/images/static/visit.jpg`,
-                    index: 2,
+                    index: 1,
                     icon: 'mdi-calendar'
                 },
                 {
                     title: 'My patients',
                     subtitle: 'Manage your patients',
                     src: `${process.env.VUE_APP_BASE_URL}/images/static/doctor-patient.jpg`,
-                    index: 4,
+                    index: 3,
                     icon: 'mdi-account-heart'
                 },
                 {
                     title: 'My schedule',
                     subtitle: 'Manage your working hours',
                     src: `${process.env.VUE_APP_BASE_URL}/images/static/schedule.jpg`,
-                    index: 3,
+                    index: 2,
                     icon: 'mdi-calendar-heart'
                 },
                 {

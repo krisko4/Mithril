@@ -45,7 +45,7 @@ export default {
             drawer: this.navigationOpened,
             items: [
                 {icon: 'mdi-home', title: 'Home'},
-                {icon: 'mdi-account', title: 'My account'},
+                // {icon: 'mdi-account', title: 'My account'},
                 {icon: 'mdi-calendar', title: 'My visits'},
                 {icon: 'mdi-calendar-heart', title: 'My schedule'},
                 {icon: 'mdi-account-heart', title: 'My patients'},

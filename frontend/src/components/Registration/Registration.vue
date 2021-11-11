@@ -2,7 +2,7 @@
     <v-container fill-height>
     <transition name="fade" appear v-if="step === 0">
             <v-row justify="center">
-                <v-col cols="8" lg="6">
+                <v-col cols="11" lg="6">
                     <v-card elevation="10">
                         <v-card-title>
                             Registration

@@ -10,10 +10,10 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="8" lg="9" align="center">
+      <v-col xs="11" lg="9" align="center">
         <v-card
           ref="card"
-          class="mx-auto"
+          
           :elevation="elevation"
           shaped
           @dragover.prevent="dragover"
@@ -22,7 +22,7 @@
           @drop="drop"
         >
           <v-container fluid>
-            <v-img :src="previewImage" min-height="300" min-width="300" />
+            <v-img :src="previewImage" width="100%" />
             <v-btn
               class="ma-2"
               color="indigo"

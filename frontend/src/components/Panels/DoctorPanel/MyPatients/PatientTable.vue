@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-row justify="center">
-            <v-col cols="10">
+            <v-col cols="12" lg="10">
                 <v-card>
                     <v-card-title class="display-2">
                         Patient table

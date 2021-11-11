@@ -14,7 +14,7 @@
                             <v-app-bar-nav-icon  @click=openNavigationDrawer></v-app-bar-nav-icon>
                             <v-row justify="end" class="mr-4">
                                 <v-btn @click="messengerOpened = true" class="mr-2" text color="white">Messenger</v-btn>
-                                <v-btn text color="white" class="mr-2">My account</v-btn>
+                                <!-- <v-btn text color="white" class="mr-2">My account</v-btn> -->
                                 <v-btn color="error" class="mr-2" @click="logout">Sign out</v-btn>
                             </v-row>
                         </v-toolbar>
@@ -38,9 +38,9 @@
                     <v-main class="mt-4">
                         <transition name="fade" mode="out-in">
                             <HomePage @cardChosen="cardChosen" v-if="cardIndex === 0"></HomePage>
-                            <NewVisit v-if="cardIndex === 2" @returnClicked="cardIndex = 0"></NewVisit>
-                            <PatientTable @newPatientClicked="cardIndex = 4" @returnClicked="cardIndex = 0" v-if="cardIndex === 3"></PatientTable>
-                            <NewPatient v-if="cardIndex === 4" @registrationFinished="cardIndex = 0"></NewPatient>
+                            <NewVisit v-if="cardIndex === 1" @returnClicked="cardIndex = 0"></NewVisit>
+                            <PatientTable @newPatientClicked="cardIndex = 4" @returnClicked="cardIndex = 0" v-if="cardIndex === 2"></PatientTable>
+                            <NewPatient v-if="cardIndex === 3" @registrationFinished="cardIndex = 0"></NewPatient>
                         </transition>
                     </v-main>
                 </v-main>

@@ -9,12 +9,11 @@
                         height="1000px"
                         :src="backgroundImage"
                     >
-
                         <v-toolbar style="background-color: transparent">
                             <v-app-bar-nav-icon @click=openNavigationDrawer></v-app-bar-nav-icon>
                             <v-row justify="end" class="mr-4">
-                                <v-btn @click="messengerOpened = true" class="mr-2" text >Messenger</v-btn>
-                                <v-btn text  class="mr-2">My account</v-btn>
+                                <v-btn @click="messengerOpened = true"  class="mr-2" color="primary" >Messenger</v-btn>
+                                <!-- <v-btn text  class="mr-2">My account</v-btn> -->
                                 <v-btn color="error" class="mr-2" @click="logout">Sign out</v-btn>
                             </v-row>
                         </v-toolbar>
@@ -40,9 +39,9 @@
                         <transition name="fade" mode="out-in">
                             <HomePage @cardChosen="cardChosen" @visitStarted="beginVisit"
                                       v-if="cardIndex === 0"></HomePage>
-                            <VisitCard @goBack="cardIndex = 0" v-if="cardIndex === 2"></VisitCard>
-                            <MySchedule v-if="cardIndex === 3"></MySchedule>
-                            <PatientTable v-if="cardIndex === 4" @returnClicked="cardIndex = 0"></PatientTable>
+                            <VisitCard @goBack="cardIndex = 0" v-if="cardIndex === 1"></VisitCard>
+                            <MySchedule v-if="cardIndex === 2"></MySchedule>
+                            <PatientTable v-if="cardIndex === 3" @returnClicked="cardIndex = 0"></PatientTable>
                             <Visit :selectedVisitDate="selectedVisitDate"
                                    @visitFinished="cardIndex = 0"
                                    :selectedVisitDuration="selectedVisitDuration"

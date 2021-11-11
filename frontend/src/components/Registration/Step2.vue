@@ -14,7 +14,7 @@
             </v-col>
         </v-row>
         <v-row justify="center">
-            <v-col cols="10" align="center">
+            <v-col lg="10" xs="12" align="center">
                 <v-form ref="form" v-model="valid" class="login">
                     <v-row justify="center">
                         <v-col cols="6">

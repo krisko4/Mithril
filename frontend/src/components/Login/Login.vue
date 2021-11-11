@@ -2,8 +2,8 @@
     <v-container fill-height align-self="center" :style="background">
         <MailConfirmComponent v-if="!isAccountActive" :email="email"></MailConfirmComponent>
     <v-row v-else justify="end">
-        <v-col cols="8" align="center">
-        <v-col lg="6" cols="6" xs="8">
+        <v-col lg="8" sm="8" md="8" align="center">
+        <v-col lg="6"  xs="10" md="10" sm="10">
             <v-card elevation="10">
                 <v-card-title class="display-2">
                     <v-spacer></v-spacer>

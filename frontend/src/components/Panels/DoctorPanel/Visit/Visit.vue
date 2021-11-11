@@ -1,7 +1,7 @@
 <template>
     <v-container class="mt-3 mb-3">
     <v-row justify="center">
-    <v-col cols="7">
+    <v-col xs="10" lg="7">
         <v-card>
             <v-card-title>Visit manager</v-card-title>
             <v-card-subtitle class="mt-1">In this card you can go through the entire process of your visit</v-card-subtitle>
@@ -70,7 +70,7 @@
         </v-card>
 
     </v-col>
-<v-col cols="5">
+<v-col xs="10" lg="5">
     <PatientHistory :patientData="patientData"></PatientHistory>
 </v-col>
     </v-row>

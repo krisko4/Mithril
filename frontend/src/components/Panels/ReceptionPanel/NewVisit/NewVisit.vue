@@ -1,7 +1,7 @@
 <template>
   <v-container fluid fill-height>
     <v-row justify="center" class="mb-3 mt-3">
-      <v-col lg="6"  cols="10" v-if="step === 1">
+      <v-col  lg="6" xs="12" sm="10" md="8" v-if="step === 1">
         <transition name="fade" appear mode="out-in">
           <DoctorComponent
             @returnClicked="step = 0"
@@ -12,7 +12,7 @@
           ></DoctorComponent>
         </transition>
       </v-col>
-      <v-col lg="4" cols="10">
+      <v-col lg="4" xs="12" sm="10" md="8">
         <v-card height="100%" class="flex-card">
           <v-card-title> New visit </v-card-title>
           <v-card-subtitle
@@ -23,7 +23,7 @@
             <v-divider></v-divider>
             <v-container height="100%" class="mt-5">
               <v-row justify="center">
-                <h2 class="display-1 font-weight-thin mb-3">
+                <h2 class="display-1 font-weight-thin mb-3 text-center">
                   Please choose a visit date
                 </h2>
               </v-row>
@@ -31,7 +31,7 @@
                 <DatePicker @dateChanged="getDate" class="mt-8" />
               </v-row>
               <v-row justify="center" class="mt-4">
-                <v-col cols="7">
+                <v-col lg="7" xs="10" sm="8" md="7">
                   <PatientSearchComponent
                     @patientSelected="getPatient"
                   ></PatientSearchComponent>

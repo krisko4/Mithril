@@ -53,7 +53,7 @@ export default {
                     subtitle: 'Browse through patients and their visits',
                     src: `${process.env.VUE_APP_BASE_URL}/images/static/Patient-holding-doctors-hand.jpg`,
                     flex: 6,
-                    index: 3,
+                    index: 2,
                     icon: 'mdi-account-heart'
                 },
                 {
@@ -61,7 +61,7 @@ export default {
                     subtitle: 'Register a new visit for patient',
                     src: `${process.env.VUE_APP_BASE_URL}/images/static/visit.jpg`,
                     flex: 6,
-                    index: 2,
+                    index: 1,
                     icon: 'mdi-calendar'
                 },
                 {
@@ -77,7 +77,7 @@ export default {
                     subtitle: 'Add new person as patient',
                     src: `https://j-elita.org.pl/wp-content/uploads/2021/03/lekarz-i-pacjent.jpg`,
                     flex: 6,
-                    index: 4,
+                    index: 3,
                     icon: 'mdi-account-check-outline'
                 },
             ],

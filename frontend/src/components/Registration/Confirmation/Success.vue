@@ -2,7 +2,7 @@
 
     <v-container fluid>
         <v-row justify="center">
-            <v-col cols="3" align="center">
+            <v-col lg="3" xs="10" sm="8" md="6" align="center">
                 <v-card>
                     <v-card-subtitle class="display-1 text--primary">Verification successful!</v-card-subtitle>
                     <v-divider class="mx-4"></v-divider>

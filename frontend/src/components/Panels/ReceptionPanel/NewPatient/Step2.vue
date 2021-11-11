@@ -15,7 +15,7 @@
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-col cols="6">
+        <v-col lg="6" xs="10" sm="8">
           <v-responsive height="400px">
             <transition name="fade" appear mode="out-in">
               <v-img :key="imgKey" height="400px" :src="imgSrc"></v-img>
@@ -24,14 +24,14 @@
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-col cols="6">
+        <v-col xs="10" md="6" sm="7" lg="6">
           <DoctorSearchComponent
             @doctorSelected="selectDoctor"
           ></DoctorSearchComponent>
         </v-col>
       </v-row>
       <v-row justify="center" class="mb-3">
-        <v-col cols="6">
+        <v-col xs="10" md="6" sm="7" lg="6">
           <v-btn
             block
             large

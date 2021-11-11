@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="mb-5">
         <v-row justify="center">
-            <v-col cols="5">
+            <v-col xs="10" sm="10" md="7" lg="5">
                 <v-card
                 >
                     <v-card-title class="display-2">My visits</v-card-title>

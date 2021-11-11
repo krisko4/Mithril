@@ -13,7 +13,7 @@
     </v-row>
     <v-form ref="form" v-model="valid" class="login">
       <v-row justify="center">
-        <v-col cols="7">
+        <v-col cols="10" lg="7" xs="11" sm="9">
           <v-text-field
             type="email"
             :rules="emailRules"

@@ -12,7 +12,7 @@
             </v-col>
         </v-row>
         <v-row justify="center">
-            <v-col cols="7">
+            <v-col lg="7" xs="12" sm="10" md="7">
                 <!-- <v-card>
                     <v-card-title>Please choose your specialization</v-card-title>
                     <v-card-text> -->
