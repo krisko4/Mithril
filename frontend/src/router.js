@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import Registration from "@/components/Registration/Registration";
 import Confirmation from "@/components/Registration/Confirmation/Confirmation";
 import Login from "@/components/Login/Login";
-import { tokenAxios } from "@/axios";
+ import { tokenAxios } from "@/axios";
 import PanelSelector from "@/components/Panels/PanelSelector";
 
 Vue.use(Router);

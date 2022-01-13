@@ -57,7 +57,7 @@ import Footer from "@/components/Footer";
 import HomePage from "@/components/Panels/ReceptionPanel/HomePage/HomePage";
 import NewVisit from "@/components/Panels/ReceptionPanel/NewVisit/NewVisit";
 import Navigation from "@/components/Panels/ReceptionPanel/Navigation";
-import Messenger from "@/components/Panels/DoctorPanel/Messenger/Messenger";
+import Messenger from "@/components/Panels/Messenger/Messenger";
 import { VueTyper } from 'vue-typer'
 import PatientTable from "@/components/Panels/DoctorPanel/MyPatients/PatientTable";
 import NewPatient from "@/components/Panels/ReceptionPanel/NewPatient/NewPatient";

@@ -132,6 +132,7 @@ export default {
                 response.data.imageName && localStorage.setItem('imageName', response.data.imageName)
                 this.$router.push({name: 'panelSelector'})
             }).catch((error) => {
+                console.log(error)
                 this.errorPopped = true
                 if(error.response.data.message === 'This user has not been activated'){
                     this.isAccountActive = false
