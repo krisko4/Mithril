@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/specializations",
                         "/users"
                         )
-                .permitAll()
+               .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
