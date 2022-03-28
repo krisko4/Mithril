@@ -1,29 +1,34 @@
 package com.website.demo.specialization;
 
+
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @Getter
 @Setter
-@RequestMapping("specializations")
+@CrossOrigin
 public class SpecializationController {
 
     private final SpecializationService specializationService;
+
 
     public SpecializationController(SpecializationService specializationService) {
         this.specializationService = specializationService;
     }
 
-    @GetMapping
+
+    @GetMapping("specializations")
     public List<Specialization> getAll(){
         return specializationService.getAll();
     }
 
+    @GetMapping("dispensaries/{id}/specializations")
+    public List<Specialization> getSpecializationsForDispensary(@PathVariable Long id){
+        return specializationService.getSpecializationsForDispensary(id);
+    }
 
 }

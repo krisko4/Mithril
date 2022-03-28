@@ -3,6 +3,8 @@ package com.website.demo.user;
 import com.website.demo.address.Address;
 import com.website.demo.authorities.AppUserRole;
 import com.website.demo.schedule.Schedule;
+import com.website.demo.specialization.Specialization;
+import com.website.demo.user.doctor.DoctorDto;
 import com.website.demo.visit.Visit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -20,8 +24,27 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "AppUser")
 @Table(name = "app_user")
+
+@SqlResultSetMapping(
+        name="myMapping",
+        classes={
+                @ConstructorResult(
+                        targetClass = DoctorDto.class,
+                        columns = {
+                                @ColumnResult(name="id", type = Long.class),
+                                @ColumnResult(name="first_name", type = String.class)
+                        }
+                )
+        }
+)
+@NamedNativeQuery(
+        name ="AppUser.test",
+        resultSetMapping = "myMapping",
+        query = "select id, first_name from app_user"
+)
+
 public class AppUser implements UserDetails {
 
     @Id
@@ -33,18 +56,19 @@ public class AppUser implements UserDetails {
     private String phone;
     private String password;
     private String email;
-//    private LocalDate birthdate;
-    @OneToMany(mappedBy = "doctor")
+    private String imageName;
+    private LocalDate birthdate;
+    @ManyToMany
+    @JoinTable(name = "doctor_specialization", joinColumns = {@JoinColumn(name = "app_user_id")}, inverseJoinColumns = {@JoinColumn(name = "specialization_id")})
+    private Set<Specialization> specializations;
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private Set<Visit> visitSet;
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
     @ManyToMany
-    @JoinTable(name = "doctor_schedule", joinColumns = {@JoinColumn(name = "doctor_id")}, inverseJoinColumns = {@JoinColumn(name = "schedule_id")})
+    @JoinTable(name = "doctor_schedule", joinColumns = {@JoinColumn(name = "app_user_id")}, inverseJoinColumns = {@JoinColumn(name = "schedule_id")})
     private Set<Schedule> schedules;
-
-
-
     @Enumerated(value = EnumType.STRING)
     private AppUserRole role;
     private boolean accountNonExpired;
@@ -52,12 +76,19 @@ public class AppUser implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean enabled;
 
+    public AppUser(String firstName, String secondName){
+        this.firstName = firstName;
+        this.secondName = secondName;
+    }
+
     public AppUser(String firstName,
                    String secondName,
                    String lastName,
                    String email,
                    String password,
                    String phone,
+                   Address address,
+                   LocalDate birthdate,
                    AppUserRole role) {
         this.firstName = firstName;
         this.secondName = secondName;
@@ -65,10 +96,12 @@ public class AppUser implements UserDetails {
         this.email = email;
         this.password = password;
         this.phone = phone;
+        this.address = address;
         this.accountNonExpired = true;
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = false;
+        this.birthdate = birthdate;
         this.role = role;
     }
 

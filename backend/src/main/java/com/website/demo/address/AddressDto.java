@@ -22,8 +22,7 @@ public class AddressDto {
         dto.country = address.getCountry();
         dto.city = address.getCity();
         dto.street = address.getStreet();
-        dto.streetNumber = address.getStreetNumber();
-        dto.flat_number = address.getFlat_number();
+        dto.flat_number = address.getFlatNumber();
         dto.postCode = address.getPostCode();
 
         return dto;

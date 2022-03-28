@@ -2,8 +2,9 @@ package com.website.demo.visit;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.website.demo.doctor.Doctor;
+
 import com.website.demo.patient.Patient;
+import com.website.demo.user.AppUser;
 import lombok.*;
 import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +14,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Entity(name = "visit")
+@Entity(name = "Visit")
+@Table(name = "visit")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -21,29 +23,33 @@ import java.util.Date;
 public class Visit {
 
 
-    public Visit(Patient patient, Doctor doctor, LocalDateTime date){
+    public Visit(Patient patient, AppUser doctor, LocalDateTime date) {
         this.patient = patient;
         this.doctor = doctor;
         this.date = date;
-          }
+    }
+
 
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime date;
-    private String description;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
+    @JoinColumn(name = "app_user_id")
+    private AppUser doctor;
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "patient_id")
     private Patient patient;
+    private int duration;
+    private Boolean finished;
 
 
-
+    public Visit(LocalDateTime localDateTime) {
+        this.date = localDateTime;
+    }
 }

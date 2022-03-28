@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,12 +38,35 @@ public class PatientService {
         patientRepository.deleteById(id);
     }
 
-    public Set<Visit> getVisit(Long id) {
-        Patient patient = patientRepository.findById(id).orElseThrow(() -> new RuntimeException("Could not find patient with ID: " + id));
-        return patient.getVisitSet();
+
+
+
+    public void removeDoctorForPatient(Long patientId, Long doctorId) {
+        patientRepository.removeDoctorForPatient(doctorId, patientId);
     }
 
-    public List<PatientDto> getPatientsByChar(String character) {
-        return patientRepository.findByFirstNameStartsWith(character);
+    public void addDoctorForPatient(Long doctorId, Long patientId) {
+        patientRepository.addDoctorForPatient(doctorId, patientId);
+        //return patientRepository.findById(patientID).get();
+    }
+
+    public List<PatientDto> getPatientsBy(String character, Long doctorID) {
+        if(character != null){
+            return patientRepository.findByFirstNameStartsWith(character);
+        }
+        if(doctorID != null){
+            return patientRepository.findByDoctorId(doctorID);
+        }
+        return patientRepository.findAllPatients();
+
+    }
+
+    public LocalDate birthdayToLocalDate(String birthdateString){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(birthdateString, formatter);
+    }
+
+    public void addNewPatient(Patient patient) {
+        patientRepository.save(patient);
     }
 }

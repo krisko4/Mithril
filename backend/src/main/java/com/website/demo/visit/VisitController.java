@@ -1,43 +1,79 @@
 package com.website.demo.visit;
 
-import com.website.demo.doctor.Doctor;
-import com.website.demo.patient.Patient;
+import com.website.demo.visit.request.FinishedVisitRequest;
+import com.website.demo.visit.request.NewUnfinishedVisitRequest;
+import com.website.demo.visit.response.AvailableHoursResponse;
+import com.website.demo.visit.response.VisitResponse;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @Data
-@RequestMapping("/visits")
 public class VisitController {
 
     private final VisitService visitService;
 
-    @CrossOrigin
-    @PostMapping("/add")
-    public void addVisit(@RequestBody VisitRequest visitRequest) {
-        visitService.addVisit(visitRequest);
+
+
+    @PostMapping("visits")
+    public void addNewUnfinishedVisit(@RequestBody NewUnfinishedVisitRequest newUnfinishedVisitRequest){
+        visitService.addNewUnfinishedVisit(
+                newUnfinishedVisitRequest.getPatientId(),
+                newUnfinishedVisitRequest.getDoctorId(),
+                newUnfinishedVisitRequest.getDate(),
+                newUnfinishedVisitRequest.getDuration()
+        );
     }
 
-    @GetMapping
-    public List<Visit> getAllVisits() {
-        return visitService.getAllVisits();
+    @PutMapping("visits")
+    public void saveFinishedVisit(@RequestBody FinishedVisitRequest finishedVisitRequest) {
+        visitService.saveFinishedVisit(
+                finishedVisitRequest.getDate(),
+                finishedVisitRequest.getDoctorId(),
+                finishedVisitRequest.getPatientId(),
+                finishedVisitRequest.getInterview(),
+                finishedVisitRequest.getMedicationIds(),
+                finishedVisitRequest.getReferrals(),
+                finishedVisitRequest.getResearch()
+                );
     }
 
-    @CrossOrigin
-    @GetMapping("/get")
-    public List<LocalTime> getVisitsForDoctorByDate(@RequestParam String date, @RequestParam Long doctor_id) {
-        return visitService.getVisitsForDoctorByDate(date, doctor_id);
+    @GetMapping("doctors/{id}/visit-hours")
+    @ResponseBody
+    public AvailableHoursResponse getAvailableVisitHoursByDate(@PathVariable Long id,
+                                                               @RequestParam String date){
+        return visitService.getAvailableVisitHoursForDoctorByDate(date, id);
     }
 
-//    @GetMapping("/bydate")
-//    public List<Visit> getVisitsBy(VisitRequest visitRequest){
-    //       return visitService.getVisitsBy(visitRequest);
-    //   }
+    @GetMapping("doctors/{id}/visits")
+    @ResponseBody
+    public List<VisitResponse> getVisitsForDoctorBy(@PathVariable Long id,
+                                                    @RequestParam(required = false) String date,
+                                                    @RequestParam(required = false) Long patientId,
+                                                    @RequestParam(required = false) Boolean finished) {
+        return visitService.getFullVisitDataForDoctorBy(id, date, patientId, finished);
+    }
+
+    @GetMapping("patients/{id}/visits")
+    public List<VisitResponse> getAllVisitsForPatient(@PathVariable Long id,
+                                                      @RequestParam(required = false) Boolean finished){
+        return visitService.getFullVisitDataForPatient(id, finished);
+    }
+
+    @GetMapping("visits")
+    public Visit getVisitsByDate(@RequestParam Long patientId, @RequestParam Long doctorId, @RequestParam String date){
+        return visitService.getVisitsByDate(patientId, doctorId, date);
+    }
+
+
+
+
+
+
+
 
 }

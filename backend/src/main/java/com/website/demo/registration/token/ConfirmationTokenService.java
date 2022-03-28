@@ -1,9 +1,12 @@
 package com.website.demo.registration.token;
 
+import com.website.demo.user.AppUser;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -22,5 +25,21 @@ public class ConfirmationTokenService {
 
     public int setConfirmedAt(String token){
         return confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
+    }
+
+    public void removeToken(ConfirmationToken token){
+        confirmationTokenRepository.delete(token);
+    }
+
+    public List<ConfirmationToken> getAll(){
+        return confirmationTokenRepository.findAll();
+    }
+
+
+    public AppUser getUserByToken(String token) {
+        return confirmationTokenRepository
+                .findByToken(token)
+                .orElseThrow(() -> new NoSuchElementException("Token with value: " + token + " not found."))
+                .getAppUser();
     }
 }

@@ -1,69 +1,92 @@
 package com.website.demo.registration;
 
-import com.website.demo.authorities.AppUserRole;
+
+import com.website.demo.address.AddressRepository;
 import com.website.demo.registration.email.EmailSender;
 import com.website.demo.registration.token.ConfirmationToken;
 import com.website.demo.registration.token.ConfirmationTokenService;
 import com.website.demo.user.AppUser;
+import com.website.demo.user.AppUserRepository;
 import com.website.demo.user.AppUserService;
 import com.website.demo.validation.EmailValidator;
+import com.website.demo.validation.PasswordValidator;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class RegistrationService {
+public class RegistrationService  {
 
-    private static final String EMAIL_NOT_VALID_MSG = "email %s not valid";
+    private static final String EMAIL_NOT_VALID_MSG = "E-mail %s is invalid";
+    private final static String USER_NOT_FOUND_MSG = "User with email %s not found";
+    private static final String PASSWORD_NOT_VALID_MSG = "Password %s is invalid";
     private final EmailValidator emailValidator;
+    private final PasswordValidator passwordValidator;
     private final AppUserService appUserService;
+    private final AppUserRepository appUserRepository;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
+    private final String CONFIRMATION_LINK = "http://localhost:8081/confirm/";
 
 
-    public String register(RegistrationRequest request) {
-        boolean isValidEmail = emailValidator.test(request.getEmail());
-        if (!isValidEmail) {
-            throw new IllegalStateException(String.format(EMAIL_NOT_VALID_MSG, request.getEmail()));
+    public LocalDate birthdayToLocalDate(String birthdateString){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(birthdateString, formatter);
+    }
+
+    public void register(AppUser appUser, MultipartFile image) {
+        String email = appUser.getEmail();
+        // resending email confirmation message for existing user
+        if(appUserRepository.existsByEmail(appUser.getEmail())){
+            appUser = appUserRepository.findByEmail(appUser.getEmail()).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+            if(!appUser.isEnabled()){
+                resendEmail(appUser.getEmail(), CONFIRMATION_LINK);
+            }
         }
-        String token = appUserService.signUp(
-                new AppUser(
-                        request.getFirstName(),
-                        request.getSecondName(),
-                        request.getLastName(),
-                        request.getEmail(),
-                        request.getPassword(),
-                        request.getPhone(),
-                        request.getRole()
-                )
-        );
-        String link = "localhost:8080/registration/confirm?token=" + token;
-        emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
-        return token;
+        String token = appUserService.signUp(appUser);
+        if(image != null) {
+            // full path to project directory
+            String projectDirectory = new File("").getAbsolutePath();
+            // directory where we want our files to be stored
+            String fileDirectory = projectDirectory + "/src/main/images/doctors/";
+            String originalFilename = image.getOriginalFilename();
+            String filePath = fileDirectory + originalFilename;
+            File dest = new File(filePath);
+            try {
+                image.transferTo(dest);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to transfer file to destinated directory.");
+            }
+            appUserService.setImageName(originalFilename, appUser.getEmail());
+        }
+        emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), CONFIRMATION_LINK + token));
+      //  return token;
     }
 
     @Transactional
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
-                .orElseThrow(() -> new IllegalStateException("token not found"));
-
+                .orElseThrow(() -> new IllegalStateException("Token not found"));
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("email already confirmed");
+            throw new IllegalStateException("E-mail already confirmed");
         }
-
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
-
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("token expired");
+            throw new IllegalStateException("Token expired");
         }
-
         confirmationTokenService.setConfirmedAt(token);
         appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
-
+        confirmationTokenService.removeToken(confirmationToken);
         return "confirmed";
     }
 
@@ -134,5 +157,21 @@ public class RegistrationService {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
+    }
+
+    public String resendEmail(String email, String firstName) {
+        AppUser appUser = appUserRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(10),
+                appUser
+        );
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        String link = CONFIRMATION_LINK + token;
+        emailSender.send(email, buildEmail(firstName, link));
+        return token;
     }
 }
