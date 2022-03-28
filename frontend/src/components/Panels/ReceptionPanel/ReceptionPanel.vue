@@ -39,7 +39,7 @@
                         <transition name="fade" mode="out-in">
                             <HomePage @cardChosen="cardChosen" v-if="cardIndex === 0"></HomePage>
                             <NewVisit v-if="cardIndex === 1" @returnClicked="cardIndex = 0"></NewVisit>
-                            <PatientTable @newPatientClicked="cardIndex = 4" @returnClicked="cardIndex = 0" v-if="cardIndex === 2"></PatientTable>
+                            <PatientTable @newPatientClicked="cardIndex = 3" @returnClicked="cardIndex = 0" v-if="cardIndex === 2"></PatientTable>
                             <NewPatient v-if="cardIndex === 3" @registrationFinished="cardIndex = 0"></NewPatient>
                         </transition>
                     </v-main>
@@ -59,7 +59,7 @@ import NewVisit from "@/components/Panels/ReceptionPanel/NewVisit/NewVisit";
 import Navigation from "@/components/Panels/ReceptionPanel/Navigation";
 import Messenger from "@/components/Panels/Messenger/Messenger";
 import { VueTyper } from 'vue-typer'
-import PatientTable from "@/components/Panels/DoctorPanel/MyPatients/PatientTable";
+import PatientTable from "@/components/Panels/ReceptionPanel/Patients/PatientTable";
 import NewPatient from "@/components/Panels/ReceptionPanel/NewPatient/NewPatient";
 
 

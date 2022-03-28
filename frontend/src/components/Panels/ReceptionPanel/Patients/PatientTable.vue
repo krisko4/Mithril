@@ -21,67 +21,15 @@
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="7" align="end">
-                                <v-dialog max-width="400"
-                                          v-model="newPatientDialog">
-                                    <template v-slot:activator="on" v-on="on">
-                                        <v-btn @click="openNewPatientDialog" color="primary">New patient</v-btn>
-                                    </template>
-                                    <template>
-                                        <v-card>
-                                            <v-card-title>
-                                                Add new patient to your table
-                                            </v-card-title>
-                                            <v-card-actions>
-                                                <PatientSearchComponent
-                                                    v-if="newPatientDialog"></PatientSearchComponent>
-                                            </v-card-actions>
-                                            <v-card-text align="end">
-                                                <v-dialog max-width="300" v-model="warningDialog">
-                                                    <template v-slot:activator="on" v-on="on">
-                                                        <v-btn color="primary" @click="addNewPatient"
-                                                               :disabled="!patientSelected">Add
-                                                        </v-btn>
-                                                    </template>
-                                                    <template>
-                                                        <v-card>
-                                                            <v-card-title>Warning</v-card-title>
-                                                            <v-card-text>Patient <b>{{ $store.state.patient.firstName }}
-                                                                {{ $store.state.patient.lastName }}</b> is already a
-                                                                patient of doctor <b>{{ doctorName }}</b>. Are you sure
-                                                                you want to place him as your patient?
-                                                            </v-card-text>
-                                                            <v-card-actions>
-                                                                <v-spacer></v-spacer>
-                                                                <v-btn color="blue darken-1" text
-                                                                       @click="closeWarningDialog">
-                                                                    Cancel
-                                                                </v-btn>
-                                                                <v-btn color="blue darken-1" text
-                                                                       @click="submitNewPatient">Yes,
-                                                                    I'm sure
-                                                                </v-btn>
-                                                                <v-spacer></v-spacer>
-                                                            </v-card-actions>
-                                                        </v-card>
-                                                    </template>
-                                                </v-dialog>
-
-                                            </v-card-text>
-                                        </v-card>
-                                    </template>
-                                </v-dialog>
+                                        <v-btn @click="handleNewPatientClick" color="primary">New patient</v-btn>
                             </v-col>
                         </v-row>
                     </v-card-subtitle>
                     <v-dialog max-width="500" v-model="patientDetails">
-                        <PatientDetails :patientData="patientData"></PatientDetails>
+                        <PatientDetailsCard :patientData="patientData"></PatientDetailsCard>
                     </v-dialog>
                     <v-dialog v-model="historyDialog" max-width="700">
                         <PatientHistory :patientData="patientData"></PatientHistory>
-                    </v-dialog>
-                    <v-dialog v-model="deleteDialog" max-width="500">
-                        <PatientDelete @deleteDialogClosed="closeDeleteDialog" @patientDeleteSubmitted="deletePatient"
-                                       :patientData="patientData"></PatientDelete>
                     </v-dialog>
                     <v-data-table
                         :headers="headers"
@@ -106,14 +54,6 @@
                                 <td class="text-xs-right">
                                     <v-btn color="primary" x-small @click.stop="openHistoryDialog(item)">Check</v-btn>
                                 </td>
-                                <td>
-                                    <v-icon
-                                        @click.stop="openDeleteDialog(item)"
-                                        color="primary"
-                                    >
-                                        mdi-pencil
-                                    </v-icon>
-                                </td>
                             </tr>
                         </template>
                     </v-data-table>
@@ -129,15 +69,14 @@
 
 <script>
 import {tokenAxios} from "@/axios";
-import PatientDelete from "@/components/Panels/DoctorPanel/MyPatients/PatientDelete";
 import PatientHistory from "@/components/Panels/DoctorPanel/MyPatients/PatientHistory/PatientHistory";
-import PatientDetails from "@/components/Panels/DoctorPanel/MyPatients/PatientDetails";
-import PatientSearchComponent from "@/components/Panels/ReceptionPanel/NewVisit/PatientSearchComponent";
+import PatientDetailsCard from "@/components/Panels/DoctorPanel/MyPatients/PatientDetailsCard";
+// import PatientSearchComponent from "@/components/Panels/ReceptionPanel/NewVisit/PatientSearchComponent";
 
 
 export default {
     name: "PatientTable",
-    components: {PatientDelete, PatientHistory, PatientDetails, PatientSearchComponent},
+    components: { PatientHistory, PatientDetailsCard},
     data() {
         return {
             newPatientDialog: false,
@@ -155,6 +94,9 @@ export default {
 
     },
     methods: {
+        handleNewPatientClick(){
+           this.$emit('newPatientClicked') 
+        },
 
         openHistoryDialog(item) {
             this.patientData = item
@@ -269,7 +211,6 @@ export default {
                 {text: 'Post code', value: 'postcode'},
                 {text: 'City', value: 'city'},
                 {text: 'History', value: 'history', sortable: false},
-                {text: 'Actions', value: 'actions', sortable: false},
 
             ]
         },

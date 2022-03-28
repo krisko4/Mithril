@@ -18,7 +18,7 @@
               ></v-app-bar-nav-icon>
               <v-row justify="end" class="mr-4">
                 <!-- @click="messengerOpened = true" -->
-                <v-btn class="mr-2" color="primary">Messenger</v-btn>
+                <v-btn class="mr-2" @click="messengerOpened = true" color="primary">Messenger</v-btn>
                 <!-- <v-btn text  class="mr-2">My account</v-btn> -->
                 <v-btn color="error" class="mr-2" @click="logout"
                   >Sign out</v-btn

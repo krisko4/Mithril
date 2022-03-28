@@ -192,9 +192,9 @@ export default {
 
 
     created() {
-
         tokenAxios.get('users/except-for/' + localStorage.getItem('id'))
             .then((response) => {
+                console.log(response.data)
                 this.friends = response.data
                 this.getRecentMessages()
                 this.setSubscription(localStorage.getItem('id'), this.friends[this.selectedItem].id)
@@ -235,10 +235,12 @@ export default {
         setSubscription(myId, friendId) {
             this.chatIndex = parseInt(myId) + parseInt(friendId)
             this.$store.state.stompClient.subscribe('/topic/' + this.chatIndex, (message) => {
+                console.log(message)
                 if (!message.body) {
                     return
                 }
                 let newMessage = JSON.parse(message.body)
+                console.log(newMessage)
                 let color, image
                 if(newMessage.receiverId === parseInt(localStorage.getItem('id'))){
                     color = 'primary'

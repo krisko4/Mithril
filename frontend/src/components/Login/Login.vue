@@ -107,8 +107,6 @@ export default {
                 v => /(?=.*[A-Z])/.test(v) || "Your password should contain at least one capital letter.",
                 v => /(?=.*\d)/.test(v) || "Your password should contain at least one number.",
                 v => /([!@$%])/.test(v) || "Your password should contain at least one special sign (!@$%).",
-
-
             ],
 
         }
