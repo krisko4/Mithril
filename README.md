@@ -24,12 +24,12 @@ Login is required to use the application. You can either register a new account 
 ...or sign in using the following credentials:
 
 ### Doctor panel
-*Login* : codeka1516@incoware.com
+*Login* : hegot44925@moonran.com
 
 *Password* : Test1234@
 
 ### Reception panel
-*Login* : natokax221@healteas.com
+*Login* : worefa1107@minimeq.com
 
 *Password* : Test1234@
 
